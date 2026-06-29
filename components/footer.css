@@ -1,0 +1,194 @@
+.premium-footer {
+    position: relative;
+    background-color: #000000;
+    color: #ffffff;
+    padding: 80px 0 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Subtle Spotify Green ambient glow coming from the top */
+.footer-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: radial-gradient(ellipse at center, rgba(29, 185, 84, 0.4) 0%, transparent 70%);
+    box-shadow: 0 0 60px 30px rgba(29, 185, 84, 0.08);
+    pointer-events: none;
+}
+
+.premium-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.footer-top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 80px;
+    gap: 40px;
+}
+
+.footer-brand {
+    max-width: 400px;
+}
+
+.footer-logo-large {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 4px 16px rgba(29, 185, 84, 0.25));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.footer-brand:hover .footer-logo-large {
+    transform: scale(1.05) rotate(-5deg);
+}
+
+.footer-headline {
+    font-size: 3.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    background: linear-gradient(135deg, #ffffff 0%, #7a7a7a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+}
+
+.footer-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 72px;
+    margin-top: 12px;
+}
+
+.nav-column h4 {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    opacity: 0.9;
+}
+
+.nav-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.nav-column a {
+    color: #888888;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: inline-block;
+}
+
+.nav-column a:hover {
+    color: #ffffff;
+    transform: translateX(4px);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.footer-bottom-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-copyright p {
+    color: #666666;
+    font-size: 14px;
+    margin: 0;
+    font-weight: 300;
+}
+
+.footer-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #888888;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.footer-status:hover {
+    background: rgba(29, 185, 84, 0.05);
+    border-color: rgba(29, 185, 84, 0.2);
+    color: #ffffff;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #1db954;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(29, 185, 84, 0.6);
+    animation: pulse 2.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
+}
+
+@media screen and (max-width: 1024px) {
+    .footer-nav-grid {
+        gap: 40px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .footer-top-section {
+        flex-direction: column;
+    }
+    .footer-nav-grid {
+        width: 100%;
+        margin-top: 0;
+    }
+    .footer-headline {
+        font-size: 3.2rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .premium-footer {
+        padding: 60px 0 30px;
+    }
+    .footer-headline {
+        font-size: 2.8rem;
+    }
+    .footer-nav-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    .footer-bottom-section {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+}

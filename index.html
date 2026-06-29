@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NevTrack - Material You Music Player</title>
+
+    <!-- Resource Hints for Performance -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://github.com">
+
+    <!-- Preload critical above-the-fold image -->
+    <link rel="preload" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1400&q=80" as="image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="shortcut icon" href="assets/icon.png"> <!-- Using a local icon for NevTrack -->
+    <link rel="canonical" href="https://nevanstudio.dev/nevtrack/">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components/header.css">
+    <link rel="stylesheet" href="components/footer.css">
+    <link rel="stylesheet" href="premium-redesign.css">
+    <meta name="description"
+        content="NevTrack is a professional Material You music player featuring Media3 ExoPlayer, 10-band equalizer, synchronized lyrics, advanced library management, and seamless device switching. Experience studio-quality audio on Android.">
+    <meta name="keywords"
+        content="Material You, Music Player, Android, NevTrack, Media3 ExoPlayer, Equalizer, Lyrics, High Resolution Audio, FLAC, ALAC">
+    <meta name="author" content="Nevan">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="NevTrack - Material You Music Player">
+    <meta property="og:description"
+        content="Experience music with stunning Material You design, intelligent features, and seamless performance.">
+    <meta property="og:image" content="assets/icon.png">
+    <meta property="og:url" content="https://nevanstudio.dev/nevtrack/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NevTrack - Material You Music Player">
+    <meta name="twitter:description"
+        content="Experience music with stunning Material You design, intelligent features, and seamless performance.">
+    <meta name="twitter:image" content="assets/icon.png">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "NevTrack",
+      "description": "A revolutionary Material You music player for Android",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Android",
+      "author": {
+        "@type": "Person",
+        "name": "Nevan"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Nevan Studio"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "ZAR"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.5",
+        "ratingCount": "100"
+      }
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Premium Landing Loader -->
+    <div id="premium-loader">
+        <div class="loader-content" aria-hidden="true">
+            <div class="loader-ring"></div>
+            <div class="loader-core"></div>
+            <div class="loader-glow"></div>
+        </div>
+    </div>
+
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div id="site-header"></div>
+
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="premium-hero">
+            <!-- HERO BACKGROUND IMAGE: easy to update from HTML source -->
+            <div class="hero-background">
+                <img id="hero-background-img" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1400&q=80" alt="Hero background image">
+            </div>
+            <div class="container hero-centered">
+                <div class="hero-content">
+                    <span class="hero-pill-premium liquid-glass">Now available • Android</span>
+                    <h1 class="text-glow">Feel music like the <span class="text-gradient-primary">future</span> is
+                        listening back.</h1>
+                    <p>NevTrack is a new kind of music app, built for immersive listening, fluid motion, and a screen
+                        experience that feels alive from the very first tap.</p>
+                    <div class="hero-cta-group">
+                        <a href="https://github.com/nevan/NevTrack/releases/latest" class="btn-premium">
+                            <i class="fab fa-android"></i> Download APK Now
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <!-- HERO IMAGES: web-based for now -->
+                    <img id="hero-image-main" src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80" alt="NevTrack hero image 1" class="floating-phone">
+                    <img id="hero-image-backdrop" src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80" alt="NevTrack hero backdrop" class="floating-phone-bg">
+                </div>
+
+                <div class="store-badges-wrapper">
+                    <p class="store-availability-text">Coming soon to your favorite stores:</p>
+                    <div class="store-badges">
+                        <!-- TODO: When you are ready to release the app to a specific store, remove the 'coming-soon' class and change the href -->
+                        <!-- Google Play -->
+                        <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                            <img src="assets/ScreenShots/icones/playstore.png" alt="Google Play">
+                            <span class="store-badge-label">Google Play</span>
+                        </a>
+                        <!-- AppGallery -->
+                        <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                            <img src="assets/ScreenShots/icones/appgallery.png" alt="AppGallery">
+                            <span class="store-badge-label">AppGallery</span>
+                        </a>
+                        <!-- Galaxy Store -->
+                        <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                            <img src="assets/ScreenShots/icones/galaxystore.png" alt="Galaxy Store">
+                            <span class="store-badge-label">Galaxy Store</span>
+                        </a>
+                        <!-- APKPure -->
+                        <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                            <img src="assets/ScreenShots/icones/apkpure.png" alt="APKPure">
+                            <span class="store-badge-label">APKPure</span>
+                        </a>
+                        <!-- Uptodown -->
+                        <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                            <img src="assets/ScreenShots/icones/uptodown.png" alt="Uptodown">
+                            <span class="store-badge-label">Uptodown</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Showcase Section -->
+        <section class="premium-showcase" id="showcase">
+            <div class="container">
+                <div class="section-header-premium">
+                    <h2>Immersive Experience</h2>
+                    <p>Swipe through our beautiful, fluid interface built with Material You.</p>
+                </div>
+            </div>
+            <!-- Scroll-controlled gallery container -->
+            <div class="showcase-wrapper">
+                <button class="gallery-arrow gallery-arrow-left" aria-label="Scroll left"><i
+                        class="fa-solid fa-chevron-left"></i></button>
+                <div class="gallery-3d-container" id="gallery-3d">
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Home.png" alt="Home"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Player.png" alt="Player"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Playlist.png" alt="Playlist"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Equalizer.png" alt="Equalizer"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Full_Screen_Lyrics_View.png"
+                            alt="Lyrics"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Artist.png" alt="Artist"></div>
+                    <div class="gallery-item"><img src="assets/ScreenShots/Phone/Settings.png" alt="Settings"></div>
+                    <!-- Spacer for scrolling comfort -->
+                    <div style="flex: 0 0 50px;"></div>
+                </div>
+                <button class="gallery-arrow gallery-arrow-right" aria-label="Scroll right"><i
+                        class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Latest Updates Section -->
+        <section class="premium-updates">
+            <div class="container">
+                <div class="section-header-premium">
+                    <h2>Latest Evolution</h2>
+                    <p>We are constantly refining the experience. Here is what's new.</p>
+                </div>
+                <div class="updates-grid">
+                    <!-- Glass Card Update -->
+                    <div class="update-card liquid-glass-card">
+                        <div class="update-version">
+                            <span>v2.1.0</span>
+                            <span class="update-date">Oct 2026</span>
+                        </div>
+                        <ul class="update-features">
+                            <li>Fluid motion transitions across all screens</li>
+                            <li>Advanced 10-band equalizer presets</li>
+                            <li>Amoled Black Theme optimization</li>
+                            <li>Enhanced lockscreen widget</li>
+                        </ul>
+                    </div>
+                    <!-- Glass Card Update -->
+                    <div class="update-card liquid-glass-card">
+                        <div class="update-version">
+                            <span>v1.0.01-beta build</span>
+                            <span class="update-date">Sep 2026</span>
+                        </div>
+                        <ul class="update-features">
+                            <li>Seamless Lyrics sync improvements</li>
+                            <li>Material 3 dynamic color fixes</li>
+                            <li>Performance tuning for older devices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community / Translate Section -->
+        <section class="premium-community" id="translationSection">
+            <div class="container">
+                <div class="community-card liquid-glass-card">
+                    <i class="fas fa-globe-americas community-icon"></i>
+                    <h2>Help Shape NevTrack</h2>
+                    <p
+                        style="color: var(--on-surface-variant); margin-top: 16px; margin-bottom: 32px; font-size: 1.1rem;">
+                        Join our community-driven effort to translate NevTrack into every language. Your contribution
+                        makes a difference.
+                    </p>
+
+                    <div class="community-stats">
+                        <div class="stat-item">
+                            <h3>24</h3>
+                            <p>Languages</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>2.5K</h3>
+                            <p>Strings</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="text-gradient-primary">You</h3>
+                            <p>Needed</p>
+                        </div>
+                    </div>
+
+                    <a href="https://github.com/nevan/NevTrack/blob/main/docs/CONTRIBUTING.md" class="btn-premium"
+                        style="background: transparent; border: 1px solid var(--primary);">
+                        <i class="fab fa-github"></i> Start Translating
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Get NevTrack Now Section -->
+        <section class="premium-download" id="downloadOptionsSection">
+            <div class="container">
+                <div class="download-content">
+                    <h2 class="text-glow">Ready to feel the music?</h2>
+                    <a href="https://github.com/nevan/NevTrack/releases/latest" class="btn-premium"
+                        style="padding: 20px 48px; font-size: 1.25rem;">
+                        <i class="fas fa-download"></i> Download APK Now
+                    </a>
+
+                    <div class="store-badges-wrapper">
+                        <p class="store-availability-text">Also coming soon to:</p>
+                        <div class="store-badges">
+                            <!-- TODO: Remove 'coming-soon' to activate these store buttons in the future -->
+                            <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                                <img src="assets/ScreenShots/icones/playstore.png" alt="Google Play">
+                                <span class="store-badge-label">Google Play</span>
+                            </a>
+                            <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                                <img src="assets/ScreenShots/icones/appgallery.png" alt="AppGallery">
+                                <span class="store-badge-label">AppGallery</span>
+                            </a>
+                            <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                                <img src="assets/ScreenShots/icones/galaxystore.png" alt="Galaxy Store">
+                                <span class="store-badge-label">Galaxy Store</span>
+                            </a>
+                            <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                                <img src="assets/ScreenShots/icones/apkpure.png" alt="APKPure">
+                                <span class="store-badge-label">APKPure</span>
+                            </a>
+                            <a href="#" class="store-badge coming-soon-wrapper coming-soon">
+                                <img src="assets/ScreenShots/icones/uptodown.png" alt="Uptodown">
+                                <span class="store-badge-label">Uptodown</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+    <div id="update-popup" class="update-popup-overlay">
+        <div class="update-popup-content">
+            <button class="close-popup-btn"><i class="fas fa-times"></i> Close</button>
+            <div class="update-popup-header">
+                <img id="popup-image" src="" alt="Update Image">
+            </div>
+            <div class="update-popup-body">
+                <div class="update-popup-header-text">
+                    <h2 id="popup-headline"></h2>
+                    <p class="popup-meta"><span id="popup-date"></span> | By <span id="popup-writer"></span></p>
+                </div>
+                <div id="popup-details"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="screenshot-popup" class="screenshot-overlay">
+        <button class="screenshot-close" id="screenshot-close-btn" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <button class="screenshot-nav screenshot-prev" id="screenshot-prev-btn" aria-label="Previous">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="screenshot-image-wrapper">
+            <img id="screenshot-popup-image" src="" alt="Screenshot">
+        </div>
+
+        <button class="screenshot-nav screenshot-next" id="screenshot-next-btn" aria-label="Next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div class="screenshot-bar">
+            <div class="screenshot-bar-left">
+                <span class="screenshot-title" id="screenshot-title">NevTrack Screenshot</span>
+                <span class="screenshot-counter" id="screenshot-counter">1 / 26</span>
+            </div>
+            <div class="screenshot-zoom">
+                <button class="screenshot-zoom-btn" id="zoom-out-btn" title="Zoom Out">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <span class="screenshot-zoom-level" id="zoom-level">100%</span>
+                <button class="screenshot-zoom-btn" id="zoom-in-btn" title="Zoom In">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <span class="screenshot-zoom-divider"></span>
+                <button class="screenshot-zoom-btn" id="zoom-reset-btn" title="Reset Zoom">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="nevtrack-toast-root" aria-live="polite" aria-atomic="true"></div>
+    <div id="nevtrack-dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="nevtrack-dialog-title">
+        <div class="nevtrack-dialog">
+            <div class="nevtrack-dialog__title" id="nevtrack-dialog-title">NevTrack</div>
+            <div class="nevtrack-dialog__body" id="nevtrack-dialog-body"></div>
+            <div class="nevtrack-dialog__actions">
+                <button class="nevtrack-dialog__btn" id="nevtrack-dialog-cancel">Close</button>
+                <button class="nevtrack-dialog__btn nevtrack-dialog__btn--primary" id="nevtrack-dialog-ok">Okay</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
