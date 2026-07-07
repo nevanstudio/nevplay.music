@@ -245,6 +245,330 @@ function initEntranceAnimations() {
   });
 }
 
+/* ── Dynamic Hero Renderer & Interactive Animations ──────── */
+async function initDynamicHero() {
+  const heroLeftTarget = document.getElementById('hero-left-target');
+  const heroRightTarget = document.getElementById('hero-right-target');
+  const heroBgTarget = document.getElementById('hero-bg-target');
+  const scrollIndicator = document.getElementById('hero-scroll-indicator');
+  const canvas = document.getElementById('hero-canvas');
+
+  if (!heroLeftTarget || !heroRightTarget) return;
+
+  try {
+    const res = await fetch('hero.json');
+    if (!res.ok) throw new Error('Failed to load hero configuration');
+    const data = await res.json();
+
+    // 1. Select random background & mockup
+    const randomBg = data.backgrounds[Math.floor(Math.random() * data.backgrounds.length)];
+    const randomMockup = data.mockups[Math.floor(Math.random() * data.mockups.length)];
+
+    // 2. Set Background
+    if (heroBgTarget) {
+      const bgImg = new Image();
+      bgImg.src = randomBg;
+      bgImg.onload = () => {
+        heroBgTarget.style.backgroundImage = `url('${randomBg}')`;
+        heroBgTarget.classList.add('is-loaded');
+      };
+    }
+
+    // 3. Render Left Side Content
+    let buttonsHtml = '';
+    data.buttons.forEach(btn => {
+      if (btn.primary) {
+        buttonsHtml += `
+          <a href="${btn.href}" class="hero-btn hero-btn--primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            ${btn.text}
+          </a>
+        `;
+      } else {
+        buttonsHtml += `
+          <a href="${btn.href}" class="hero-btn hero-btn--secondary">
+            ${btn.text}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        `;
+      }
+    });
+
+    let pillsHtml = '';
+    data.pills.forEach(pill => {
+      pillsHtml += `<span class="hero-pill">${pill}</span>`;
+    });
+
+    let statsHtml = '';
+    data.stats.forEach(stat => {
+      statsHtml += `
+        <div class="hero-stat-card">
+          <strong>${stat.value}</strong>
+          <span>${stat.label}</span>
+        </div>
+      `;
+    });
+
+    heroLeftTarget.innerHTML = `
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        ${data.badge.text}
+        <span class="hero-badge-version">${data.badge.version}</span>
+      </div>
+      <h1 class="hero-title">
+        ${data.heading.prefix} <span class="hero-title-highlight">${data.heading.highlight}</span> ${data.heading.suffix}
+      </h1>
+      <p class="hero-desc">${data.description}</p>
+      <div class="hero-buttons">
+        ${buttonsHtml}
+      </div>
+      <div class="hero-pills">
+        ${pillsHtml}
+      </div>
+      <div class="hero-stats">
+        ${statsHtml}
+      </div>
+    `;
+
+    // 4. Render Right Side (Phone Mockup & Floating Cards)
+    let lyricsHtml = '';
+    data.floating_cards.lyrics.forEach(lyric => {
+      lyricsHtml += `<div class="lyric-row ${lyric.active ? 'active' : ''}">${lyric.text}</div>`;
+    });
+
+    heroRightTarget.innerHTML = `
+      <div class="hero-phone-wrap" id="hero-phone-wrap">
+        <div class="hero-phone">
+          <img src="${randomMockup}" alt="NevPlay Android App Mockup" />
+          <div class="phone-home-indicator"></div>
+        </div>
+
+        <!-- Float Card 1: Now Playing -->
+        <div class="hero-float-card card-nowplaying" id="float-card-np">
+          <div class="np-header">
+            <div class="np-cover"></div>
+            <div class="np-details">
+              <strong>${data.floating_cards.now_playing.title}</strong>
+              <span>${data.floating_cards.now_playing.artist}</span>
+            </div>
+          </div>
+          <div class="np-progress-bar">
+            <div class="np-progress-fill" style="width: ${data.floating_cards.now_playing.progress}"></div>
+          </div>
+          <div class="np-time">
+            <span>${data.floating_cards.now_playing.time_current}</span>
+            <span>${data.floating_cards.now_playing.time_total}</span>
+          </div>
+        </div>
+
+        <!-- Float Card 2: Synced Lyrics -->
+        <div class="hero-float-card card-lyrics" id="float-card-lyrics">
+          ${lyricsHtml}
+        </div>
+
+        <!-- Float Card 3: AI recommendation -->
+        <div class="hero-float-card card-recommend" id="float-card-recommend">
+          <span class="ai-tag">${data.floating_cards.ai_recommendation.tag}</span>
+          <div class="ai-song">
+            <div class="ai-art"></div>
+            <div class="ai-details">
+              <strong>${data.floating_cards.ai_recommendation.title}</strong>
+              <span>${data.floating_cards.ai_recommendation.match}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Trigger reveal class for floating cards
+    setTimeout(() => {
+      document.querySelectorAll('.hero-float-card').forEach(card => {
+        card.classList.add('is-active');
+      });
+    }, 400);
+
+    // 5. Interactive Canvas Particles
+    if (canvas) {
+      initParticles(canvas);
+    }
+
+    // 6. Interactive Mouse Parallax & Scroll Parallax
+    initParallax();
+
+    // 7. Scroll Indicator Fade Out
+    window.addEventListener('scroll', () => {
+      if (scrollIndicator) {
+        const scrolled = window.scrollY > 40;
+        scrollIndicator.classList.toggle('scrolled', scrolled);
+      }
+    }, { passive: true });
+
+    // 8. Info Card Reveal Observer
+    initRevealObserver();
+
+  } catch (err) {
+    console.error('Error rendering hero section:', err);
+    // Graceful fallback content if JSON is missing or fails to parse
+    heroLeftTarget.innerHTML = `
+      <h1 class="hero-title">Your Local Music. <span class="hero-title-highlight">Beautifully Reimagined.</span></h1>
+      <p class="hero-desc">Discover the premium local offline music experience on Android.</p>
+      <div class="hero-buttons">
+        <a href="download.html" class="hero-btn hero-btn--primary">Download Now</a>
+      </div>
+    `;
+    heroRightTarget.innerHTML = `
+      <div class="hero-phone-wrap">
+        <div class="hero-phone">
+          <div class="phone-home-indicator"></div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+/* ── Lightweight Canvas Particle System ────────────────── */
+function initParticles(canvas) {
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  const maxParticles = window.innerWidth < 768 ? 20 : 45;
+
+  const resize = () => {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  };
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  class Particle {
+    constructor() {
+      this.reset();
+      this.y = Math.random() * canvas.height;
+    }
+
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + Math.random() * 20;
+      this.size = Math.random() * 2.8 + 0.6;
+      this.speed = Math.random() * 0.4 + 0.15;
+      this.alpha = Math.random() * 0.4 + 0.15;
+      this.decay = Math.random() * 0.002 + 0.0005;
+      this.oscillationSpeed = Math.random() * 0.02 + 0.005;
+      this.oscillationRange = Math.random() * 1.5 + 0.5;
+      this.angle = Math.random() * Math.PI * 2;
+    }
+
+    update() {
+      this.y -= this.speed;
+      this.angle += this.oscillationSpeed;
+      this.x += Math.sin(this.angle) * this.oscillationRange;
+      this.alpha -= this.decay;
+
+      if (this.y < -10 || this.alpha <= 0) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(122, 217, 80, ${this.alpha})`;
+      ctx.shadowBlur = this.size * 2;
+      ctx.shadowColor = '#7ad950';
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < maxParticles; i++) {
+    particles.push(new Particle());
+  }
+
+  const loop = () => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.bottom > 0 && rect.top < window.innerHeight) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.shadowBlur = 0;
+      
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+    }
+    requestAnimationFrame(loop);
+  };
+  loop();
+}
+
+/* ── Mouse-move and Scroll Parallax ────────────────────── */
+function initParallax() {
+  const phoneWrap = document.getElementById('hero-phone-wrap');
+  const orbs = document.querySelectorAll('.orb');
+  const cardNp = document.getElementById('float-card-np');
+  const cardLyrics = document.getElementById('float-card-lyrics');
+  const cardRecommend = document.getElementById('float-card-recommend');
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let mouseX = 0, mouseY = 0;
+  let targetX = 0, targetY = 0;
+  const lerp = 0.08;
+
+  window.addEventListener('mousemove', e => {
+    targetX = (e.clientX / window.innerWidth) - 0.5;
+    targetY = (e.clientY / window.innerHeight) - 0.5;
+  }, { passive: true });
+
+  const updateMouseParallax = () => {
+    mouseX += (targetX - mouseX) * lerp;
+    mouseY += (targetY - mouseY) * lerp;
+
+    if (phoneWrap) {
+      phoneWrap.style.transform = `rotateY(${mouseX * 16}deg) rotateX(${-mouseY * 12}deg) translate3d(${mouseX * 10}px, ${mouseY * 10}px, 0)`;
+    }
+
+    if (cardNp) cardNp.style.transform = `translate3d(${-mouseX * 25}px, ${-mouseY * 25}px, 0) rotate(1deg)`;
+    if (cardLyrics) cardLyrics.style.transform = `translate3d(${-mouseX * 35}px, ${-mouseY * 35}px, 0) rotate(-1.5deg)`;
+    if (cardRecommend) cardRecommend.style.transform = `translate3d(${-mouseX * 20}px, ${-mouseY * 20}px, 0) rotate(0.5deg)`;
+
+    orbs.forEach((orb, index) => {
+      const multiplier = (index + 1) * 35;
+      orb.style.transform = `translate3d(${mouseX * multiplier}px, ${mouseY * multiplier}px, 0)`;
+    });
+
+    requestAnimationFrame(updateMouseParallax);
+  };
+  requestAnimationFrame(updateMouseParallax);
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (scrollY > window.innerHeight) return;
+
+    if (phoneWrap) {
+      phoneWrap.style.transform = `translateY(${scrollY * 0.12}px)`;
+    }
+  }, { passive: true });
+}
+
+/* ── Section Reveal Observer ───────────────────────────── */
+function initRevealObserver() {
+  const options = {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, options);
+
+  document.querySelectorAll('.section-reveal').forEach(el => {
+    observer.observe(el);
+  });
+}
+
 /* ── Bootstrap ────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', async () => {
   injectFonts();
@@ -254,4 +578,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initNav();
   initEntranceAnimations();
+  initDynamicHero();
 });

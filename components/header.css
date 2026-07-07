@@ -5,55 +5,57 @@
 
 /* ── Design tokens (nav-specific) ─────────────────────── */
 :root {
-  --np-accent:        #7ad950;
-  --np-accent-dim:    rgba(122, 217, 80, 0.22);
-  --np-accent-glow:   rgba(122, 217, 80, 0.35);
+  --np-accent: #7ad950;
+  --np-accent-dim: rgba(122, 217, 80, 0.22);
+  --np-accent-glow: rgba(122, 217, 80, 0.35);
   --np-accent-bright: rgba(122, 217, 80, 0.55);
-  --np-glass-bg:      rgba(8, 20, 10, 0.52);
-  --np-glass-border:  rgba(122, 217, 80, 0.20);
-  --np-glass-shine:   rgba(255, 255, 255, 0.10);
-  --np-glass-inner:   rgba(255, 255, 255, 0.06);
-  --np-text:          #e5e5e5;
-  --np-muted:         rgba(229, 229, 229, 0.65);
-  --np-shadow-lg:     0 28px 80px rgba(0, 0, 0, 0.38),
-                      0 8px 32px  rgba(0, 0, 0, 0.24);
-  --np-shadow-sm:     0 4px 20px  rgba(0, 0, 0, 0.22),
-                      inset 0 1px 0 var(--np-glass-shine);
-  --np-ease-spring:   cubic-bezier(0.22, 1, 0.36, 1);
-  --np-ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
-  --np-dur-fast:      220ms;
-  --np-dur-mid:       300ms;
-  --np-dur-slow:      380ms;
+  --np-glass-bg: rgba(8, 20, 10, 0.52);
+  --np-glass-border: rgba(122, 217, 80, 0.20);
+  --np-glass-shine: rgba(255, 255, 255, 0.10);
+  --np-glass-inner: rgba(255, 255, 255, 0.06);
+  --np-text: #e5e5e5;
+  --np-muted: rgba(229, 229, 229, 0.65);
+  --np-shadow-lg: 0 28px 80px rgba(0, 0, 0, 0.38),
+    0 8px 32px rgba(0, 0, 0, 0.24);
+  --np-shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 var(--np-glass-shine);
+  --np-ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --np-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --np-dur-fast: 220ms;
+  --np-dur-mid: 300ms;
+  --np-dur-slow: 380ms;
 }
 
 /* ── Outer fixed shell ─────────────────────────────────── */
 .np-nav-shell {
-  position:       fixed;
-  inset:          0 0 auto 0;
-  z-index:        1200;
-  padding:        14px clamp(14px, 3vw, 28px) 0;
-  pointer-events: none;           /* gap between bar & links is click-through */
-  display:        flex;
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1200;
+  padding: 14px clamp(14px, 3vw, 28px) 0;
+  pointer-events: none;
+  /* gap between bar & links is click-through */
+  display: flex;
   flex-direction: column;
-  align-items:    center;
+  align-items: center;
 }
 
 /* ── Floating Glass Capsule Bar ────────────────────────── */
 .np-bar {
-  position:        relative;       /* logo is absolute inside */
-  width:           100%;
-  max-width:       900px;
-  pointer-events:  auto;
-  display:         flex;
-  align-items:     center;
+  position: relative;
+  /* logo is absolute inside */
+  width: 100%;
+  max-width: 900px;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  min-height:      72px;
-  padding:         10px 18px;
-  border-radius:   999px;
+  min-height: 72px;
+  padding: 10px 18px;
+  border-radius: 999px;
 
   /* Glass core */
-  background:      var(--np-glass-bg);
-  border:          1px solid var(--np-glass-border);
+  background: var(--np-glass-bg);
+  border: 1px solid var(--np-glass-border);
   backdrop-filter: blur(32px) saturate(1.4) brightness(1.05);
   -webkit-backdrop-filter: blur(32px) saturate(1.4) brightness(1.05);
 
@@ -66,55 +68,51 @@
     0 0 60px rgba(122, 217, 80, 0.07);
 
   /* Smooth transitions */
-  will-change:     min-height, padding, background, box-shadow;
+  will-change: min-height, padding, background, box-shadow;
   transition:
-    min-height   var(--np-dur-mid) var(--np-ease-out),
-    padding      var(--np-dur-mid) var(--np-ease-out),
-    background   var(--np-dur-mid) ease,
-    box-shadow   var(--np-dur-mid) ease,
+    min-height var(--np-dur-mid) var(--np-ease-out),
+    padding var(--np-dur-mid) var(--np-ease-out),
+    background var(--np-dur-mid) ease,
+    box-shadow var(--np-dur-mid) ease,
     border-color var(--np-dur-mid) ease;
 }
 
 /* Glass inner highlight — pseudo top sheen */
 .np-bar::before {
-  content:       '';
-  position:      absolute;
-  inset:         0;
+  content: '';
+  position: absolute;
+  inset: 0;
   border-radius: inherit;
-  background:    linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.13) 0%,
-    rgba(255, 255, 255, 0.04) 40%,
-    transparent 70%
-  );
+  background: linear-gradient(160deg,
+      rgba(255, 255, 255, 0.13) 0%,
+      rgba(255, 255, 255, 0.04) 40%,
+      transparent 70%);
   pointer-events: none;
 }
 
 /* Subtle inner bottom gradient (depth) */
 .np-bar::after {
-  content:       '';
-  position:      absolute;
-  inset:         0;
+  content: '';
+  position: absolute;
+  inset: 0;
   border-radius: inherit;
-  background:    linear-gradient(
-    to bottom,
-    transparent 50%,
-    rgba(0, 0, 0, 0.12) 100%
-  );
+  background: linear-gradient(to bottom,
+      transparent 50%,
+      rgba(0, 0, 0, 0.12) 100%);
   pointer-events: none;
 }
 
 /* Scrolled state — tighter, darker, stronger blur */
 .np-bar.np-scrolled {
-  min-height:  58px;
-  padding:     8px 18px;
-  background:  rgba(4, 14, 6, 0.82);
+  min-height: 58px;
+  padding: 8px 18px;
+  background: rgba(4, 14, 6, 0.82);
   border-color: rgba(122, 217, 80, 0.28);
   backdrop-filter: blur(44px) saturate(1.6) brightness(1.02);
   -webkit-backdrop-filter: blur(44px) saturate(1.6) brightness(1.02);
   box-shadow:
     0 32px 100px rgba(0, 0, 0, 0.48),
-    0 12px 40px  rgba(0, 0, 0, 0.30),
+    0 12px 40px rgba(0, 0, 0, 0.30),
     0 0 0 1px rgba(122, 217, 80, 0.12),
     inset 0 1px 0 var(--np-glass-shine),
     inset 0 -1px 0 rgba(0, 0, 0, 0.26),
@@ -123,11 +121,12 @@
 
 /* ── Bar slot layout ───────────────────────────────────── */
 .np-bar__slot {
-  display:     flex;
+  display: flex;
   align-items: center;
-  gap:         10px;
-  flex:        1;             /* each slot takes equal width */
-  min-width:   0;
+  gap: 10px;
+  flex: 1;
+  /* each slot takes equal width */
+  min-width: 0;
 }
 
 .np-bar__slot--right {
@@ -136,72 +135,77 @@
 
 /* ── Centered Logo ─────────────────────────────────────── */
 .np-bar__logo {
-  position:  absolute;
-  left:      50%;
-  top:       50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%) translateY(0);
-  width:     74px;
-  display:   block;
-  z-index:   1;
+  width: 220px;
+  display: block;
+  z-index: 1;
 
   filter:
-    drop-shadow(0 0 22px rgba(122, 217, 80, 0.50))
-    drop-shadow(0 0 8px  rgba(122, 217, 80, 0.30));
+    drop-shadow(0 0 22px rgba(122, 217, 80, 0.50)) drop-shadow(0 0 8px rgba(122, 217, 80, 0.30));
 
-  will-change:  transform, filter;
-  animation:    np-float 3.6s ease-in-out infinite;
-  transition:   width var(--np-dur-mid) var(--np-ease-out),
-                filter var(--np-dur-mid) ease;
+  will-change: transform, filter;
+  animation: np-float 3.6s ease-in-out infinite;
+  transition: width var(--np-dur-mid) var(--np-ease-out),
+    filter var(--np-dur-mid) ease;
 }
 
 .np-bar__logo img {
-  display:            block;
-  width:              100%;
-  height:             auto;
-  image-rendering:    -webkit-optimize-contrast;
-  image-rendering:    crisp-edges;
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 .np-bar.np-scrolled .np-bar__logo {
-  width: 56px;
+  width: 155px;
   filter:
-    drop-shadow(0 0 14px rgba(122, 217, 80, 0.40))
-    drop-shadow(0 0 5px  rgba(122, 217, 80, 0.22));
+    drop-shadow(0 0 14px rgba(122, 217, 80, 0.40)) drop-shadow(0 0 5px rgba(122, 217, 80, 0.22));
 }
 
 @keyframes np-float {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0px);  }
-  50%       { transform: translate(-50%, -50%) translateY(-6px); }
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0px);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-6px);
+  }
 }
 
 /* ── Desktop Search Field ──────────────────────────────── */
 .np-search {
-  display:      flex;
-  align-items:  center;
-  gap:          10px;
-  height:       42px;
-  width:        210px;
-  padding:      0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  width: 210px;
+  padding: 0 14px;
   border-radius: 999px;
 
-  background:   rgba(255, 255, 255, 0.09);
-  border:       1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(16px);
-  box-shadow:   inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
 
-  overflow:     hidden;
-  cursor:       text;
-  will-change:  width, box-shadow;
+  overflow: hidden;
+  cursor: text;
+  will-change: width, box-shadow;
   transition:
-    width      var(--np-dur-mid) var(--np-ease-out),
+    width var(--np-dur-mid) var(--np-ease-out),
     box-shadow var(--np-dur-mid) ease,
     border-color var(--np-dur-mid) ease,
     background var(--np-dur-mid) ease;
 }
 
 .np-search:focus-within {
-  width:        270px;
-  background:   rgba(255, 255, 255, 0.12);
+  width: 270px;
+  background: rgba(255, 255, 255, 0.12);
   border-color: rgba(122, 217, 80, 0.40);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -210,12 +214,12 @@
 }
 
 .np-search__icon {
-  display:     flex;
+  display: flex;
   align-items: center;
   flex-shrink: 0;
-  color:       var(--np-muted);
-  cursor:      text;
-  transition:  color var(--np-dur-fast) ease;
+  color: var(--np-muted);
+  cursor: text;
+  transition: color var(--np-dur-fast) ease;
 }
 
 .np-search:focus-within .np-search__icon {
@@ -223,24 +227,24 @@
 }
 
 .np-search__icon svg {
-  width:              18px;
-  height:             18px;
-  fill:               none;
-  stroke:             currentColor;
-  stroke-width:       1.8;
-  stroke-linecap:     round;
-  stroke-linejoin:    round;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .np-search__input {
-  flex:        1;
-  min-width:   0;
-  border:      0;
-  outline:     0;
-  background:  transparent;
-  color:       var(--np-text);
-  font:        inherit;
-  font-size:   0.92rem;
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--np-text);
+  font: inherit;
+  font-size: 0.92rem;
   letter-spacing: 0.01em;
 }
 
@@ -255,118 +259,123 @@
 
 /* ── Icon button (shared: search trigger, etc.) ────────── */
 .np-icon-btn {
-  display:         flex;
-  align-items:     center;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  width:           42px;
-  height:          42px;
-  border-radius:   999px;
-  border:          1px solid rgba(255, 255, 255, 0.14);
-  background:      rgba(255, 255, 255, 0.09);
-  color:           var(--np-text);
-  cursor:          pointer;
-  box-shadow:      inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--np-text);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
   transition:
-    background   var(--np-dur-fast) ease,
+    background var(--np-dur-fast) ease,
     border-color var(--np-dur-fast) ease,
-    transform    var(--np-dur-fast) ease,
-    box-shadow   var(--np-dur-fast) ease;
+    transform var(--np-dur-fast) ease,
+    box-shadow var(--np-dur-fast) ease;
 }
 
 .np-icon-btn:hover {
-  background:   rgba(122, 217, 80, 0.14);
+  background: rgba(122, 217, 80, 0.14);
   border-color: rgba(122, 217, 80, 0.36);
-  transform:    scale(1.06);
+  transform: scale(1.06);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 18px rgba(122, 217, 80, 0.20);
 }
 
 .np-icon-btn svg {
-  width:           18px;
-  height:          18px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    1.8;
-  stroke-linecap:  round;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 /* Hide mobile search trigger on desktop */
-.np-search-trigger { display: none; }
+.np-search-trigger {
+  display: none;
+}
 
 /* ── Hamburger Button ──────────────────────────────────── */
 .np-hamburger {
-  display:         flex;
-  flex-direction:  column;
-  align-items:     center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap:             4px;
-  width:           42px;
-  height:          42px;
-  border-radius:   999px;
-  border:          1px solid rgba(255, 255, 255, 0.14);
-  background:      rgba(255, 255, 255, 0.09);
-  color:           var(--np-text);
-  cursor:          pointer;
-  box-shadow:      inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  gap: 4px;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--np-text);
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
   transition:
-    background   var(--np-dur-fast) ease,
+    background var(--np-dur-fast) ease,
     border-color var(--np-dur-fast) ease,
-    transform    var(--np-dur-fast) ease,
-    box-shadow   var(--np-dur-fast) ease;
+    transform var(--np-dur-fast) ease,
+    box-shadow var(--np-dur-fast) ease;
 
   /* Hidden by default — only shown on mobile */
   display: none;
 }
 
 .np-hamburger:hover {
-  background:   rgba(122, 217, 80, 0.14);
+  background: rgba(122, 217, 80, 0.14);
   border-color: rgba(122, 217, 80, 0.36);
-  transform:    scale(1.06);
+  transform: scale(1.06);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
     0 0 18px rgba(122, 217, 80, 0.20);
 }
 
 .np-hamburger__line {
-  display:       block;
-  width:         17px;
-  height:        1.8px;
+  display: block;
+  width: 17px;
+  height: 1.8px;
   border-radius: 999px;
-  background:    currentColor;
-  will-change:   transform, opacity;
+  background: currentColor;
+  will-change: transform, opacity;
   transition:
     transform var(--np-dur-mid) var(--np-ease-spring),
-    opacity   var(--np-dur-fast) ease;
+    opacity var(--np-dur-fast) ease;
 }
 
 /* Open state — morphs to × */
 .np-hamburger.is-open .np-hamburger__line:nth-child(1) {
   transform: translateY(5.8px) rotate(45deg);
 }
+
 .np-hamburger.is-open .np-hamburger__line:nth-child(2) {
-  opacity:   0;
+  opacity: 0;
   transform: scaleX(0);
 }
+
 .np-hamburger.is-open .np-hamburger__line:nth-child(3) {
   transform: translateY(-5.8px) rotate(-45deg);
 }
 
 /* ── Desktop Navigation Links Row ──────────────────────── */
 .np-links-row {
-  position:        relative;      /* for glider */
-  display:         flex;
-  align-items:     center;
+  position: relative;
+  /* for glider */
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap:             4px;
-  margin-top:      10px;
-  padding:         7px 14px;
-  border-radius:   999px;
-  pointer-events:  auto;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  pointer-events: auto;
 
-  background:      rgba(255, 255, 255, 0.07);
-  border:          1px solid rgba(122, 217, 80, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(122, 217, 80, 0.14);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow:
@@ -375,56 +384,57 @@
 
   will-change: transform;
   transition:
-    padding    var(--np-dur-mid) var(--np-ease-out),
+    padding var(--np-dur-mid) var(--np-ease-out),
     margin-top var(--np-dur-mid) var(--np-ease-out),
     background var(--np-dur-mid) ease;
 }
 
 .np-links-row.np-scrolled {
   margin-top: 8px;
-  padding:    5px 12px;
+  padding: 5px 12px;
   background: rgba(4, 14, 6, 0.60);
 }
 
 /* Active indicator glider */
 .np-links-row__glider {
-  position:      absolute;
-  top:           0;
-  left:          0;
-  height:        100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
   border-radius: 999px;
-  background:    rgba(122, 217, 80, 0.16);
-  border:        1px solid rgba(122, 217, 80, 0.30);
-  box-shadow:    0 0 20px rgba(122, 217, 80, 0.18);
+  background: rgba(122, 217, 80, 0.16);
+  border: 1px solid rgba(122, 217, 80, 0.30);
+  box-shadow: 0 0 20px rgba(122, 217, 80, 0.18);
   pointer-events: none;
-  will-change:   transform, width;
+  will-change: transform, width;
   transition:
     transform var(--np-dur-mid) var(--np-ease-spring),
-    width     var(--np-dur-mid) var(--np-ease-spring),
-    opacity   var(--np-dur-fast) ease;
-  opacity: 0;     /* hidden until JS positions it */
+    width var(--np-dur-mid) var(--np-ease-spring),
+    opacity var(--np-dur-fast) ease;
+  opacity: 0;
+  /* hidden until JS positions it */
 }
 
 /* Desktop nav links */
 .np-link {
-  position:       relative;
-  z-index:        1;
-  padding:        8px 14px;
-  border-radius:  999px;
-  color:          rgba(229, 229, 229, 0.80);
+  position: relative;
+  z-index: 1;
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: rgba(229, 229, 229, 0.80);
   text-decoration: none;
-  font-size:      0.94rem;
-  font-weight:    500;
+  font-size: 0.94rem;
+  font-weight: 500;
   letter-spacing: 0.02em;
-  white-space:    nowrap;
-  will-change:    color, transform;
+  white-space: nowrap;
+  will-change: color, transform;
   transition:
-    color     var(--np-dur-fast) ease,
+    color var(--np-dur-fast) ease,
     transform var(--np-dur-fast) ease;
 }
 
 .np-link:hover {
-  color:     var(--np-accent);
+  color: var(--np-accent);
   transform: translateY(-1px);
 }
 
@@ -438,17 +448,17 @@
 
 /* Backdrop */
 .np-backdrop {
-  position:       fixed;
-  inset:          0;
-  z-index:        1150;
-  background:     rgba(0, 0, 0, 0);
+  position: fixed;
+  inset: 0;
+  z-index: 1150;
+  background: rgba(0, 0, 0, 0);
   pointer-events: none;
-  will-change:    background;
-  transition:     background var(--np-dur-mid) ease;
+  will-change: background;
+  transition: background var(--np-dur-mid) ease;
 }
 
 .np-backdrop.is-visible {
-  background:     rgba(0, 0, 0, 0.56);
+  background: rgba(0, 0, 0, 0.56);
   pointer-events: auto;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -456,15 +466,16 @@
 
 /* Drawer shell */
 .np-drawer {
-  position:   fixed;
-  top:        0;
-  right:      0;
-  width:      min(92vw, 390px);
-  height:     100dvh;
-  z-index:    1160;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(92vw, 390px);
+  height: 100dvh;
+  z-index: 1160;
   will-change: transform;
-  transform:   translateX(110%);   /* start off-screen */
-  transition:  transform var(--np-dur-slow) var(--np-ease-spring);
+  transform: translateX(110%);
+  /* start off-screen */
+  transition: transform var(--np-dur-slow) var(--np-ease-spring);
 }
 
 .np-drawer.is-open {
@@ -473,144 +484,139 @@
 
 /* Drawer inner panel — the glass surface */
 .np-drawer__inner {
-  display:        flex;
+  display: flex;
   flex-direction: column;
-  height:         100%;
-  border-radius:  28px 0 0 28px;
-  overflow:       hidden;
+  height: 100%;
+  border-radius: 28px 0 0 28px;
+  overflow: hidden;
 
   /* Glass */
   background:
-    linear-gradient(
-      150deg,
+    linear-gradient(150deg,
       rgba(10, 24, 12, 0.92) 0%,
-      rgba(6, 48, 8, 0.78)  60%,
-      rgba(5, 30, 6, 0.88)  100%
-    );
-  border:          1px solid rgba(122, 217, 80, 0.22);
-  border-right:    0;
+      rgba(6, 48, 8, 0.78) 60%,
+      rgba(5, 30, 6, 0.88) 100%);
+  border: 1px solid rgba(122, 217, 80, 0.22);
+  border-right: 0;
   backdrop-filter: blur(40px) saturate(1.5);
   -webkit-backdrop-filter: blur(40px) saturate(1.5);
   box-shadow:
     -24px 0 80px rgba(0, 0, 0, 0.42),
-    -8px  0 32px rgba(0, 0, 0, 0.28),
+    -8px 0 32px rgba(0, 0, 0, 0.28),
     inset 1px 0 0 rgba(255, 255, 255, 0.08),
     0 0 80px rgba(122, 217, 80, 0.06);
 }
 
 /* Drawer inner top sheen */
 .np-drawer__inner::before {
-  content:        '';
-  position:       absolute;
-  inset:          0;
-  border-radius:  inherit;
-  background:     linear-gradient(
-    130deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    transparent 50%
-  );
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(130deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%);
   pointer-events: none;
 }
 
 /* ── Sticky drawer header ──────────────────────────────── */
 .np-drawer__head {
   flex-shrink: 0;
-  padding:     18px 18px 14px;
+  padding: 18px 18px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 /* Close button */
 .np-drawer__close {
-  display:         flex;
-  align-items:     center;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  width:           36px;
-  height:          36px;
-  margin-left:     auto;
-  margin-bottom:   14px;
-  border-radius:   999px;
-  border:          1px solid rgba(255, 255, 255, 0.14);
-  background:      rgba(255, 255, 255, 0.08);
-  color:           var(--np-muted);
-  cursor:          pointer;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--np-muted);
+  cursor: pointer;
   transition:
-    background   var(--np-dur-fast) ease,
-    color        var(--np-dur-fast) ease,
-    transform    var(--np-dur-fast) ease;
+    background var(--np-dur-fast) ease,
+    color var(--np-dur-fast) ease,
+    transform var(--np-dur-fast) ease;
 }
 
 .np-drawer__close:hover {
-  background:  rgba(255, 80, 80, 0.18);
-  color:       #ff6b6b;
-  transform:   scale(1.1);
+  background: rgba(255, 80, 80, 0.18);
+  color: #ff6b6b;
+  transform: scale(1.1);
 }
 
 .np-drawer__close svg {
-  width:           16px;
-  height:          16px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    2;
-  stroke-linecap:  round;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
 
 /* Brand row */
 .np-drawer__brand {
-  display:         flex;
-  align-items:     center;
-  gap:             14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   text-decoration: none;
-  margin-bottom:   16px;
+  margin-bottom: 16px;
 }
 
 .np-drawer__brand img {
-  width:   56px;
-  height:  auto;
+  width: 56px;
+  height: auto;
   display: block;
   filter:
-    drop-shadow(0 0 18px rgba(122, 217, 80, 0.45))
-    drop-shadow(0 0 6px  rgba(122, 217, 80, 0.25));
+    drop-shadow(0 0 18px rgba(122, 217, 80, 0.45)) drop-shadow(0 0 6px rgba(122, 217, 80, 0.25));
 }
 
 .np-drawer__brand-text {
-  display:        flex;
+  display: flex;
   flex-direction: column;
-  gap:            3px;
+  gap: 3px;
 }
 
 .np-drawer__brand-text strong {
-  font-size:      1.1rem;
-  font-weight:    700;
-  color:          var(--np-text);
-  font-family:    var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--np-text);
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
   letter-spacing: 0.02em;
 }
 
 .np-drawer__brand-text span {
   font-size: 0.84rem;
-  color:     var(--np-muted);
+  color: var(--np-muted);
 }
 
 /* Drawer search bar */
 .np-drawer__search {
-  display:       flex;
-  align-items:   center;
-  gap:           10px;
-  padding:       12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
   border-radius: 16px;
-  background:    rgba(255, 255, 255, 0.09);
-  border:        1px solid rgba(255, 255, 255, 0.14);
-  box-shadow:    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  cursor:        text;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  cursor: text;
   transition:
     border-color var(--np-dur-fast) ease,
-    box-shadow   var(--np-dur-fast) ease,
-    background   var(--np-dur-fast) ease;
+    box-shadow var(--np-dur-fast) ease,
+    background var(--np-dur-fast) ease;
 }
 
 .np-drawer__search:focus-within {
   border-color: rgba(122, 217, 80, 0.40);
-  background:   rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.10),
     0 0 0 2px rgba(122, 217, 80, 0.14),
@@ -618,15 +624,15 @@
 }
 
 .np-drawer__search svg {
-  width:           18px;
-  height:          18px;
-  fill:            none;
-  stroke:          var(--np-muted);
-  stroke-width:    1.8;
-  stroke-linecap:  round;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--np-muted);
+  stroke-width: 1.8;
+  stroke-linecap: round;
   stroke-linejoin: round;
-  flex-shrink:     0;
-  transition:      stroke var(--np-dur-fast) ease;
+  flex-shrink: 0;
+  transition: stroke var(--np-dur-fast) ease;
 }
 
 .np-drawer__search:focus-within svg {
@@ -634,13 +640,13 @@
 }
 
 .np-drawer__search input {
-  flex:        1;
-  border:      0;
-  outline:     0;
-  background:  transparent;
-  color:       var(--np-text);
-  font:        inherit;
-  font-size:   0.94rem;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--np-text);
+  font: inherit;
+  font-size: 0.94rem;
 }
 
 .np-drawer__search input::placeholder {
@@ -649,63 +655,66 @@
 
 /* ── Scrollable drawer body ────────────────────────────── */
 .np-drawer__body {
-  flex:              1;
-  overflow-y:        auto;
+  flex: 1;
+  overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width:   thin;
-  scrollbar-color:   rgba(122, 217, 80, 0.20) transparent;
-  padding:           8px 12px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 217, 80, 0.20) transparent;
+  padding: 8px 12px 0;
 }
 
 .np-drawer__body::-webkit-scrollbar {
   width: 3px;
 }
+
 .np-drawer__body::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .np-drawer__body::-webkit-scrollbar-thumb {
-  background:    rgba(122, 217, 80, 0.20);
+  background: rgba(122, 217, 80, 0.20);
   border-radius: 999px;
 }
 
 /* ── Drawer nav links ──────────────────────────────────── */
 .np-drawer__nav {
-  display:        flex;
+  display: flex;
   flex-direction: column;
-  gap:            4px;
-  padding:        8px 0 14px;
+  gap: 4px;
+  padding: 8px 0 14px;
 }
 
 /* Individual drawer link */
 .np-dlink {
-  display:         flex;
-  align-items:     center;
-  gap:             14px;
-  padding:         14px 14px;
-  border-radius:   16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 14px;
+  border-radius: 16px;
   text-decoration: none;
-  color:           var(--np-text);
-  min-height:      56px;       /* 48px+ touch target */
-  position:        relative;
-  overflow:        hidden;
+  color: var(--np-text);
+  min-height: 56px;
+  /* 48px+ touch target */
+  position: relative;
+  overflow: hidden;
 
-  will-change:     background, transform;
+  will-change: background, transform;
   transition:
     background var(--np-dur-fast) ease,
-    transform  var(--np-dur-fast) ease,
-    color      var(--np-dur-fast) ease;
+    transform var(--np-dur-fast) ease,
+    color var(--np-dur-fast) ease;
 }
 
 /* Ripple overlay */
 .np-dlink::after {
-  content:        '';
-  position:       absolute;
-  inset:          0;
-  border-radius:  inherit;
-  background:     radial-gradient(circle at var(--rx, 50%) var(--ry, 50%), rgba(122, 217, 80, 0.25) 0%, transparent 70%);
-  opacity:        0;
-  transition:     opacity 0.5s ease;
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--rx, 50%) var(--ry, 50%), rgba(122, 217, 80, 0.25) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
   pointer-events: none;
 }
 
@@ -716,36 +725,36 @@
 
 .np-dlink:hover {
   background: rgba(255, 255, 255, 0.06);
-  transform:  translateX(3px);
+  transform: translateX(3px);
 }
 
 .np-dlink.active {
   background: rgba(122, 217, 80, 0.14);
-  color:      var(--np-accent);
+  color: var(--np-accent);
 }
 
 .np-dlink.active::before {
-  content:        '';
-  position:       absolute;
-  left:           0;
-  top:            20%;
-  bottom:         20%;
-  width:          3px;
-  border-radius:  0 999px 999px 0;
-  background:     var(--np-accent);
-  box-shadow:     0 0 12px rgba(122, 217, 80, 0.50);
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  bottom: 20%;
+  width: 3px;
+  border-radius: 0 999px 999px 0;
+  background: var(--np-accent);
+  box-shadow: 0 0 12px rgba(122, 217, 80, 0.50);
 }
 
 /* Icon container */
 .np-dlink__icon {
-  display:          flex;
-  align-items:      center;
-  justify-content:  center;
-  width:            38px;
-  height:           38px;
-  border-radius:    12px;
-  background:       rgba(255, 255, 255, 0.08);
-  flex-shrink:      0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
   transition:
     background var(--np-dur-fast) ease,
     box-shadow var(--np-dur-fast) ease;
@@ -753,20 +762,20 @@
 
 .np-dlink:hover .np-dlink__icon,
 .np-dlink.active .np-dlink__icon {
-  background:  rgba(122, 217, 80, 0.16);
-  box-shadow:  0 0 14px rgba(122, 217, 80, 0.20);
+  background: rgba(122, 217, 80, 0.16);
+  box-shadow: 0 0 14px rgba(122, 217, 80, 0.20);
 }
 
 .np-dlink__icon svg {
-  width:           20px;
-  height:          20px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    1.8;
-  stroke-linecap:  round;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
   stroke-linejoin: round;
-  color:           var(--np-muted);
-  transition:      color var(--np-dur-fast) ease;
+  color: var(--np-muted);
+  transition: color var(--np-dur-fast) ease;
 }
 
 .np-dlink:hover .np-dlink__icon svg,
@@ -775,105 +784,103 @@
 }
 
 .np-dlink__label {
-  flex:        1;
-  font-size:   1.02rem;
+  flex: 1;
+  font-size: 1.02rem;
   font-weight: 500;
   letter-spacing: 0.01em;
 }
 
 .np-dlink__arrow {
   flex-shrink: 0;
-  color:       var(--np-muted);
-  opacity:     0;
+  color: var(--np-muted);
+  opacity: 0;
   transition:
-    opacity   var(--np-dur-fast) ease,
+    opacity var(--np-dur-fast) ease,
     transform var(--np-dur-fast) ease;
 }
 
 .np-dlink:hover .np-dlink__arrow,
 .np-dlink.active .np-dlink__arrow {
-  opacity:   0.6;
+  opacity: 0.6;
   transform: translateX(2px);
 }
 
 .np-dlink__arrow svg {
-  width:           16px;
-  height:          16px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    2;
-  stroke-linecap:  round;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 /* ── Stagger cascade animation ─────────────────────────── */
 /* Applied by JS once drawer opens - only affects animation, items are visible by default */
 .np-dlink[data-nav-item] {
-  opacity:   1;
+  opacity: 1;
   transform: translateX(0);
   transition:
-    opacity   var(--np-dur-mid) var(--np-ease-out),
+    opacity var(--np-dur-mid) var(--np-ease-out),
     transform var(--np-dur-mid) var(--np-ease-out),
     background var(--np-dur-fast) ease,
-    color      var(--np-dur-fast) ease;
+    color var(--np-dur-fast) ease;
 }
 
 .np-drawer:not(.is-open) .np-dlink[data-nav-item] {
-  opacity:   0;
+  opacity: 0;
   transform: translateX(24px);
   transition: none;
 }
 
 .np-dlink[data-nav-item].np-cascade-in {
-  opacity:   1;
+  opacity: 1;
   transform: translateX(0);
 }
 
 /* ── Sticky drawer footer ──────────────────────────────── */
 .np-drawer__foot {
-  flex-shrink:  0;
-  padding:      12px 18px 18px;
+  flex-shrink: 0;
+  padding: 12px 18px 18px;
 }
 
 .np-drawer__divider {
-  height:        1px;
-  background:    linear-gradient(
-    90deg,
-    transparent,
-    rgba(122, 217, 80, 0.20) 30%,
-    rgba(122, 217, 80, 0.20) 70%,
-    transparent
-  );
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(122, 217, 80, 0.20) 30%,
+      rgba(122, 217, 80, 0.20) 70%,
+      transparent);
   margin-bottom: 14px;
 }
 
 /* CTA download button */
 .np-drawer__cta {
-  display:         flex;
-  align-items:     center;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap:             10px;
-  width:           100%;
-  height:          50px;
-  border-radius:   14px;
-  margin-bottom:   14px;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border-radius: 14px;
+  margin-bottom: 14px;
   text-decoration: none;
-  font-weight:     700;
-  font-size:       0.98rem;
-  color:           #031104;
-  letter-spacing:  0.02em;
-  background:      linear-gradient(135deg, #7ad950 0%, #51b330 100%);
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #031104;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #7ad950 0%, #51b330 100%);
   box-shadow:
     0 4px 20px rgba(122, 217, 80, 0.30),
     inset 0 1px 0 rgba(255, 255, 255, 0.30);
   transition:
-    transform  var(--np-dur-fast) ease,
+    transform var(--np-dur-fast) ease,
     box-shadow var(--np-dur-fast) ease,
-    filter     var(--np-dur-fast) ease;
+    filter var(--np-dur-fast) ease;
 }
 
 .np-drawer__cta:hover {
-  transform:  translateY(-2px);
+  transform: translateY(-2px);
   box-shadow:
     0 8px 32px rgba(122, 217, 80, 0.40),
     inset 0 1px 0 rgba(255, 255, 255, 0.30);
@@ -881,70 +888,70 @@
 }
 
 .np-drawer__cta:active {
-  transform:  translateY(0);
-  filter:     brightness(0.96);
+  transform: translateY(0);
+  filter: brightness(0.96);
 }
 
 .np-drawer__cta svg {
-  width:           18px;
-  height:          18px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    2;
-  stroke-linecap:  round;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 /* Social links row */
 .np-drawer__socials {
-  display:         flex;
-  align-items:     center;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap:             8px;
-  margin-bottom:   12px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .np-drawer__social {
-  display:         flex;
-  align-items:     center;
-  gap:             6px;
-  padding:         8px 14px;
-  border-radius:   999px;
-  border:          1px solid rgba(255, 255, 255, 0.12);
-  background:      rgba(255, 255, 255, 0.07);
-  color:           var(--np-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--np-muted);
   text-decoration: none;
-  font-size:       0.84rem;
-  font-weight:     500;
+  font-size: 0.84rem;
+  font-weight: 500;
   transition:
-    background   var(--np-dur-fast) ease,
-    color        var(--np-dur-fast) ease,
+    background var(--np-dur-fast) ease,
+    color var(--np-dur-fast) ease,
     border-color var(--np-dur-fast) ease,
-    transform    var(--np-dur-fast) ease;
+    transform var(--np-dur-fast) ease;
 }
 
 .np-drawer__social:hover {
-  background:   rgba(122, 217, 80, 0.12);
-  color:        var(--np-accent);
+  background: rgba(122, 217, 80, 0.12);
+  color: var(--np-accent);
   border-color: rgba(122, 217, 80, 0.30);
-  transform:    translateY(-2px);
+  transform: translateY(-2px);
 }
 
 .np-drawer__social svg {
-  width:           15px;
-  height:          15px;
-  fill:            none;
-  stroke:          currentColor;
-  stroke-width:    2;
-  stroke-linecap:  round;
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .np-drawer__meta {
-  margin:     0;
+  margin: 0;
   text-align: center;
-  font-size:  0.78rem;
-  color:      rgba(229, 229, 229, 0.40);
+  font-size: 0.78rem;
+  color: rgba(229, 229, 229, 0.40);
 }
 
 /* Prevent background scroll while drawer open */
@@ -959,15 +966,18 @@ body.np-drawer-open {
   .np-bar {
     max-width: 820px;
   }
+
   .np-search {
     width: 180px;
   }
+
   .np-search:focus-within {
     width: 240px;
   }
+
   .np-link {
-    font-size:  0.90rem;
-    padding:    7px 11px;
+    font-size: 0.90rem;
+    padding: 7px 11px;
   }
 }
 
@@ -985,22 +995,33 @@ body.np-drawer-open {
 
   /* Capsule slightly slimmer */
   .np-bar {
-    min-height:  62px;
-    padding:     8px 14px;
+    min-height: 62px;
+    padding: 8px 14px;
   }
 
   /* Desktop search hidden, mobile trigger shown */
-  .np-search       { display: none; }
-  .np-search-trigger { display: flex; }
+  .np-search {
+    display: none;
+  }
+
+  .np-search-trigger {
+    display: flex;
+  }
 
   /* Show hamburger */
-  .np-hamburger { display: flex; }
+  .np-hamburger {
+    display: flex;
+  }
 
   /* Hide desktop nav row */
-  .np-links-row { display: none; }
+  .np-links-row {
+    display: none;
+  }
 
   /* Logo slightly smaller */
-  .np-bar__logo { width: 58px; }
+  .np-bar__logo {
+    width: 58px;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1017,7 +1038,7 @@ body.np-drawer-open {
 
   .np-bar {
     min-height: 58px;
-    padding:    7px 12px;
+    padding: 7px 12px;
   }
 
   .np-bar__logo {

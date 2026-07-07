@@ -1,0 +1,72 @@
+[
+  {
+    "id": "home",
+    "title": "Home Screen",
+    "category": "Library",
+    "image": "assets/screenshots/Home.png",
+    "description": "Your clean, modern music hub with local collection highlights and customized recommendations."
+  },
+  {
+    "id": "player",
+    "title": "Beautiful Now Playing",
+    "category": "Player",
+    "image": "assets/screenshots/Player.png",
+    "description": "Premium glass UI showcasing album art, high-fidelity playback controls, and smooth visualizations."
+  },
+  {
+    "id": "lyrics_full",
+    "title": "Full Screen Lyrics View",
+    "category": "Player",
+    "image": "assets/screenshots/Full_Screen_Lyrics_View.png",
+    "description": "Synced karaoke-style lyrics that highlight and transition beautifully to the rhythm of your music."
+  },
+  {
+    "id": "equalizer",
+    "title": "Professional Equalizer",
+    "category": "Audio",
+    "image": "assets/screenshots/Equalizer.png",
+    "description": "Multi-band audio frequency tuning tool to achieve the perfect acoustic response for any headphones."
+  },
+  {
+    "id": "auto_eq",
+    "title": "AutoEQ Integration",
+    "category": "Audio",
+    "image": "assets/screenshots/AutoEQ.png",
+    "description": "Choose from thousands of preset headphone profiles to optimize and balance sound automatically."
+  },
+  {
+    "id": "rhythm_stats",
+    "title": "Rhythm & Listen Stats",
+    "category": "Analytics",
+    "image": "assets/screenshots/Rhythm_Stats.png",
+    "description": "Understand your music taste with privacy-first listening history charts, statistics, and graphs."
+  },
+  {
+    "id": "edit_metadata",
+    "title": "Tag Editor & Metadata",
+    "category": "Tools",
+    "image": "assets/screenshots/Edit_Metadata.png",
+    "description": "Keep your local audio library organized by modifying titles, artists, albums, track numbers, and cover art."
+  },
+  {
+    "id": "playlist",
+    "title": "Smart Playlists",
+    "category": "Library",
+    "image": "assets/screenshots/Playlist.png",
+    "description": "Create custom lists of your favorite tracks or play automatically generated collections based on tags."
+  },
+  {
+    "id": "queue",
+    "title": "Interactive Play Queue",
+    "category": "Player",
+    "image": "assets/screenshots/Queue.png",
+    "description": "Easily manage upcoming tracks with drag-and-drop ordering and swift swipe-to-remove interactions."
+  },
+  {
+    "id": "settings",
+    "title": "Extensive Customization",
+    "category": "Settings",
+    "image": "assets/screenshots/Settings.png",
+    "description": "Tailor the interface, theme engine, gesture behaviors, language translations, and file scanners to your liking."
+  }
+]

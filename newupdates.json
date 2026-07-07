@@ -1,0 +1,27 @@
+[
+  {
+    "version": "Version 2026.07",
+    "date": "July 2026",
+    "title": "The Glassmorphism Era",
+    "image": "assets/image_releases/Rhythm_5.1_Release.png",
+    "changelog": [
+      "Completely rewritten website layout with interactive Liquid Glass components",
+      "Dynamic background matching with 60 FPS scrolling and parallax",
+      "Added support for advanced local file scanning and sorting algorithms",
+      "Enhanced equalizer sound profiles with AutoEQ integrations",
+      "Privacy tracking shield: 100% zero analytics or data collection"
+    ]
+  },
+  {
+    "version": "Version 2026.06",
+    "date": "June 2026",
+    "title": "Material You Integration",
+    "image": "assets/image_releases/Rhythm_5_Release.png",
+    "changelog": [
+      "Dynamic color palettes fetched directly from your Android wallpaper system",
+      "Full offline synced lyrics support for LRC files",
+      "Stately Now Playing cards with customized gradient shaders",
+      "Android Auto integration with full speech-to-text searching"
+    ]
+  }
+]
