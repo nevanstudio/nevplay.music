@@ -1,0 +1,23 @@
+.hero-card {
+  background: linear-gradient(135deg, rgba(116, 215, 255, 0.18), rgba(255,255,255,0.04));
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.stat-card {
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+}
+
+.stat-card strong { display: block; font-size: 1.25rem; margin-bottom: 6px; }
+
+@media (max-width: 768px) {
+  .hero-grid { grid-template-columns: 1fr; }
+}

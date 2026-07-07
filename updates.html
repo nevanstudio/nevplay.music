@@ -1,169 +1,34 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NevTrack - Updates & Latest Features</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NevPlay — Updates</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="components/header.css" />
+    <link rel="stylesheet" href="components/footer.css" />
+    <link rel="stylesheet" href="css/updates.css" />
+    <script src="js/main.js" defer></script>
+    <script src="js/updates.js" defer></script>
+  </head>
+  <body>
+    <div class="site-shell">
+      <div id="navbar"></div>
 
-    <!-- Resource Hints for Performance -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://github.com">
+      <main class="page">
+        <section class="hero-card">
+          <p class="eyebrow">Planned page</p>
+          <h1>Updates</h1>
+          <p>Version history and release notes will be arranged in a polished timeline here, including entries such as 2026.07, 2026.07.01, 2026.07.02, and beyond.</p>
+        </section>
 
-    <!-- Preload critical above-the-fold image -->
-    <link rel="preload" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1400&q=80" as="image">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="shortcut icon" href="assets/icon.png">
-    <link rel="canonical" href="https://nevan.github.io/NevTrack/updates.html">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="components/header.css">
-    <link rel="stylesheet" href="components/footer.css">
-    <meta name="description" content="Track the latest NevTrack updates including Dual-Mode architecture, NevTrack Guard hearing safety, professional 10-band equalizer, and advanced playback insights. Stay current with the cutting-edge Material You music experience.">
-    <meta name="keywords" content="NevTrack, Updates, Changelog, Features, Material You, Android Music Player">
-    <meta name="author" content="Nevan">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="NevTrack - Updates & Latest Features">
-    <meta property="og:description" content="Stay updated with the latest features, improvements, and news from NevTrack music player.">
-    <meta property="og:image" content="assets/icon.png">
-    <meta property="og:url" content="https://nevan.github.io/NevTrack/updates.html">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NevTrack - Updates & Latest Features">
-    <meta name="twitter:description" content="Stay updated with the latest features, improvements, and news from NevTrack music player.">
-    <meta name="twitter:image" content="assets/icon.png">
-</head>
-<body>
-    <div id="premium-loader">
-        <div class="loader-content" aria-hidden="true">
-            <div class="loader-ring"></div>
-            <div class="loader-core"></div>
-            <div class="loader-glow"></div>
-        </div>
+        <section class="info-card">
+          <h2>Timeline preview</h2>
+          <p>This page is ready as a placeholder while the release timeline and version summaries are prepared.</p>
+        </section>
+      </main>
     </div>
-
-    <!-- Skip to main content link for accessibility -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <div id="site-header"></div>
-
-    <main id="main-content" role="main">
-    <section class="hero">
-        <div class="animated-circles">
-            <div class="circle x1"></div>
-            <div class="circle x2"></div>
-            <div class="circle x3"></div>
-            <div class="circle x4"></div>
-            <div class="circle x5"></div>
-            <div class="circle x6"></div>
-            <div class="circle x7"></div>
-            <div class="circle x8"></div>
-            <div class="circle x9"></div>
-            <div class="circle x10"></div>
-            <div class="circle x11"></div>
-            <div class="circle x12"></div>
-            <div class="circle x13"></div>
-        </div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Stay Ahead with NevTrack Updates</h1>
-                    <p>Discover the latest features, performance improvements, and innovative additions to your favorite Material You music player. From advanced audio processing to intelligent library management.</p>
-                    <div class="view-controls">
-                        <button id="listViewBtn" class="btn btn-primary active"><i class="fas fa-list"></i> List View</button>
-                        <button id="gridViewBtn" class="btn btn-outline"><i class="fas fa-th-large"></i> Grid View</button>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80" alt="NevTrack Home Screen" loading="eager">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="updates-list-section" id="updates">
-        <div class="container">
-                <div class="updates-list list-view"> <!-- Default to list-view -->
-                    <div class="update-item" data-update-id="update51">
-                        <img src="assets/Posts/NevTrack_5.1_Release.png" alt="NevTrack 5.1 Release">
-                        <div class="update-content">
-                            <h3>NevTrack 5.1: The Refinement Update ✨</h3>
-                            <p class="update-summary">NevTrack 5.1 is here with improved tablet layouts, A-Z scroll bar, NevTrack Lyrics widget, nearby server discovery, Replay Gain, and numerous bug fixes across the board.</p>
-                            <span class="update-meta">June 14, 2026 | By Nevan</span>
-                            <button class="btn btn-primary read-more-btn">Read More</button>
-                        </div>
-                    </div>
-                    <div class="update-item" data-update-id="updateAnniversary">
-                        <img src="assets/Banner.png" alt="Anniversary Image">
-                        <div class="update-content">
-                            <h3>Celebrating Our First Anniversary! 🥳</h3>
-                            <p class="update-summary">It's been an incredible year! We're celebrating NevTrack's first anniversary and the journey from a local player to a streaming powerhouse.</p>
-                            <span class="update-meta">June 03, 2026 | By Nevan</span>
-                            <button class="btn btn-primary read-more-btn">Read More</button>
-                        </div>
-                    </div>
-                    <div class="update-item" data-update-id="update15">
-                        <img src="assets/Posts/NevTrack_5_Release.png" alt="Update Image 15">
-                        <div class="update-content">
-                            <h3>NevTrack 5: The Streaming Revolution 🌐</h3>
-                            <p class="update-summary">NevTrack 5 is here! Experience a complete evolution with Dual-Mode Architecture, Universal Search, and Full-Screen Lyrics. Now available as a stable release.</p>
-                            <span class="update-meta">June 03, 2026 | By Nevan</span>
-                            <button class="btn btn-primary read-more-btn">Read More</button>
-                        </div>
-                    </div>
-                    <div class="update-item" data-update-id="update9">
-                        <img src="assets/Banner.png" alt="Update Image 9">
-                        <div class="update-content">
-                            <h3>NevTrack is Coming to Google Play Store! 📱🎉</h3>
-                            <p class="update-summary">Exciting news, NevTrack community! We're thrilled to announce that NevTrack will soon be available on the Google Play Store! This is a major milestone in our journey to bring professional music playback to Android users worldwide.</p>
-                            <span class="update-meta">January 22, 2026 | By Nevan</span>
-                            <button class="btn btn-primary read-more-btn">Read More</button>
-                        </div>
-                    </div>
-                    <div class="update-item" data-update-id="update1">
-                        <img src="assets/update.jpg" alt="Update Image 1">
-                        <div class="update-content">
-                            <h3>NevTrack's Website Launch ;)</h3>
-                            <p class="update-summary">Hi Everyone! We're thrilled to announce the launch of our new website!</p>
-                            <span class="update-meta">August 27, 2025 | By Nevan</span>
-                            <button class="btn btn-primary read-more-btn">Read More</button>
-                        </div>
-                    </div>
-                </div>
-
-        </div>
-    </section>
-
-    <div id="update-popup" class="update-popup-overlay">
-        <div class="update-popup-content">
-            <button class="close-popup-btn"><i class="fas fa-times"></i> Close</button>
-            <div class="update-popup-header">
-                <img id="popup-image" src="" alt="Update Image">
-            </div>
-            <div class="update-popup-body">
-                <div class="update-popup-header-text">
-                    <h2 id="popup-headline"></h2>
-                    <p class="popup-meta"><span id="popup-date"></span> | By <span id="popup-writer"></span></p>
-                </div>
-                <div id="popup-details"></div>
-            </div>
-        </div>
-    </div>
-
-    <section class="cta">
-        <div class="container">
-            <h2>Join the NevTrack Revolution!</h2>
-            <p>Get NevTrack now and immerse yourself in a world of personalized music with stunning Material You design.</p>
-            <div class="cta-buttons">
-            <a href="index.html#downloadOptionsSection" class="btn btn-outline">Download Now</a>
-                <a href="https://github.com/nevan/NevTrack" class="btn btn-primary">Star on GitHub</a>
-            </div>
-        </div>
-    </section>
-    </main>
-
-    <div id="site-footer"></div>
-    <script src="script.js"></script>
-</body>
+    <div id="footer"></div>
+  </body>
 </html>
+
