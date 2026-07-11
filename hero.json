@@ -24,7 +24,7 @@
   "buttons": [
     {
       "text": "Download Now",
-      "href": "download.html",
+      "href": "get.html",
       "primary": true
     },
     {

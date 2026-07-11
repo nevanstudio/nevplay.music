@@ -413,7 +413,7 @@ async function initDynamicHero() {
       <h1 class="hero-title">Your Local Music. <span class="hero-title-highlight">Beautifully Reimagined.</span></h1>
       <p class="hero-desc">Discover the premium local offline music experience on Android.</p>
       <div class="hero-buttons">
-        <a href="download.html" class="hero-btn hero-btn--primary">Download Now</a>
+        <a href="get.html" class="hero-btn hero-btn--primary">Download Now</a>
       </div>
     `;
     heroRightTarget.innerHTML = `
