@@ -31,4 +31,4 @@ export const navItems: NavItem[] = [
   { label: "Help", href: "/help", icon: LifeBuoy },
 ]
 
-export const GITHUB_REPO_URL = "https://github.com/nevanstudio/NevStream-Releases"
+export const GITHUB_REPO_URL = "https://github.com/nevanstudio/nevplay_releases"
