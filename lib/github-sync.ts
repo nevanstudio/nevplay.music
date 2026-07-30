@@ -3,7 +3,7 @@ import { stableReleases, betaReleases } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getReleases, findApkAsset } from "./github"
 
-const REPO = "nevanstudio/nevplay.music"
+const REPO = "nevanstudio/nevplay_releases"
 const API_BASE = `https://api.github.com/repos/${REPO}`
 
 export type GitHubRelease = {
