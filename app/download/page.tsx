@@ -17,6 +17,7 @@ import {
   getTotalDownloads,
 } from "@/app/actions/releases"
 import { ReleaseCard } from "@/components/releases/release-card"
+import { CheckUpdatesButton } from "@/components/releases/check-updates-button"
 
 export const metadata: Metadata = {
   title: "Download",
@@ -47,7 +48,12 @@ export default async function DownloadPage() {
           </div>
         )}
 
-        {/* Stable Release */}
+        {/* Check for Updates Button */}
+      <div className="mx-auto max-w-3xl px-4">
+        <CheckUpdatesButton />
+      </div>
+
+      {/* Stable Release */}
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="mb-4 text-xl font-bold text-white">Latest Release</h2>
           {latest ? (
