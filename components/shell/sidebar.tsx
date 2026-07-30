@@ -89,13 +89,13 @@ export function Sidebar() {
                 {active && (
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 rounded-lg bg-accent"
+                    className="absolute inset-0 rounded-lg bg-primary/10"
                   />
                 )}
                 {active && (
                   <span
                     aria-hidden="true"
-                    className="absolute left-0 top-1/2 h-5 w-0.75 -translate-y-1/2 rounded-full bg-primary"
+                    className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary"
                   />
                 )}
                 <item.icon className="relative size-4.5 shrink-0" aria-hidden="true" />
