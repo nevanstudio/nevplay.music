@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s — NevPlay",
   },
   description:
-    "NevPlay brings your local music library to life. Private offline listening with synced lyrics, AI-powered recommendations, and a beautiful Material You Liquid Glass interface. Free, open source, no tracking.",
+    "NevPlay brings your local music library to life. Private offline listening with synced lyrics, AI-powered recommendations, and a beautiful Material You Liquid Glass interface. Free, always private, your music stays yours.",
   icons: { icon: "/assets/icon.png" },
 }
 

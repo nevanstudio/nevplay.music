@@ -1,7 +1,5 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Github } from "lucide-react"
-import { GITHUB_REPO_URL } from "@/lib/nav"
 
 const productLinks = [
   { label: "Download", href: "/download" },
@@ -36,18 +34,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              The premium offline music player for Android. Free, open source, and
-              privacy-first — your music stays yours.
+              The premium offline music player for Android. Always free, always private
+              — your music stays completely yours.
             </p>
-            <a
-              href={GITHUB_REPO_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex w-fit items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              <Github className="size-4" aria-hidden="true" />
-              GitHub
-            </a>
           </div>
 
           <div className="flex flex-wrap gap-12">
@@ -91,8 +80,8 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-glass-border pt-6 text-xs text-muted-foreground md:flex-row">
-          <p>&copy; {new Date().getFullYear()} Nevan Studio. Free and open source, forever.</p>
-          <p>No ads. No tracking. No compromise.</p>
+          <p>&copy; {new Date().getFullYear()} Nevan Studio. Always free, always private.</p>
+          <p>No ads. No tracking. Your privacy guaranteed.</p>
         </div>
       </div>
     </footer>

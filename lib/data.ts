@@ -17,7 +17,7 @@ export const hero = {
     "Android Auto",
   ],
   stats: [
-    { value: "100% Free", label: "Open Source" },
+    { value: "100% Free", label: "No Ads Ever" },
     { value: "Weekly", label: "Regular Updates" },
     { value: "< 40MB", label: "Fast Performance" },
     { value: "No Tracking", label: "Privacy Focused" },
@@ -171,7 +171,7 @@ export const faqs = [
   {
     question: 'Why does Android warn about a "harmful file"?',
     answer:
-      "This is a common false positive for sideloaded APKs. NevPlay is open source — you can verify the code yourself on GitHub. The warning appears because the app isn't distributed through the Play Store.",
+      "This is a common false positive for sideloaded APKs. The warning appears because the app isn't distributed through the Play Store. Rest assured, NevPlay is secure and digitally signed.",
   },
   {
     question: "How do I add synced lyrics?",

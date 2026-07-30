@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "Download",
   description:
-    "Download NevPlay for Android — the premium offline music player. Free, open source, signed APK, no tracking.",
+    "Download NevPlay for Android — the premium offline music player. Free, secure signed APK, completely private.",
 }
 
 export default async function DownloadPage() {

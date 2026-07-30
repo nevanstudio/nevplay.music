@@ -26,7 +26,7 @@ const pillars = [
     icon: Heart,
     title: "Our Promise",
     description:
-      "Free forever, open source, no ads, no tracking. NevPlay will never sell your data because we never collect it.",
+      "Free forever, no ads, no tracking. NevPlay will never sell your data because we never collect it.",
   },
 ]
 
@@ -39,9 +39,9 @@ const journey = [
   },
   {
     year: "2025",
-    title: "Open Source Launch",
+    title: "Public Launch",
     description:
-      "NevPlay goes public on GitHub. Synced lyrics, equalizer, and smart playlists join the core playback engine.",
+      "NevPlay is released publicly. Synced lyrics, equalizer, and smart playlists join the core playback engine.",
   },
   {
     year: "2026",
@@ -65,9 +65,9 @@ const principles = [
   },
   {
     icon: Code2,
-    title: "Transparent Code",
+    title: "Premium Quality",
     description:
-      "Every line is open source. Inspect, fork, contribute — the codebase is yours too.",
+      "Built with attention to detail. Every feature is crafted for excellence and reliability.",
   },
   {
     icon: Wallet,
