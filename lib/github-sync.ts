@@ -72,12 +72,22 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
   console.log("[GitHub Sync] Stable releases found:", stableReleasesList.length)
 
   for (const ghRelease of stableReleasesList) {
+    console.log(`[GitHub Sync] Processing release: ${ghRelease.tag_name}`)
+    console.log(`[GitHub Sync] Release has ${ghRelease.assets.length} assets`)
+    ghRelease.assets.forEach((asset, i) => {
+      console.log(`[GitHub Sync]   Asset ${i}: ${asset.name}`)
+    })
+
     const apkAsset = findApkAsset({
       ...ghRelease,
       assets: ghRelease.assets,
     })
 
-    if (!apkAsset) continue
+    if (!apkAsset) {
+      console.log(`[GitHub Sync] No APK found for ${ghRelease.tag_name}, skipping`)
+      continue
+    }
+    console.log(`[GitHub Sync] Found APK: ${apkAsset.name}`)
 
     const imageUrl = extractImageUrl(ghRelease.body)
 
@@ -89,6 +99,7 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
       .limit(1)
 
     if (existing.length > 0) {
+      console.log(`[GitHub Sync] Updating existing release: ${ghRelease.tag_name}`)
       // Update existing release
       await db
         .update(stableReleases)
@@ -102,6 +113,7 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
         })
         .where(eq(stableReleases.githubReleaseId, ghRelease.tag_name))
     } else {
+      console.log(`[GitHub Sync] Inserting new stable release: ${ghRelease.tag_name}`)
       // Insert new release
       await db.insert(stableReleases).values({
         id: ghRelease.tag_name,
@@ -116,6 +128,7 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
         githubReleaseId: ghRelease.tag_name,
         prerelease: false,
       })
+      console.log(`[GitHub Sync] Successfully inserted: ${ghRelease.tag_name}`)
     }
   }
 }
@@ -128,12 +141,22 @@ export async function syncBetaReleases(githubReleases: GitHubRelease[]) {
   console.log("[GitHub Sync] Beta releases found:", betaReleasesList.length)
 
   for (const ghRelease of betaReleasesList) {
+    console.log(`[GitHub Sync] Processing beta release: ${ghRelease.tag_name}`)
+    console.log(`[GitHub Sync] Beta release has ${ghRelease.assets.length} assets`)
+    ghRelease.assets.forEach((asset, i) => {
+      console.log(`[GitHub Sync]   Asset ${i}: ${asset.name}`)
+    })
+
     const apkAsset = findApkAsset({
       ...ghRelease,
       assets: ghRelease.assets,
     })
 
-    if (!apkAsset) continue
+    if (!apkAsset) {
+      console.log(`[GitHub Sync] No APK found for beta ${ghRelease.tag_name}, skipping`)
+      continue
+    }
+    console.log(`[GitHub Sync] Found APK in beta: ${apkAsset.name}`)
 
     const imageUrl = extractImageUrl(ghRelease.body)
 
