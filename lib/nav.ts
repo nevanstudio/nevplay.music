@@ -9,6 +9,8 @@ import {
   Info,
   Heart,
   LifeBuoy,
+  AlertCircle,
+  Zap,
   type LucideIcon,
 } from "lucide-react"
 
@@ -24,9 +26,11 @@ export const navItems: NavItem[] = [
   { label: "Features", href: "/features", icon: Sparkles },
   { label: "Screenshots", href: "/screenshots", icon: Camera },
   { label: "Releases", href: "/releases", icon: Rocket },
+  { label: "Coming Soon", href: "/coming-soon", icon: Zap },
   { label: "Roadmap", href: "/roadmap", icon: Map },
   { label: "Blog", href: "/blog", icon: Newspaper },
   { label: "About", href: "/about", icon: Info },
+  { label: "Report Issues", href: "/issues", icon: AlertCircle },
   { label: "Donate", href: "/donate", icon: Heart },
   { label: "Help", href: "/help", icon: LifeBuoy },
 ]
