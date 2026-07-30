@@ -2,21 +2,14 @@ import { syncAllReleases } from "@/lib/github-sync"
 import { NextResponse } from "next/server"
 
 /**
- * Cron job endpoint that syncs GitHub releases to the database
- * Called every 5 minutes by Vercel Cron
+ * Sync endpoint for GitHub releases
+ * Can be called by Vercel Cron (GET) or manually (POST)
  */
-export async function GET(req: Request) {
-  // Verify the request is from Vercel Cron
-  const authHeader = req.headers.get("authorization")
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    )
-  }
-
+async function handleSync() {
   try {
+    console.log("[Release Sync API] Starting sync...")
     const result = await syncAllReleases()
+    console.log("[Release Sync API] Sync completed:", result)
     return NextResponse.json(result)
   } catch (error) {
     console.error("[Release Sync API] Error:", error)
@@ -25,4 +18,12 @@ export async function GET(req: Request) {
       { status: 500 }
     )
   }
+}
+
+export async function GET(req: Request) {
+  return handleSync()
+}
+
+export async function POST(req: Request) {
+  return handleSync()
 }

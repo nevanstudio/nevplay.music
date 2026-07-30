@@ -1,4 +1,4 @@
-const REPO = "nevanstudio/nevplay_releases"
+const REPO = "nevanstudio/nevplay.music"
 const API_BASE = `https://api.github.com/repos/${REPO}`
 
 export type ReleaseAsset = {

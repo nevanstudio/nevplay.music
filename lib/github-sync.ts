@@ -3,7 +3,7 @@ import { stableReleases, betaReleases } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getReleases, findApkAsset } from "./github"
 
-const REPO = "nevanstudio/nevplay_releases"
+const REPO = "nevanstudio/nevplay.music"
 const API_BASE = `https://api.github.com/repos/${REPO}`
 
 export type GitHubRelease = {
@@ -32,15 +32,19 @@ const headers: HeadersInit = {
  */
 async function fetchGitHubReleases(): Promise<GitHubRelease[]> {
   try {
+    console.log("[GitHub Sync] Fetching from:", `${API_BASE}/releases?per_page=50`)
     const res = await fetch(`${API_BASE}/releases?per_page=50`, {
       headers,
     })
     if (!res.ok) {
-      console.error("[GitHub Sync] Failed to fetch releases:", res.status)
+      console.error("[GitHub Sync] Failed to fetch releases:", res.status, res.statusText)
       return []
     }
     const data = (await res.json()) as GitHubRelease[]
-    return data.filter((r) => !r.draft)
+    console.log("[GitHub Sync] Found", data.length, "releases")
+    const filtered = data.filter((r) => !r.draft)
+    console.log("[GitHub Sync] After filtering drafts:", filtered.length, "releases")
+    return filtered
   } catch (error) {
     console.error("[GitHub Sync] Error fetching releases:", error)
     return []
@@ -65,6 +69,7 @@ function extractImageUrl(body: string | null): string | null {
  */
 export async function syncStableReleases(githubReleases: GitHubRelease[]) {
   const stableReleasesList = githubReleases.filter((r) => !r.prerelease)
+  console.log("[GitHub Sync] Stable releases found:", stableReleasesList.length)
 
   for (const ghRelease of stableReleasesList) {
     const apkAsset = findApkAsset({
@@ -120,6 +125,7 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
  */
 export async function syncBetaReleases(githubReleases: GitHubRelease[]) {
   const betaReleasesList = githubReleases.filter((r) => r.prerelease)
+  console.log("[GitHub Sync] Beta releases found:", betaReleasesList.length)
 
   for (const ghRelease of betaReleasesList) {
     const apkAsset = findApkAsset({
