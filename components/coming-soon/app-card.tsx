@@ -1,11 +1,10 @@
 import Image from "next/image"
 import { Calendar } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 interface ComingSoonAppCardProps {
   appName: string
   description?: string
-  estimatedRelease?: Date
+  estimatedRelease?: string
   imageUrl?: string
   status?: string
 }
@@ -17,12 +16,9 @@ export function ComingSoonAppCard({
   imageUrl,
   status = "in_development",
 }: ComingSoonAppCardProps) {
-  const formatDate = (date: Date | null | undefined) => {
+  const formatDate = (date: string | null | undefined) => {
     if (!date) return "Coming Soon"
-    return new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-    })
+    return date
   }
 
   const getStatusColor = (stat: string) => {
@@ -106,12 +102,12 @@ export function ComingSoonAppCard({
         </div>
 
         {/* Button */}
-        <Button
+        <button
           disabled
-          className="mt-4 w-full bg-[#1DB954]/20 text-[#1DB954] hover:bg-[#1DB954]/20 cursor-not-allowed"
+          className="mt-4 w-full rounded-lg bg-[#1DB954]/20 px-4 py-2 text-sm font-semibold text-[#1DB954] cursor-not-allowed opacity-50"
         >
           Coming Soon
-        </Button>
+        </button>
       </div>
     </div>
   )

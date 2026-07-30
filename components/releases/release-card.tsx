@@ -4,16 +4,15 @@ import { useState } from "react"
 import Image from "next/image"
 import { Download, ExternalLink, Info } from "lucide-react"
 import { trackDownload } from "@/app/actions/releases"
-import { Button } from "@/components/ui/button"
 
 interface ReleaseCardProps {
-  id: number
+  id: string
   version: string
   title: string
   description?: string
   releaseNotes?: string
   imageUrl?: string
-  apkUrl: string
+  apkUrl: string | null
   downloadCount: number
   releaseType: "stable" | "beta"
   isBeta?: boolean
@@ -42,11 +41,11 @@ export function ReleaseCard({
       setDownloadsCount((prev) => prev + 1)
 
       // Open APK URL directly
-      window.open(apkUrl, "_blank")
+      if (apkUrl) window.open(apkUrl, "_blank")
     } catch (error) {
       console.error("Download failed:", error)
       alert("Failed to track download. The file link will still open.")
-      window.open(apkUrl, "_blank")
+      if (apkUrl) window.open(apkUrl, "_blank")
     } finally {
       setIsDownloading(false)
     }
@@ -102,31 +101,33 @@ export function ReleaseCard({
       )}
 
       {/* Download Stats & Button */}
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <p className="text-sm font-medium text-white">
-            {downloadsCount.toLocaleString()} downloads
-          </p>
-          <a
-            href={apkUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs text-[#1DB954] hover:text-[#1ED760]"
-          >
-            <ExternalLink className="size-3" />
-            GitHub
-          </a>
-        </div>
+      {apkUrl && (
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex flex-col gap-1">
+            <p className="text-sm font-medium text-white">
+              {downloadsCount.toLocaleString()} downloads
+            </p>
+            <a
+              href={apkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs text-[#1DB954] hover:text-[#1ED760]"
+            >
+              <ExternalLink className="size-3" />
+              GitHub
+            </a>
+          </div>
 
-        <Button
-          onClick={handleDownload}
-          disabled={isDownloading}
-          className="gap-2 bg-[#1DB954] text-black hover:bg-[#1ed760] disabled:opacity-50"
-        >
-          <Download className="size-4" />
-          {isDownloading ? "Downloading..." : "Download APK"}
-        </Button>
-      </div>
+          <button
+            onClick={handleDownload}
+            disabled={isDownloading}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1DB954] px-4 py-2 font-semibold text-black transition-all hover:bg-[#1ed760] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Download className="size-4" />
+            {isDownloading ? "Downloading..." : "Download APK"}
+          </button>
+        </div>
+      )}
     </div>
   )
 }

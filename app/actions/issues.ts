@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { issues } from "@/lib/db/schema"
+import { userIssues } from "@/lib/db/schema"
 import { desc } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
@@ -73,22 +73,20 @@ export async function submitIssue(data: IssueData) {
 
     // Insert issue
     const result = await db
-      .insert(issues)
+      .insert(userIssues)
       .values({
+        id: `issue-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         title: data.title,
         description: data.description,
         category: data.category,
         type: data.type,
-        priority: data.priority,
-        email: data.email || null,
+        email: data.email || "",
         attachments: data.attachments
           ? JSON.stringify(data.attachments)
           : null,
         status: "open",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       })
-      .returning({ id: issues.id })
+      .returning({ id: userIssues.id })
 
     revalidatePath("/issues")
 
@@ -110,8 +108,8 @@ export async function getRecentIssues(limit = 10) {
   try {
     const data = await db
       .select()
-      .from(issues)
-      .orderBy(desc(issues.createdAt))
+      .from(userIssues)
+      .orderBy(desc(userIssues.createdAt))
       .limit(limit)
     return data
   } catch (error) {

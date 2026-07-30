@@ -118,10 +118,10 @@ export default async function IssuesPage() {
                       <h3 className="font-semibold text-white">{issue.title}</h3>
                       <span
                         className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(
-                          issue.priority
+                          issue.type
                         )}`}
                       >
-                        {issue.priority}
+                        {issue.type}
                       </span>
                     </div>
 

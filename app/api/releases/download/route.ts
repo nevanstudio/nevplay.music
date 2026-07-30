@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { releases, betaReleases, downloadLogs } from "@/lib/db/schema"
+import { stableReleases, betaReleases, downloadLogs } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { NextResponse } from "next/server"
 
@@ -23,19 +23,19 @@ export async function POST(req: Request) {
 
     // Log the download
     await db.insert(downloadLogs).values({
-      releaseId: parseInt(releaseId),
+      id: `${releaseId}-${Date.now()}`,
+      releaseId,
       releaseType,
       appName,
       ipAddress: ip,
-      downloadedAt: new Date(),
     })
 
     // Update download count
-    const table = releaseType === "beta" ? betaReleases : releases
+    const table = releaseType === "beta" ? betaReleases : stableReleases
     const releaseRecord = await db
       .select()
       .from(table)
-      .where(eq(table.id, parseInt(releaseId)))
+      .where(eq(table.id, releaseId))
       .limit(1)
 
     if (releaseRecord.length > 0) {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       await db
         .update(table)
         .set({ downloadCount: currentCount + 1 })
-        .where(eq(table.id, parseInt(releaseId)))
+        .where(eq(table.id, releaseId))
     }
 
     return NextResponse.json({

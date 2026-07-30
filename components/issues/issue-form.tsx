@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { submitIssue } from "@/app/actions/issues"
-import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2, Loader } from "lucide-react"
 
 type Category = "bug" | "feature" | "suggestion"
@@ -218,10 +217,10 @@ export function IssueForm() {
       </div>
 
       {/* Submit Button */}
-      <Button
+      <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full gap-2 bg-[#1DB954] py-3 text-black hover:bg-[#1ed760] disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1DB954] px-4 py-3 font-semibold text-black transition-all hover:bg-[#1ed760] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isSubmitting ? (
           <>
@@ -231,7 +230,7 @@ export function IssueForm() {
         ) : (
           "Submit Issue"
         )}
-      </Button>
+      </button>
     </form>
   )
 }

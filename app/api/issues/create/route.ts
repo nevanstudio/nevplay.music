@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { issues } from "@/lib/db/schema"
+import { userIssues } from "@/lib/db/schema"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     } = body
 
     // Validation
-    if (!title || !description || !category || !type || !priority) {
+    if (!title || !description || !category || !type) {
       return NextResponse.json(
         {
           error: "Missing required fields",
@@ -25,22 +25,15 @@ export async function POST(req: Request) {
             "description",
             "category",
             "type",
-            "priority",
           ],
         },
         { status: 400 }
       )
     }
 
-    // Validate category, type, and priority
+    // Validate category and type
     const validCategories = ["bug", "feature", "suggestion"]
     const validTypes = [
-      "critical",
-      "high",
-      "normal",
-      "low",
-    ]
-    const validPriorities = [
       "critical",
       "high",
       "normal",
@@ -61,29 +54,20 @@ export async function POST(req: Request) {
       )
     }
 
-    if (!validPriorities.includes(priority)) {
-      return NextResponse.json(
-        { error: `Invalid priority. Must be one of: ${validPriorities.join(", ")}` },
-        { status: 400 }
-      )
-    }
-
     // Insert issue
     const result = await db
-      .insert(issues)
+      .insert(userIssues)
       .values({
+        id: `issue-${Date.now()}`,
         title: title.substring(0, 255),
         description,
         category,
         type,
-        priority,
-        email: email ? email.substring(0, 255) : null,
+        email: email ? email.substring(0, 255) : "",
         attachments: attachments ? JSON.stringify(attachments) : null,
         status: "open",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       })
-      .returning({ id: issues.id })
+      .returning({ id: userIssues.id })
 
     return NextResponse.json(
       {

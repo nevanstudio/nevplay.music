@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { releases, betaReleases } from "@/lib/db/schema"
+import { stableReleases, betaReleases } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { getReleases, findApkAsset } from "./github"
 
@@ -64,9 +64,9 @@ function extractImageUrl(body: string | null): string | null {
  * Sync stable releases to database
  */
 export async function syncStableReleases(githubReleases: GitHubRelease[]) {
-  const stableReleases = githubReleases.filter((r) => !r.prerelease)
+  const stableReleasesList = githubReleases.filter((r) => !r.prerelease)
 
-  for (const ghRelease of stableReleases) {
+  for (const ghRelease of stableReleasesList) {
     const apkAsset = findApkAsset({
       ...ghRelease,
       assets: ghRelease.assets,
@@ -79,14 +79,14 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
     // Check if release already exists
     const existing = await db
       .select()
-      .from(releases)
-      .where(eq(releases.githubReleaseId, ghRelease.tag_name))
+      .from(stableReleases)
+      .where(eq(stableReleases.githubReleaseId, ghRelease.tag_name))
       .limit(1)
 
     if (existing.length > 0) {
       // Update existing release
       await db
-        .update(releases)
+        .update(stableReleases)
         .set({
           title: ghRelease.name || ghRelease.tag_name,
           description: ghRelease.body || undefined,
@@ -95,10 +95,11 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
           apkUrl: apkAsset.browser_download_url,
           updatedAt: new Date(),
         })
-        .where(eq(releases.githubReleaseId, ghRelease.tag_name))
+        .where(eq(stableReleases.githubReleaseId, ghRelease.tag_name))
     } else {
       // Insert new release
-      await db.insert(releases).values({
+      await db.insert(stableReleases).values({
+        id: ghRelease.tag_name,
         appName: "NevPlay",
         version: ghRelease.tag_name,
         title: ghRelease.name || ghRelease.tag_name,
@@ -108,8 +109,7 @@ export async function syncStableReleases(githubReleases: GitHubRelease[]) {
         apkUrl: apkAsset.browser_download_url,
         downloadCount: apkAsset.download_count,
         githubReleaseId: ghRelease.tag_name,
-        createdAt: new Date(ghRelease.published_at),
-        updatedAt: new Date(),
+        prerelease: false,
       })
     }
   }
@@ -154,6 +154,7 @@ export async function syncBetaReleases(githubReleases: GitHubRelease[]) {
     } else {
       // Insert new beta release
       await db.insert(betaReleases).values({
+        id: ghRelease.tag_name,
         appName: "NevPlay",
         version: ghRelease.tag_name,
         title: ghRelease.name || ghRelease.tag_name,
@@ -163,8 +164,6 @@ export async function syncBetaReleases(githubReleases: GitHubRelease[]) {
         apkUrl: apkAsset.browser_download_url,
         downloadCount: apkAsset.download_count,
         githubReleaseId: ghRelease.tag_name,
-        createdAt: new Date(ghRelease.published_at),
-        updatedAt: new Date(),
       })
     }
   }
