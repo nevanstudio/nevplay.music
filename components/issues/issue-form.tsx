@@ -7,7 +7,6 @@ import {
   Bug, Lightbulb, MessageSquare, ExternalLink, ImagePlus, X, Smartphone, Cpu, Tag
 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
 type Category = "bug" | "feature" | "suggestion"
 type Priority = "critical" | "high" | "normal" | "low"
@@ -31,6 +30,46 @@ type SubmitResult = {
   githubUrl?: string | null
   message?: string
   error?: string
+}
+
+/** Compress an image file to a lightweight JPEG Data URL (max 1200px, 75% quality) */
+function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = (event) => {
+      const img = new Image()
+      img.src = event.target?.result as string
+      img.onload = () => {
+        const MAX_DIM = 1200
+        let width = img.width
+        let height = img.height
+
+        if (width > MAX_DIM || height > MAX_DIM) {
+          if (width > height) {
+            height = Math.round((height * MAX_DIM) / width)
+            width = MAX_DIM
+          } else {
+            width = Math.round((width * MAX_DIM) / height)
+            height = MAX_DIM
+          }
+        }
+
+        const canvas = document.createElement("canvas")
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext("2d")
+        if (!ctx) {
+          resolve(img.src)
+          return
+        }
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL("image/jpeg", 0.75))
+      }
+      img.onerror = (err) => reject(err)
+    }
+    reader.onerror = (err) => reject(err)
+  })
 }
 
 export function IssueForm() {
@@ -60,8 +99,8 @@ export function IssueForm() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // Screenshot upload handler (Base64)
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Screenshot upload handler with client-side canvas compression
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files || files.length === 0) return
 
@@ -72,26 +111,17 @@ export function IssueForm() {
 
     const fileList = Array.from(files).slice(0, 3 - screenshots.length)
 
-    fileList.forEach((file) => {
-      if (!file.type.startsWith("image/")) {
-        setError("Please upload valid image files (.png, .jpg, .webp).")
-        return
-      }
-
-      if (file.size > 4 * 1024 * 1024) {
-        setError("Image size should be less than 4MB.")
-        return
-      }
-
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          setScreenshots((prev) => [...prev, event.target!.result as string])
-          setError(null)
-        }
-      }
-      reader.readAsDataURL(file)
-    })
+    try {
+      const compressedList = await Promise.all(
+        fileList.map((file) => compressImage(file))
+      )
+      setScreenshots((prev) => [...prev, ...compressedList])
+      setError(null)
+    } catch {
+      setError("Failed to process image file. Please try another image.")
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = ""
+    }
   }
 
   const removeScreenshot = (index: number) => {
@@ -126,8 +156,9 @@ export function IssueForm() {
       } else {
         setError(result.error || "Failed to submit issue")
       }
-    } catch {
-      setError("An unexpected error occurred. Please try again.")
+    } catch (err: any) {
+      console.error("[IssueForm] Submission error:", err)
+      setError(err?.message || "An unexpected error occurred. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
