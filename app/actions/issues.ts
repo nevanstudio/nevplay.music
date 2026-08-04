@@ -19,6 +19,56 @@ const VALID_CATEGORIES = ["bug", "feature", "suggestion"] as const
 const VALID_TYPES = ["critical", "high", "normal", "low"] as const
 const VALID_PRIORITIES = ["critical", "high", "normal", "low"] as const
 
+async function postToGitHubIssues(data: IssueData) {
+  const token = process.env.GITHUB_TOKEN || process.env.NEXT_PUBLIC_GITHUB_TOKEN
+  if (!token) return null
+
+  try {
+    const categoryLabel = data.category.toUpperCase()
+    const priorityLabel = (data.priority || data.type || "normal").toUpperCase()
+    const title = `[${categoryLabel}] [${priorityLabel}] ${data.title}`
+
+    const body = `### ${data.title}
+
+**Category**: \`${data.category}\`  
+**Priority**: \`${priorityLabel}\`  
+**Submitter Contact**: ${data.email ? `\`${data.email}\`` : "*No email provided*"}  
+**Submitted via**: NevPlay Website Issue Form  
+
+---
+
+### Description
+${data.description}
+`
+
+    const res = await fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues", {
+      method: "POST",
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: `token ${token}`,
+        "User-Agent": "NevPlaySite",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        labels: [data.category],
+      }),
+    })
+
+    if (!res.ok) {
+      console.error("[GitHub Issues] API response not OK:", res.status, await res.text())
+      return null
+    }
+
+    const issueObj = await res.json()
+    return issueObj.html_url as string
+  } catch (err) {
+    console.error("[GitHub Issues] Failed to post:", err)
+    return null
+  }
+}
+
 export async function submitIssue(data: IssueData) {
   try {
     // Validation
@@ -50,58 +100,42 @@ export async function submitIssue(data: IssueData) {
       }
     }
 
-    if (!VALID_TYPES.includes(data.type)) {
-      return {
-        success: false,
-        error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}`,
-      }
-    }
+    // 1. Post to GitHub Issues (Triggers instant email notification to you)
+    const githubIssueUrl = await postToGitHubIssues(data)
 
-    if (!VALID_PRIORITIES.includes(data.priority)) {
-      return {
-        success: false,
-        error: `Invalid priority. Must be one of: ${VALID_PRIORITIES.join(", ")}`,
-      }
-    }
-
-    if (data.email && data.email.length > 255) {
-      return {
-        success: false,
-        error: "Email must be less than 255 characters",
-      }
-    }
-
+    // 2. Save to database if available
+    let issueId = `issue-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
     const db = await getDb()
-    if (!db) {
-      return {
-        success: false,
-        error: "Database not configured",
+    if (db) {
+      try {
+        const result = await db
+          .insert(userIssues)
+          .values({
+            id: issueId,
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            type: data.type || "normal",
+            email: data.email || "",
+            attachments: data.attachments ? JSON.stringify(data.attachments) : null,
+            status: "open",
+          })
+          .returning({ id: userIssues.id })
+        if (result[0]?.id) issueId = result[0].id
+      } catch (dbErr) {
+        console.warn("[Issues Action] DB insert warning:", dbErr)
       }
     }
-
-    // Insert issue
-    const result = await db
-      .insert(userIssues)
-      .values({
-        id: `issue-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        type: data.type,
-        email: data.email || "",
-        attachments: data.attachments
-          ? JSON.stringify(data.attachments)
-          : null,
-        status: "open",
-      })
-      .returning({ id: userIssues.id })
 
     revalidatePath("/issues")
 
     return {
       success: true,
-      issueId: result[0].id,
-      message: "Issue submitted successfully. Thank you for your feedback!",
+      issueId,
+      githubUrl: githubIssueUrl,
+      message: githubIssueUrl
+        ? "Issue submitted successfully and posted to GitHub! Thank you for your feedback."
+        : "Issue submitted successfully. Thank you for your feedback!",
     }
   } catch (error) {
     console.error("[Issues Action] Error:", error)
