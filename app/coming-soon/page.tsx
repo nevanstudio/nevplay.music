@@ -33,7 +33,7 @@ export default async function ComingSoonPage() {
       {apps.length > 0 ? (
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {apps.map((app) => (
+            {apps.map((app: any) => (
               <ComingSoonAppCard
                 key={app.id}
                 appName={app.appName}
@@ -56,7 +56,7 @@ export default async function ComingSoonPage() {
       )}
 
       {/* APK-Pure Teaser if not in list */}
-      {!apps.find((app) => app.appName.toLowerCase().includes("apk")) && (
+      {!apps.find((app: any) => app.appName.toLowerCase().includes("apk")) && (
         <div className="mx-auto max-w-4xl px-4">
           <div className="rounded-lg border border-[#1DB954]/20 bg-gradient-to-r from-[#1DB954]/10 to-transparent p-8">
             <h2 className="text-2xl font-bold text-white">

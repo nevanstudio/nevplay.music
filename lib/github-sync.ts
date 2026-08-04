@@ -28,8 +28,8 @@ const headers: HeadersInit = {
   "User-Agent": "NevPlaySite",
 }
 
-function buildHeaders(): HeadersInit {
-  const h: HeadersInit = { ...headers }
+function buildHeaders(): Record<string, string> {
+  const h: Record<string, string> = { ...(headers as Record<string, string>) }
   const token = process.env.GITHUB_TOKEN || process.env.NEXT_PUBLIC_GITHUB_TOKEN
   if (token) h["Authorization"] = `token ${token}`
   return h

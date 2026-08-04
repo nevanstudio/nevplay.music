@@ -104,7 +104,7 @@ export default async function IssuesPage() {
             <h2 className="mb-6 text-2xl font-bold text-white">Recent Feedback</h2>
 
             <div className="space-y-4">
-              {recentIssues.map((issue) => (
+              {recentIssues.map((issue: any) => (
                 <div
                   key={issue.id}
                   className="flex gap-4 rounded-lg border border-[#1DB954]/10 bg-[#121212] p-4"
