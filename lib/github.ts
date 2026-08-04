@@ -106,15 +106,18 @@ export function formatReleaseDate(iso: string): string {
   })
 }
 
-/** Parse a markdown release body into simple lines (bullets and paragraphs). */
+/** Parse a markdown release body into simple clean lines (bullets and paragraphs). */
 export function parseChangelog(body: string | null): string[] {
   if (!body) return []
   return body
+    .replace(/<img\s+[^>]*\/?>/gis, "")
+    .replace(/!\[.*?\]\((.*?)\)/g, "")
     .split("\n")
     .map((line) => line.trim())
+    .map((line) => line.replace(/<img\s+[^>]*\/?>/gis, "").replace(/!\[.*?\]\((.*?)\)/g, "").trim())
     .filter((line) => line.length > 0 && !line.startsWith("#"))
     .map((line) => line.replace(/^[-*+]\s+/, "").replace(/\*\*/g, ""))
-    .filter((line) => line.length > 0)
+    .filter((line) => line.length > 0 && !line.startsWith("<img"))
     .slice(0, 12)
 }
 
@@ -129,7 +132,7 @@ export function extractSha256(body: string | null): string | null {
 export function extractImageUrl(body: string | null): string | null {
   if (!body) return null
 
-  // 1. HTML <img ... src="..."> tags
+  // 1. HTML <img ... src="..."> tags (including multiline attributes)
   const imgMatch = body.match(/<img\s+[^>]*src=["']([^"']+)["']/i)
   if (imgMatch) return imgMatch[1]
 
@@ -154,19 +157,12 @@ export function extractImageUrl(body: string | null): string | null {
 /** Clean release body by removing image tags */
 export function renderReleaseBody(body: string | null): string {
   if (!body) return ""
-  // Remove markdown images and HTML img tags
-  let cleanBody = body.replace(/!\[.*?\]\(.*?\)/g, "").replace(/<img.*?>/g, "")
 
-  // Basic HTML-escape to avoid XSS
-  const escapeHtml = (s: string) =>
-    s
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;")
+  // 1. Completely strip out HTML <img ...> tags (multiline included) and Markdown images ![...](...)
+  let cleanBody = body
+    .replace(/<img\s+[^>]*\/?>/gis, "")
+    .replace(/!\[.*?\]\((.*?)\)/g, "")
 
-  // Convert simplified Markdown to HTML (headers, lists, bold, links, paragraphs)
   const lines = cleanBody.split(/\r?\n/)
   const htmlLines: string[] = []
   let inList = false
@@ -179,7 +175,11 @@ export function renderReleaseBody(body: string | null): string {
   }
 
   for (let rawLine of lines) {
-    const line = rawLine.trim()
+    let line = rawLine.trim()
+
+    // Strip remaining raw img tags or image markdown references
+    line = line.replace(/<img\s+[^>]*\/?>/gis, "").replace(/!\[.*?\]\((.*?)\)/g, "").trim()
+    
     if (line.length === 0) {
       flushList()
       continue
@@ -191,7 +191,6 @@ export function renderReleaseBody(body: string | null): string {
       flushList()
       const level = Math.min(6, hMatch[1].length)
       let content = hMatch[2]
-      content = content
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\*(.*?)\*/g, "<em>$1</em>")
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
@@ -201,11 +200,13 @@ export function renderReleaseBody(body: string | null): string {
 
     // Unordered list
     if (/^[-*+]\s+/.test(line)) {
+      const item = line.replace(/^[-*+]\s+/, "").trim()
+      if (!item) continue
+
       if (!inList) {
         htmlLines.push("<ul>")
         inList = true
       }
-      const item = line.replace(/^[-*+]\s+/, "")
       const content = item
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
         .replace(/\*(.*?)\*/g, "<em>$1</em>")
@@ -214,15 +215,12 @@ export function renderReleaseBody(body: string | null): string {
       continue
     }
 
-    // Paragraph / inline formatting
+    // Paragraph
     flushList()
-    let text = escapeHtml(line)
-    // bold
-    text = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    // italics
-    text = text.replace(/\*(.*?)\*/g, "<em>$1</em>")
-    // links
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+    let text = line
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<em>$1</em>")
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
     htmlLines.push(`<p>${text}</p>`)
   }
 

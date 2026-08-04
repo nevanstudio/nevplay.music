@@ -1,100 +1,91 @@
 import type { Metadata } from "next"
 import { getComingSoonApps } from "@/app/actions/coming-soon"
 import { ComingSoonAppCard } from "@/components/coming-soon/app-card"
-import { Zap } from "lucide-react"
+import { Reveal } from "@/components/motion/reveal"
+import { Badge, GlassCard, PageHero } from "@/components/ui/primitives"
+import { Sparkles, Zap } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Coming Soon",
   description:
-    "Discover the upcoming apps from Nevan Studio. More powerful music and entertainment tools are on the way.",
+    "Discover upcoming apps and tools from Nevan Studio. Music player enhancements, distribution platforms, and new projects are in active development.",
 }
 
 export default async function ComingSoonPage() {
   const apps = await getComingSoonApps()
 
   return (
-    <main className="space-y-12 py-12">
-      {/* Header */}
-      <div className="mx-auto max-w-4xl px-4">
-        <div className="flex items-center gap-2 mb-4">
-          <Zap className="h-6 w-6 text-[#1DB954]" />
-          <span className="text-sm font-semibold text-[#1DB954]">Exciting Things Ahead</span>
-        </div>
-        <h1 className="text-4xl font-bold text-white">
-          Coming Soon to Nevan Studio
-        </h1>
-        <p className="mt-4 text-lg text-gray-400">
-          We&apos;re constantly working on new apps and features. Check back soon to see what&apos;s in
-          development. Subscribe to stay updated on our latest releases.
-        </p>
-      </div>
+    <>
+      <PageHero
+        eyebrow="In Active Development"
+        title="Coming Soon from Nevan Studio"
+        description="We're constantly crafting new audio tools, distribution channels, and ecosystem improvements. Take a look at what's shipping next."
+      />
 
-      {/* Coming-Soon Apps Grid */}
-      {apps.length > 0 ? (
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {apps.map((app: any) => (
-              <ComingSoonAppCard
-                key={app.id}
-                appName={app.appName}
-                description={app.description || undefined}
-                estimatedRelease={app.estimatedRelease || undefined}
-                imageUrl={app.imageUrl || undefined}
-                status={app.status}
-              />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] py-12 text-center">
-            <p className="text-lg text-gray-400">
-              No upcoming apps announced yet. Check back soon!
-            </p>
-          </div>
-        </div>
-      )}
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-6xl space-y-16">
+          {/* Apps Grid */}
+          {apps.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {apps.map((app: any, index: number) => (
+                <Reveal key={app.id || index} delay={index * 80}>
+                  <ComingSoonAppCard
+                    appName={app.appName}
+                    description={app.description || undefined}
+                    estimatedRelease={app.estimatedRelease || undefined}
+                    imageUrl={app.imageUrl || undefined}
+                    status={app.status}
+                  />
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <Reveal>
+              <GlassCard className="p-12 text-center">
+                <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary mb-4">
+                  <Sparkles className="size-6" />
+                </div>
+                <h2 className="text-xl font-bold">New Apps Announced Soon</h2>
+                <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
+                  Our engineering team is working on exciting next-generation music playback and discovery features.
+                </p>
+              </GlassCard>
+            </Reveal>
+          )}
 
-      {/* APK-Pure Teaser if not in list */}
-      {!apps.find((app: any) => app.appName.toLowerCase().includes("apk")) && (
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="rounded-lg border border-[#1DB954]/20 bg-gradient-to-r from-[#1DB954]/10 to-transparent p-8">
-            <h2 className="text-2xl font-bold text-white">
-              APK-Pure
-            </h2>
-            <p className="mt-2 text-gray-400">
-              Your ultimate source for premium APK files. Browse, download, and discover the best
-              Android apps with complete privacy and security. Coming soon.
-            </p>
-            <p className="mt-4 text-sm text-[#1DB954] font-semibold">
-              More details coming soon...
-            </p>
-          </div>
+          {/* APK-Pure Teaser Card */}
+          {!apps.find((app: any) => app.appName.toLowerCase().includes("apk")) && (
+            <Reveal delay={200}>
+              <GlassCard className="relative overflow-hidden p-8 md:p-12 border-primary/30 bg-gradient-to-br from-card via-card to-primary/5">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-3xl"
+                />
+                <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  <div className="space-y-3 max-w-xl">
+                    <Badge>
+                      <Zap className="size-3.5" />
+                      Alternative Distribution
+                    </Badge>
+                    <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+                      APKPure & Third-Party App Store Deployment
+                    </h2>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      We are expanding NevPlay availability to major Android app mirrors. Soon you will be able to download and auto-update directly via APKPure and Uptodown with full cryptographic verification.
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/15 px-5 py-3 text-xs font-bold text-primary shadow-lg shadow-primary/10">
+                      <span className="size-2 rounded-full bg-primary animate-pulse" />
+                      In Review & Preparation
+                    </span>
+                  </div>
+                </div>
+              </GlassCard>
+            </Reveal>
+          )}
         </div>
-      )}
-
-      {/* Newsletter Signup */}
-      <div className="mx-auto max-w-4xl px-4">
-        <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-8">
-          <h2 className="text-2xl font-bold text-white">
-            Stay Updated
-          </h2>
-          <p className="mt-2 text-gray-400">
-            We&apos;ll notify you when new apps are released. Follow us for the latest updates.
-          </p>
-
-          <div className="mt-6 flex flex-col gap-4 sm:flex-row">
-            <a
-              href="https://github.com/nevanstudio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 rounded-lg bg-[#1DB954] px-4 py-3 text-center font-semibold text-black transition-colors hover:bg-[#1ed760]"
-            >
-              Follow on GitHub
-            </a>
-          </div>
-        </div>
-      </div>
-    </main>
+      </section>
+    </>
   )
 }

@@ -7,10 +7,24 @@ import { GlassCard, SectionHeading } from "@/components/ui/primitives"
 const stores = [
   {
     name: "GitHub Releases",
-    description: "Source code & release logs",
-    icon: null,
+    description: "Official releases & source code",
+    icon: "/assets/icones/Refresh_loading.png",
     href: GITHUB_REPO_URL,
     available: true,
+  },
+  {
+    name: "APKPure",
+    description: "Direct APK mirror store",
+    icon: "/assets/icones/apkpure.png",
+    href: null,
+    available: false,
+  },
+  {
+    name: "Uptodown",
+    description: "Verified Android app store",
+    icon: "/assets/icones/uptodown.png",
+    href: null,
+    available: false,
   },
   {
     name: "Google Play Store",
@@ -72,42 +86,52 @@ export function StoreCards() {
           <SectionHeading
             eyebrow="Distribution"
             title="Alternative App Stores"
-            description="Prefer third-party distribution? NevPlay is heading to standard platforms."
+            description="Prefer third-party distribution? NevPlay is heading to major Android stores."
           />
         </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {stores.map((store, index) => {
             const inner = (
               <GlassCard
                 hover={store.available}
-                className={`flex h-full items-center gap-4 p-5 ${store.available ? "" : "opacity-60"}`}
+                className={`relative flex h-full items-center gap-4 p-5 transition-all duration-300 ${
+                  store.available
+                    ? "border-primary/40 bg-gradient-to-br from-card via-card to-primary/5 shadow-lg shadow-primary/5"
+                    : "opacity-75 hover:opacity-100 hover:border-primary/20"
+                }`}
               >
                 {store.icon ? (
-                  <Image
-                    src={store.icon}
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="size-10 rounded-lg object-contain"
-                  />
+                  <div className="relative flex size-12 shrink-0 items-center justify-center rounded-xl border border-glass-border bg-secondary/80 p-2 shadow-inner">
+                    <Image
+                      src={store.icon}
+                      alt={store.name}
+                      width={36}
+                      height={36}
+                      className="size-8 object-contain"
+                    />
+                  </div>
                 ) : (
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-secondary font-mono text-sm font-bold">
+                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/20 font-mono text-sm font-bold text-primary">
                     GH
                   </div>
                 )}
-                <div className="flex flex-col gap-0.5">
-                  <span className="font-semibold">{store.name}</span>
-                  <span className="text-sm text-muted-foreground">{store.description}</span>
+                <div className="flex flex-col gap-1 min-w-0 flex-1">
+                  <span className="font-bold text-sm tracking-tight truncate">{store.name}</span>
+                  <span className="text-xs text-muted-foreground line-clamp-1">{store.description}</span>
                 </div>
-                {!store.available && (
-                  <span className="ml-auto shrink-0 rounded-full bg-secondary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                {store.available ? (
+                  <span className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
+                    Live
+                  </span>
+                ) : (
+                  <span className="shrink-0 rounded-full border border-glass-border bg-secondary/80 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                     Soon
                   </span>
                 )}
               </GlassCard>
             )
             return (
-              <Reveal key={store.name} delay={index * 60}>
+              <Reveal key={store.name} delay={index * 50}>
                 {store.href ? (
                   <a href={store.href} target="_blank" rel="noopener noreferrer" className="block h-full">
                     {inner}
