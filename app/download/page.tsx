@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/primitives"
 import { InstallGuide, StoreCards, SystemRequirements, FaqSection } from "@/components/download/download-sections"
 
-export const revalidate = 43200 // 12 hours (2 times per day)
+export const revalidate = 3600 // 1 hour (24 times per day)
 
 export const metadata: Metadata = {
   title: "Download",

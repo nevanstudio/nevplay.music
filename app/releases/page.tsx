@@ -13,7 +13,7 @@ import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
 import { Badge, ButtonLink, GlassCard, PageHero } from "@/components/ui/primitives"
 
-export const revalidate = 43200 // 12 hours (2 times per day)
+export const revalidate = 3600 // 1 hour (24 times per day)
 
 export const metadata: Metadata = {
   title: "Releases",
