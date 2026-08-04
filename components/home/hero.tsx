@@ -67,14 +67,16 @@ export function Hero({ latestRelease }: { latestRelease: GitHubRelease | null })
             className="pointer-events-none absolute inset-0 m-auto h-80 w-80 rounded-full bg-glow blur-3xl"
           />
           <div className="relative">
-            <Image
-              src="/assets/hero_images/hero.png"
-              alt="NevPlay app running on an Android phone"
-              width={340}
-              height={700}
-              priority
-              className="relative z-10 w-64 drop-shadow-2xl md:w-80"
-            />
+            <div className="flex size-64 items-center justify-center rounded-3xl border border-primary/30 bg-gradient-to-br from-card/90 via-card to-primary/10 p-8 shadow-2xl shadow-primary/20 backdrop-blur-2xl ring-1 ring-primary/20 md:size-80">
+              <Image
+                src="/assets/icon_full.png"
+                alt="NevPlay Logo"
+                width={256}
+                height={256}
+                priority
+                className="size-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
+              />
+            </div>
 
             {/* Floating: Now Playing */}
             <div className="animate-float glass-panel absolute -left-28 top-16 z-20 hidden w-52 rounded-xl p-4 sm:block">
