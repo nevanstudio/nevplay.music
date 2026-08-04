@@ -13,6 +13,7 @@ export type GitHubRelease = {
   name: string | null
   body: string | null
   published_at: string
+  created_at?: string
   html_url: string
   prerelease: boolean
   draft: boolean
@@ -41,7 +42,13 @@ export async function getReleases(): Promise<GitHubRelease[]> {
     })
     if (!res.ok) return []
     const data = (await res.json()) as GitHubRelease[]
-    return data.filter((r) => !r.draft)
+    return data
+      .filter((r) => !r.draft)
+      .sort((a, b) => {
+        const timeA = new Date(a.published_at || a.created_at || 0).getTime()
+        const timeB = new Date(b.published_at || b.created_at || 0).getTime()
+        return timeB - timeA
+      })
   } catch {
     return []
   }
