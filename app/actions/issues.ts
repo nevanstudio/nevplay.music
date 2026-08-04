@@ -17,7 +17,6 @@ export type IssueData = {
 
 const VALID_CATEGORIES = ["bug", "feature", "suggestion"] as const
 const VALID_TYPES = ["critical", "high", "normal", "low"] as const
-const VALID_PRIORITIES = ["critical", "high", "normal", "low"] as const
 
 async function postToGitHubIssues(data: IssueData) {
   const token = process.env.GITHUB_TOKEN || process.env.NEXT_PUBLIC_GITHUB_TOKEN
@@ -69,38 +68,82 @@ ${data.description}
   }
 }
 
+export type GitHubIssueStats = {
+  open: number
+  closed: number
+  total: number
+}
+
+/** Fetch open/closed issue counts from GitHub (1 hour cache) */
+export async function getGitHubIssueStats(): Promise<GitHubIssueStats> {
+  const token = process.env.GITHUB_TOKEN || process.env.NEXT_PUBLIC_GITHUB_TOKEN
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "NevPlaySite",
+  }
+  if (token) headers["Authorization"] = `token ${token}`
+
+  try {
+    const [openRes, closedRes] = await Promise.all([
+      fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues?state=open&per_page=1&labels=bug,feature,suggestion", {
+        headers,
+        next: { revalidate: 3600 },
+      }),
+      fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues?state=closed&per_page=1&labels=bug,feature,suggestion", {
+        headers,
+        next: { revalidate: 3600 },
+      }),
+    ])
+
+    const getLinkCount = (res: Response): number => {
+      const link = res.headers.get("link") || ""
+      const match = link.match(/[?&]page=(\d+)>; rel="last"/)
+      return match ? parseInt(match[1]) : (res.ok ? 1 : 0)
+    }
+
+    // GitHub paginates at 1 per_page so Link header reveals total
+    let open = 0
+    let closed = 0
+
+    if (openRes.ok) {
+      const data = await openRes.json()
+      const link = openRes.headers.get("link") || ""
+      const m = link.match(/[?&]page=(\d+)>; rel="last"/)
+      open = m ? parseInt(m[1]) : (Array.isArray(data) ? data.length : 0)
+    }
+
+    if (closedRes.ok) {
+      const data = await closedRes.json()
+      const link = closedRes.headers.get("link") || ""
+      const m = link.match(/[?&]page=(\d+)>; rel="last"/)
+      closed = m ? parseInt(m[1]) : (Array.isArray(data) ? data.length : 0)
+    }
+
+    return { open, closed, total: open + closed }
+  } catch {
+    return { open: 0, closed: 0, total: 0 }
+  }
+}
+
 export async function submitIssue(data: IssueData) {
   try {
-    // Validation
     if (!data.title || !data.description) {
-      return {
-        success: false,
-        error: "Title and description are required",
-      }
+      return { success: false, error: "Title and description are required" }
     }
-
     if (data.title.length > 255) {
-      return {
-        success: false,
-        error: "Title must be less than 255 characters",
-      }
+      return { success: false, error: "Title must be less than 255 characters" }
     }
-
     if (data.description.length > 5000) {
-      return {
-        success: false,
-        error: "Description must be less than 5000 characters",
-      }
+      return { success: false, error: "Description must be less than 5000 characters" }
     }
-
     if (!VALID_CATEGORIES.includes(data.category)) {
-      return {
-        success: false,
-        error: `Invalid category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
-      }
+      return { success: false, error: `Invalid category. Must be one of: ${VALID_CATEGORIES.join(", ")}` }
+    }
+    if (!VALID_TYPES.includes(data.type)) {
+      return { success: false, error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}` }
     }
 
-    // 1. Post to GitHub Issues (Triggers instant email notification to you)
+    // 1. Post to GitHub Issues (triggers instant email notification to you)
     const githubIssueUrl = await postToGitHubIssues(data)
 
     // 2. Save to database if available
@@ -134,15 +177,12 @@ export async function submitIssue(data: IssueData) {
       issueId,
       githubUrl: githubIssueUrl,
       message: githubIssueUrl
-        ? "Issue submitted successfully and posted to GitHub! Thank you for your feedback."
+        ? "Your report was received and logged to our tracker! We'll review it shortly."
         : "Issue submitted successfully. Thank you for your feedback!",
     }
   } catch (error) {
     console.error("[Issues Action] Error:", error)
-    return {
-      success: false,
-      error: "Failed to submit issue. Please try again.",
-    }
+    return { success: false, error: "Failed to submit issue. Please try again." }
   }
 }
 
@@ -160,5 +200,16 @@ export async function getRecentIssues(limit = 10) {
   } catch (error) {
     console.error("[Issues Action] Error fetching issues:", error)
     return []
+  }
+}
+
+export async function getTotalIssueCount(): Promise<number> {
+  try {
+    const db = await getDb()
+    if (!db) return 0
+    const all = await db.select({ id: userIssues.id }).from(userIssues)
+    return all.length
+  } catch {
+    return 0
   }
 }

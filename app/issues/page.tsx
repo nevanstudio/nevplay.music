@@ -1,209 +1,265 @@
 import type { Metadata } from "next"
 import { IssueForm } from "@/components/issues/issue-form"
-import { getRecentIssues } from "@/app/actions/issues"
-import { Bug, Lightbulb, MessageSquare } from "lucide-react"
+import { getRecentIssues, getGitHubIssueStats } from "@/app/actions/issues"
+import {
+  Bug, Lightbulb, MessageSquare, CheckCircle2, CircleDot,
+  ShieldAlert, Target, Sparkles, Info, ChevronRight
+} from "lucide-react"
+import { Reveal } from "@/components/motion/reveal"
+import { Badge, GlassCard, PageHero } from "@/components/ui/primitives"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Report Issues & Feedback",
   description:
-    "Help us improve NevPlay by reporting bugs, suggesting features, or sharing your feedback.",
+    "Help us improve NevPlay by reporting bugs, suggesting features, or sharing your feedback. Every report goes directly to our development team.",
+}
+
+const guidelines = [
+  {
+    icon: Target,
+    title: "Be specific and descriptive",
+    body: "Include your NevPlay version, Android version, and device model when reporting bugs.",
+  },
+  {
+    icon: ChevronRight,
+    title: "Steps to reproduce",
+    body: "For bugs, describe exactly what you did before the problem occurred — step by step.",
+  },
+  {
+    icon: Info,
+    title: "One issue per report",
+    body: "Submit separate reports for separate issues so we can track and fix them individually.",
+  },
+  {
+    icon: ShieldAlert,
+    title: "Security vulnerabilities",
+    body: "For sensitive security issues, set priority to Critical and include your email for private follow-up.",
+  },
+  {
+    icon: Sparkles,
+    title: "Feature requests",
+    body: "Describe the use case and why it would improve your experience. Screenshots or mockups are welcome in the description.",
+  },
+]
+
+const getCategoryIcon = (category: string, size = "h-4 w-4") => {
+  switch (category) {
+    case "bug":
+      return <Bug className={`${size} text-red-500`} />
+    case "feature":
+      return <Lightbulb className={`${size} text-primary`} />
+    case "suggestion":
+      return <MessageSquare className={`${size} text-sky-500`} />
+    default:
+      return <CircleDot className={`${size} text-muted-foreground`} />
+  }
+}
+
+const getPriorityStyle = (priority: string) => {
+  switch (priority) {
+    case "critical": return "border-red-500/30 bg-red-500/10 text-red-500"
+    case "high": return "border-amber-500/30 bg-amber-500/10 text-amber-500"
+    case "normal": return "border-primary/30 bg-primary/10 text-primary"
+    case "low": return "border-sky-500/30 bg-sky-500/10 text-sky-500"
+    default: return "border-glass-border bg-secondary text-muted-foreground"
+  }
 }
 
 export default async function IssuesPage() {
-  const recentIssues = await getRecentIssues(5)
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "bug":
-        return <Bug className="h-5 w-5 text-red-500" />
-      case "feature":
-        return <Lightbulb className="h-5 w-5 text-[#1DB954]" />
-      case "suggestion":
-        return <MessageSquare className="h-5 w-5 text-blue-500" />
-      default:
-        return null
-    }
-  }
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "critical":
-        return "bg-red-500/10 text-red-500"
-      case "high":
-        return "bg-orange-500/10 text-orange-500"
-      case "normal":
-        return "bg-[#1DB954]/10 text-[#1DB954]"
-      case "low":
-        return "bg-blue-500/10 text-blue-500"
-      default:
-        return "bg-gray-500/10 text-gray-500"
-    }
-  }
+  const [recentIssues, ghStats] = await Promise.all([
+    getRecentIssues(6),
+    getGitHubIssueStats(),
+  ])
 
   return (
-    <main className="space-y-12 py-12">
-      {/* Header */}
-      <div className="mx-auto max-w-4xl px-4">
-        <h1 className="text-4xl font-bold text-white">Report Issues & Feedback</h1>
-        <p className="mt-4 text-lg text-gray-400">
-          Found a bug? Have a feature idea? We&apos;d love to hear from you. Your feedback helps us
-          make NevPlay better for everyone.
-        </p>
-      </div>
+    <>
+      <PageHero
+        eyebrow="Community Feedback"
+        title="Report Issues & Feedback"
+        description="Found a bug? Have a feature idea? Every report is read and tracked by our team. Help us make NevPlay better for everyone."
+      />
 
-      {/* Main Content */}
-      <div className="mx-auto max-w-4xl px-4 lg:grid lg:grid-cols-3 lg:gap-8">
-        {/* Form - Takes 2 columns on large screens */}
-        <div className="lg:col-span-2">
-          <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-8">
-            <h2 className="mb-6 text-2xl font-bold text-white">Submit Your Feedback</h2>
-            <IssueForm />
-          </div>
-        </div>
+      <section className="px-6 pb-24">
+        <div className="mx-auto max-w-5xl space-y-16">
 
-        {/* Sidebar Info */}
-        <div className="mt-8 space-y-6 lg:mt-0">
-          {/* Guidelines */}
-          <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-6">
-            <h3 className="font-semibold text-white">Guidelines</h3>
-            <ul className="mt-4 space-y-3 text-sm text-gray-400">
-              <li className="flex gap-2">
-                <span className="flex-shrink-0 text-[#1DB954]">•</span>
-                <span>Be clear and descriptive</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="flex-shrink-0 text-[#1DB954]">•</span>
-                <span>Include steps to reproduce bugs</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="flex-shrink-0 text-[#1DB954]">•</span>
-                <span>One issue per submission</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="flex-shrink-0 text-[#1DB954]">•</span>
-                <span>We read every submission</span>
-              </li>
-            </ul>
-          </div>
+          {/* Stats Row */}
+          <Reveal>
+            <div className="grid grid-cols-3 gap-4">
+              <GlassCard className="flex flex-col items-center gap-1.5 p-5 text-center">
+                <span className="text-3xl font-bold text-foreground tabular-nums">{ghStats.total}</span>
+                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Total Reports</span>
+              </GlassCard>
+              <GlassCard className="flex flex-col items-center gap-1.5 p-5 text-center border-primary/30">
+                <span className="text-3xl font-bold text-primary tabular-nums">{ghStats.closed}</span>
+                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Issues Fixed</span>
+              </GlassCard>
+              <GlassCard className="flex flex-col items-center gap-1.5 p-5 text-center">
+                <span className="text-3xl font-bold text-amber-500 tabular-nums">{ghStats.open}</span>
+                <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Under Review</span>
+              </GlassCard>
+            </div>
+          </Reveal>
 
-          {/* Stats */}
-          <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-6">
-            <h3 className="font-semibold text-white">Community Feedback</h3>
-            <p className="mt-4 text-sm text-gray-400">
-              Total reports received:{" "}
-              <span className="font-semibold text-[#1DB954]">{recentIssues.length}+</span>
-            </p>
-          </div>
-        </div>
-      </div>
+          {/* How it works note */}
+          <Reveal delay={60}>
+            <div className="flex items-start gap-3 rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 text-sm text-muted-foreground">
+              <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+              <span>
+                Reports submitted here are <strong className="text-foreground">automatically tracked on GitHub</strong>.
+                When we close a report on GitHub (mark it resolved), the <strong className="text-foreground">Issues Fixed</strong> counter updates automatically within 1 hour.
+              </span>
+            </div>
+          </Reveal>
 
-      {/* Recent Issues Preview */}
-      {recentIssues.length > 0 && (
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-8">
-            <h2 className="mb-6 text-2xl font-bold text-white">Recent Feedback</h2>
+          {/* Main Grid: Form + Sidebar */}
+          <div className="grid gap-8 lg:grid-cols-3">
 
-            <div className="space-y-4">
-              {recentIssues.map((issue: any) => (
-                <div
-                  key={issue.id}
-                  className="flex gap-4 rounded-lg border border-[#1DB954]/10 bg-[#121212] p-4"
-                >
-                  <div className="flex-shrink-0 pt-1">
-                    {getCategoryIcon(issue.category)}
+            {/* Submission Form */}
+            <Reveal className="lg:col-span-2">
+              <GlassCard className="p-8">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Bug className="size-4" />
                   </div>
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="font-semibold text-white">{issue.title}</h3>
-                      <span
-                        className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(
-                          issue.type
-                        )}`}
-                      >
-                        {issue.type}
-                      </span>
-                    </div>
-
-                    <p className="mt-1 text-sm text-gray-400 line-clamp-2">
-                      {issue.description}
-                    </p>
-
-                    <p className="mt-2 text-xs text-gray-500">
-                      {new Date(issue.createdAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
+                  <h2 className="text-xl font-bold tracking-tight">Submit Your Report</h2>
                 </div>
-              ))}
+                <IssueForm />
+              </GlassCard>
+            </Reveal>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Guidelines */}
+              <Reveal delay={80}>
+                <GlassCard className="p-6">
+                  <div className="mb-4 flex items-center gap-2">
+                    <Target className="size-4 text-primary" />
+                    <h3 className="text-sm font-bold uppercase tracking-widest text-foreground">Submission Guidelines</h3>
+                  </div>
+                  <ul className="space-y-4">
+                    {guidelines.map((g) => (
+                      <li key={g.title} className="flex gap-3">
+                        <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                          <g.icon className="size-3 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-foreground">{g.title}</p>
+                          <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{g.body}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </GlassCard>
+              </Reveal>
+
+              {/* Track on GitHub */}
+              <Reveal delay={100}>
+                <GlassCard className="p-6">
+                  <h3 className="mb-3 text-sm font-bold uppercase tracking-widest text-foreground">Track Your Report</h3>
+                  <p className="text-xs leading-relaxed text-muted-foreground">
+                    Every submitted report is posted to our public GitHub Issues tracker. You can follow progress, add comments, and get notified when it's resolved.
+                  </p>
+                  <Link
+                    href="https://github.com/nevanstudio/nevplay_releases/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+                  >
+                    View all open issues on GitHub →
+                  </Link>
+                </GlassCard>
+              </Reveal>
             </div>
           </div>
+
+          {/* Recent Reports */}
+          {recentIssues.length > 0 && (
+            <div className="space-y-4">
+              <Reveal>
+                <div className="flex items-center gap-3">
+                  <h2 className="text-xl font-bold tracking-tight">Recent Reports</h2>
+                  <Badge>
+                    <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+                    Live
+                  </Badge>
+                </div>
+              </Reveal>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {recentIssues.map((issue: any, index: number) => (
+                  <Reveal key={issue.id} delay={index * 40}>
+                    <GlassCard hover className="flex gap-4 p-5">
+                      <div className="mt-0.5 shrink-0">
+                        {getCategoryIcon(issue.category)}
+                      </div>
+                      <div className="min-w-0 flex-1 space-y-1.5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="truncate text-sm font-semibold">{issue.title}</h3>
+                          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${getPriorityStyle(issue.type)}`}>
+                            {issue.type}
+                          </span>
+                        </div>
+                        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+                          {issue.description}
+                        </p>
+                        <p className="text-[10px] font-mono text-muted-foreground/60">
+                          {new Date(issue.createdAt).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </p>
+                      </div>
+                    </GlassCard>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* FAQ */}
+          <Reveal>
+            <GlassCard className="p-8">
+              <h2 className="mb-6 text-xl font-bold tracking-tight">Frequently Asked Questions</h2>
+              <div className="divide-y divide-glass-border space-y-0">
+                {[
+                  {
+                    q: "How long does it take to receive a response?",
+                    a: "We review all submissions regularly. Critical bugs are prioritised within 48 hours. Other issues are typically addressed within 1–2 weeks.",
+                  },
+                  {
+                    q: "How will I know when my issue is fixed?",
+                    a: "When a report is closed on GitHub, the 'Issues Fixed' counter above updates within 1 hour. If you submitted your email, we'll notify you directly.",
+                  },
+                  {
+                    q: "Can I see the status of my submitted issue?",
+                    a: "Yes — every report is publicly trackable on GitHub Issues. Click the 'View all open issues on GitHub' link in the sidebar.",
+                  },
+                  {
+                    q: "What if I found a security vulnerability?",
+                    a: "Set the priority to Critical and include your email for private follow-up. Do not post credentials or sensitive details in the description.",
+                  },
+                  {
+                    q: "Can I attach screenshots?",
+                    a: "Not directly via the form yet — describe your issue in detail and include your email. We'll contact you to request screenshots if needed.",
+                  },
+                ].map((item) => (
+                  <details key={item.q} className="group cursor-pointer py-4 first:pt-0 last:pb-0">
+                    <summary className="flex items-center justify-between gap-4 text-sm font-semibold text-foreground marker:content-none hover:text-primary transition-colors">
+                      {item.q}
+                      <ChevronRight className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" />
+                    </summary>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      {item.a}
+                    </p>
+                  </details>
+                ))}
+              </div>
+            </GlassCard>
+          </Reveal>
+
         </div>
-      )}
-
-      {/* FAQ Section */}
-      <div className="mx-auto max-w-4xl px-4">
-        <div className="rounded-lg border border-[#1DB954]/20 bg-[#0f0f0f] p-8">
-          <h2 className="mb-6 text-2xl font-bold text-white">FAQ</h2>
-
-          <div className="space-y-4">
-            <details className="group cursor-pointer">
-              <summary className="flex items-center gap-2 font-semibold text-white hover:text-[#1DB954]">
-                <span className="inline-block h-6 w-6 text-[#1DB954] group-open:rotate-90 transition-transform">
-                  →
-                </span>
-                How long does it take to receive feedback?
-              </summary>
-              <p className="mt-3 ml-8 text-gray-400">
-                We review all submissions regularly. While we can&apos;t guarantee a specific timeline, most
-                issues are reviewed within 1-2 weeks. For critical bugs, we prioritize faster.
-              </p>
-            </details>
-
-            <details className="group cursor-pointer">
-              <summary className="flex items-center gap-2 font-semibold text-white hover:text-[#1DB954]">
-                <span className="inline-block h-6 w-6 text-[#1DB954] group-open:rotate-90 transition-transform">
-                  →
-                </span>
-                Can I see the status of my submitted issue?
-              </summary>
-              <p className="mt-3 ml-8 text-gray-400">
-                If you provided your email, we&apos;ll send you updates about your submission. You can also check
-                the recent feedback section on this page to see community reports.
-              </p>
-            </details>
-
-            <details className="group cursor-pointer">
-              <summary className="flex items-center gap-2 font-semibold text-white hover:text-[#1DB954]">
-                <span className="inline-block h-6 w-6 text-[#1DB954] group-open:rotate-90 transition-transform">
-                  →
-                </span>
-                What if I found a security issue?
-              </summary>
-              <p className="mt-3 ml-8 text-gray-400">
-                Please don&apos;t post security issues publicly. Instead, report them with priority set to
-                &quot;Critical&quot; and include your email for direct contact.
-              </p>
-            </details>
-
-            <details className="group cursor-pointer">
-              <summary className="flex items-center gap-2 font-semibold text-white hover:text-[#1DB954]">
-                <span className="inline-block h-6 w-6 text-[#1DB954] group-open:rotate-90 transition-transform">
-                  →
-                </span>
-                Can I attach files or screenshots?
-              </summary>
-              <p className="mt-3 ml-8 text-gray-400">
-                Currently, our form supports text-based descriptions. If you need to share files, please provide
-                your email and we&apos;ll contact you for additional details.
-              </p>
-            </details>
-          </div>
-        </div>
-      </div>
-    </main>
+      </section>
+    </>
   )
 }

@@ -2,51 +2,67 @@
 
 import { useState } from "react"
 import { submitIssue } from "@/app/actions/issues"
-import { AlertCircle, CheckCircle2, Loader } from "lucide-react"
+import {
+  AlertCircle, CheckCircle2, Loader2, Send,
+  Bug, Lightbulb, MessageSquare, ExternalLink
+} from "lucide-react"
+import Link from "next/link"
 
 type Category = "bug" | "feature" | "suggestion"
-type Type = "critical" | "high" | "normal" | "low"
 type Priority = "critical" | "high" | "normal" | "low"
+
+const categoryOptions: { value: Category; label: string; icon: typeof Bug }[] = [
+  { value: "bug", label: "Bug Report", icon: Bug },
+  { value: "feature", label: "Feature Request", icon: Lightbulb },
+  { value: "suggestion", label: "Suggestion", icon: MessageSquare },
+]
+
+const priorityOptions: { value: Priority; label: string; color: string }[] = [
+  { value: "critical", label: "Critical", color: "text-red-500" },
+  { value: "high", label: "High", color: "text-amber-500" },
+  { value: "normal", label: "Normal", color: "text-primary" },
+  { value: "low", label: "Low", color: "text-sky-500" },
+]
+
+type SubmitResult = {
+  success: boolean
+  issueId?: string
+  githubUrl?: string | null
+  message?: string
+  error?: string
+}
 
 export function IssueForm() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     category: "bug" as Category,
-    type: "normal" as Type,
+    type: "normal" as Priority,
     priority: "normal" as Priority,
     email: "",
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+  const [submitted, setSubmitted] = useState<SubmitResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    setMessage(null)
+    setError(null)
 
     try {
       const result = await submitIssue(formData)
 
       if (result.success) {
-        setMessage({
-          type: "success",
-          text: result.message || "Issue submitted successfully!",
-        })
-        // Reset form
+        setSubmitted(result)
         setFormData({
           title: "",
           description: "",
@@ -55,48 +71,125 @@ export function IssueForm() {
           priority: "normal",
           email: "",
         })
-        // Hide message after 5 seconds
-        setTimeout(() => setMessage(null), 5000)
       } else {
-        setMessage({
-          type: "error",
-          text: result.error || "Failed to submit issue",
-        })
+        setError(result.error || "Failed to submit issue")
       }
-    } catch (error) {
-      setMessage({
-        type: "error",
-        text: "An unexpected error occurred",
-      })
+    } catch {
+      setError("An unexpected error occurred. Please try again.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Message Alert */}
-      {message && (
-        <div
-          className={`flex gap-3 rounded-lg px-4 py-3 ${
-            message.type === "success"
-              ? "bg-[#1DB954]/10 text-[#1DB954]"
-              : "bg-red-500/10 text-red-500"
-          }`}
+  // ── Success state ──
+  if (submitted) {
+    return (
+      <div className="flex flex-col items-center gap-6 py-6 text-center">
+        {/* Animated checkmark */}
+        <div className="relative flex size-20 items-center justify-center">
+          <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping opacity-60" />
+          <div className="relative flex size-20 items-center justify-center rounded-full border-2 border-primary bg-primary/10 shadow-lg shadow-primary/20">
+            <CheckCircle2 className="size-10 text-primary" />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <h3 className="text-2xl font-bold text-foreground">Report Received! 🎉</h3>
+          <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
+            Your report has been <strong className="text-foreground">successfully submitted</strong> and{" "}
+            <strong className="text-foreground">automatically logged to our GitHub tracker</strong>.
+            We review every single one.
+          </p>
+        </div>
+
+        {submitted.githubUrl && (
+          <Link
+            href={submitted.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary transition-all hover:bg-primary/20 hover:shadow-md hover:shadow-primary/10"
+          >
+            <ExternalLink className="size-4" />
+            View your report on GitHub
+          </Link>
+        )}
+
+        <div className="w-full rounded-xl border border-primary/20 bg-primary/5 px-5 py-4 text-left">
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-2">What happens next?</p>
+          <ul className="space-y-1.5 text-xs text-muted-foreground">
+            <li className="flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-primary shrink-0" />
+              Our team receives an instant GitHub notification
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-primary shrink-0" />
+              Your report is reviewed and labelled
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-primary shrink-0" />
+              When fixed, it's closed and the "Issues Fixed" counter updates
+            </li>
+            {formData.email && (
+              <li className="flex items-center gap-2">
+                <span className="size-1.5 rounded-full bg-primary shrink-0" />
+                We'll email you at <strong>{formData.email}</strong> if we need more info
+              </li>
+            )}
+          </ul>
+        </div>
+
+        <button
+          onClick={() => setSubmitted(null)}
+          className="text-sm font-semibold text-primary hover:underline"
         >
-          {message.type === "success" ? (
-            <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
-          ) : (
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
-          )}
-          <p className="text-sm">{message.text}</p>
+          Submit another report →
+        </button>
+      </div>
+    )
+  }
+
+  // ── Form ──
+  const inputBase =
+    "mt-2 w-full rounded-xl border border-glass-border bg-secondary/50 px-4 py-3 text-sm text-foreground placeholder-muted-foreground transition-colors focus:border-primary/60 focus:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary/20"
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {/* Error Alert */}
+      {error && (
+        <div className="flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3">
+          <AlertCircle className="mt-0.5 size-4 shrink-0 text-destructive" />
+          <p className="text-sm text-destructive">{error}</p>
         </div>
       )}
 
+      {/* Category chips */}
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-2">
+          Category <span className="text-destructive">*</span>
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {categoryOptions.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setFormData((p) => ({ ...p, category: opt.value }))}
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                formData.category === opt.value
+                  ? "border-primary/50 bg-primary/15 text-primary shadow-sm shadow-primary/10"
+                  : "border-glass-border bg-secondary/50 text-muted-foreground hover:border-primary/30 hover:text-foreground"
+              }`}
+            >
+              <opt.icon className="size-3.5" />
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Title */}
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-white">
-          Title <span className="text-red-500">*</span>
+        <label htmlFor="title" className="block text-sm font-medium text-foreground">
+          Title <span className="text-destructive">*</span>
         </label>
         <input
           type="text"
@@ -107,100 +200,59 @@ export function IssueForm() {
           placeholder="Brief summary of your issue"
           maxLength={255}
           required
-          className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white placeholder-gray-500 focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
+          className={inputBase}
         />
-        <p className="mt-1 text-xs text-gray-500">
-          {formData.title.length}/255 characters
+        <p className="mt-1 text-right text-[10px] font-mono text-muted-foreground/60">
+          {formData.title.length}/255
         </p>
       </div>
 
       {/* Description */}
       <div>
-        <label
-          htmlFor="description"
-          className="block text-sm font-medium text-white"
-        >
-          Description <span className="text-red-500">*</span>
+        <label htmlFor="description" className="block text-sm font-medium text-foreground">
+          Description <span className="text-destructive">*</span>
         </label>
         <textarea
           id="description"
           name="description"
           value={formData.description}
           onChange={handleChange}
-          placeholder="Please provide detailed information about your issue, steps to reproduce, or feature idea"
+          placeholder="Detailed description, steps to reproduce, or your feature idea..."
           maxLength={5000}
           rows={6}
           required
-          className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white placeholder-gray-500 focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
+          className={`${inputBase} resize-none`}
         />
-        <p className="mt-1 text-xs text-gray-500">
-          {formData.description.length}/5000 characters
+        <p className="mt-1 text-right text-[10px] font-mono text-muted-foreground/60">
+          {formData.description.length}/5000
         </p>
       </div>
 
-      {/* Category, Type, Priority */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        {/* Category */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-white">
-            Category <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
-          >
-            <option value="bug">Bug Report</option>
-            <option value="feature">Feature Request</option>
-            <option value="suggestion">Suggestion</option>
-          </select>
-        </div>
-
-        {/* Type */}
-        <div>
-          <label htmlFor="type" className="block text-sm font-medium text-white">
-            Type <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="type"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
-          >
-            <option value="critical">Critical</option>
-            <option value="high">High</option>
-            <option value="normal">Normal</option>
-            <option value="low">Low</option>
-          </select>
-        </div>
-
-        {/* Priority */}
-        <div>
-          <label htmlFor="priority" className="block text-sm font-medium text-white">
-            Priority <span className="text-red-500">*</span>
-          </label>
-          <select
-            id="priority"
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-            className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
-          >
-            <option value="critical">Critical</option>
-            <option value="high">High</option>
-            <option value="normal">Normal</option>
-            <option value="low">Low</option>
-          </select>
+      {/* Priority */}
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-2">Priority</label>
+        <div className="flex flex-wrap gap-2">
+          {priorityOptions.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setFormData((p) => ({ ...p, type: opt.value, priority: opt.value }))}
+              className={`rounded-full border px-4 py-2 text-xs font-semibold transition-all ${
+                formData.priority === opt.value
+                  ? `border-current/50 bg-current/10 ${opt.color}`
+                  : "border-glass-border bg-secondary/50 text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
         </div>
       </div>
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-white">
-          Email (optional)
+        <label htmlFor="email" className="block text-sm font-medium text-foreground">
+          Email <span className="text-muted-foreground text-xs font-normal">(optional)</span>
         </label>
         <input
           type="email"
@@ -209,26 +261,29 @@ export function IssueForm() {
           value={formData.email}
           onChange={handleChange}
           placeholder="your@email.com"
-          className="mt-2 w-full rounded-lg border border-[#1DB954]/20 bg-[#121212] px-4 py-3 text-white placeholder-gray-500 focus:border-[#1DB954] focus:outline-none focus:ring-1 focus:ring-[#1DB954]"
+          className={inputBase}
         />
-        <p className="mt-1 text-xs text-gray-500">
-          So we can follow up with you if needed
+        <p className="mt-1 text-xs text-muted-foreground">
+          Only used to notify you when your issue is resolved. Never shared.
         </p>
       </div>
 
-      {/* Submit Button */}
+      {/* Submit */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#1DB954] px-4 py-3 font-semibold text-black transition-all hover:bg-[#1ed760] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:brightness-110 hover:shadow-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isSubmitting ? (
           <>
-            <Loader className="h-4 w-4 animate-spin" />
-            Submitting...
+            <Loader2 className="size-4 animate-spin" />
+            Submitting your report...
           </>
         ) : (
-          "Submit Issue"
+          <>
+            <Send className="size-4" />
+            Submit Report
+          </>
         )}
       </button>
     </form>
