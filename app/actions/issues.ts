@@ -12,7 +12,10 @@ export type IssueData = {
   type: "critical" | "high" | "normal" | "low"
   priority: "critical" | "high" | "normal" | "low"
   email?: string
-  attachments?: string[]
+  appVersion?: string
+  androidVersion?: string
+  deviceModel?: string
+  screenshots?: string[]
 }
 
 const VALID_CATEGORIES = ["bug", "feature", "suggestion"] as const
@@ -27,18 +30,33 @@ async function postToGitHubIssues(data: IssueData) {
     const priorityLabel = (data.priority || data.type || "normal").toUpperCase()
     const title = `[${categoryLabel}] [${priorityLabel}] ${data.title}`
 
-    const body = `### ${data.title}
+    const sysInfo = [
+      data.appVersion ? `**NevPlay Version**: \`${data.appVersion}\`` : null,
+      data.androidVersion ? `**Android OS**: \`${data.androidVersion}\`` : null,
+      data.deviceModel ? `**Device Model**: \`${data.deviceModel}\`` : null,
+    ]
+      .filter(Boolean)
+      .join("  \n")
+
+    let body = `### ${data.title}
 
 **Category**: \`${data.category}\`  
 **Priority**: \`${priorityLabel}\`  
 **Submitter Contact**: ${data.email ? `\`${data.email}\`` : "*No email provided*"}  
-**Submitted via**: NevPlay Website Issue Form  
+${sysInfo ? `${sysInfo}  \n` : ""}**Submitted via**: NevPlay Website Issue Form  
 
 ---
 
 ### Description
 ${data.description}
 `
+
+    if (data.screenshots && data.screenshots.length > 0) {
+      body += `\n\n---\n### Screenshots & Attachments\n`
+      data.screenshots.forEach((src, idx) => {
+        body += `\n![Screenshot ${idx + 1}](${src})\n`
+      })
+    }
 
     const res = await fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues", {
       method: "POST",
@@ -84,45 +102,41 @@ export async function getGitHubIssueStats(): Promise<GitHubIssueStats> {
   if (token) headers["Authorization"] = `token ${token}`
 
   try {
-    const [openRes, closedRes] = await Promise.all([
-      fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues?state=open&per_page=1&labels=bug,feature,suggestion", {
+    const res = await fetch(
+      "https://api.github.com/repos/nevanstudio/nevplay_releases/issues?state=all&per_page=100",
+      {
         headers,
         next: { revalidate: 3600 },
-      }),
-      fetch("https://api.github.com/repos/nevanstudio/nevplay_releases/issues?state=closed&per_page=1&labels=bug,feature,suggestion", {
-        headers,
-        next: { revalidate: 3600 },
-      }),
-    ])
+      }
+    )
 
-    const getLinkCount = (res: Response): number => {
-      const link = res.headers.get("link") || ""
-      const match = link.match(/[?&]page=(\d+)>; rel="last"/)
-      return match ? parseInt(match[1]) : (res.ok ? 1 : 0)
+    if (res.ok) {
+      const data = await res.json()
+      if (Array.isArray(data)) {
+        const issuesOnly = data.filter((item: any) => !item.pull_request)
+        const open = issuesOnly.filter((item: any) => item.state === "open").length
+        const closed = issuesOnly.filter((item: any) => item.state === "closed").length
+        return { open, closed, total: open + closed }
+      }
     }
-
-    // GitHub paginates at 1 per_page so Link header reveals total
-    let open = 0
-    let closed = 0
-
-    if (openRes.ok) {
-      const data = await openRes.json()
-      const link = openRes.headers.get("link") || ""
-      const m = link.match(/[?&]page=(\d+)>; rel="last"/)
-      open = m ? parseInt(m[1]) : (Array.isArray(data) ? data.length : 0)
-    }
-
-    if (closedRes.ok) {
-      const data = await closedRes.json()
-      const link = closedRes.headers.get("link") || ""
-      const m = link.match(/[?&]page=(\d+)>; rel="last"/)
-      closed = m ? parseInt(m[1]) : (Array.isArray(data) ? data.length : 0)
-    }
-
-    return { open, closed, total: open + closed }
-  } catch {
-    return { open: 0, closed: 0, total: 0 }
+  } catch (err) {
+    console.error("[getGitHubIssueStats] Error:", err)
   }
+
+  // Fallback to database count if GitHub API fails
+  try {
+    const db = await getDb()
+    if (db) {
+      const all = await db.select({ id: userIssues.id, status: userIssues.status }).from(userIssues)
+      const open = all.filter((i: any) => i.status === "open").length
+      const closed = all.filter((i: any) => i.status === "closed" || i.status === "resolved").length
+      return { open, closed, total: all.length }
+    }
+  } catch {
+    // Ignore fallback error
+  }
+
+  return { open: 0, closed: 0, total: 0 }
 }
 
 export async function submitIssue(data: IssueData) {
@@ -143,7 +157,7 @@ export async function submitIssue(data: IssueData) {
       return { success: false, error: `Invalid type. Must be one of: ${VALID_TYPES.join(", ")}` }
     }
 
-    // 1. Post to GitHub Issues (triggers instant email notification to you)
+    // 1. Post to GitHub Issues
     const githubIssueUrl = await postToGitHubIssues(data)
 
     // 2. Save to database if available
@@ -160,7 +174,7 @@ export async function submitIssue(data: IssueData) {
             category: data.category,
             type: data.type || "normal",
             email: data.email || "",
-            attachments: data.attachments ? JSON.stringify(data.attachments) : null,
+            attachments: data.screenshots ? JSON.stringify(data.screenshots) : null,
             status: "open",
           })
           .returning({ id: userIssues.id })
@@ -200,16 +214,5 @@ export async function getRecentIssues(limit = 10) {
   } catch (error) {
     console.error("[Issues Action] Error fetching issues:", error)
     return []
-  }
-}
-
-export async function getTotalIssueCount(): Promise<number> {
-  try {
-    const db = await getDb()
-    if (!db) return 0
-    const all = await db.select({ id: userIssues.id }).from(userIssues)
-    return all.length
-  } catch {
-    return 0
   }
 }
