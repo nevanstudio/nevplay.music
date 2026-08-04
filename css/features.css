@@ -1,0 +1,16 @@
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.feature-card {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+}
+
+.feature-card h3 { margin: 0 0 8px; }
+.feature-card p { font-size: 0.95rem; }

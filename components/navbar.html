@@ -1,0 +1,286 @@
+<!-- ═══════════════════════════════════════════════════════
+     NevPlay · Liquid Glass Navigation Shell
+     ═══════════════════════════════════════════════════════ -->
+
+<!-- Fixed wrapper — pointer-events off so the gap is click-through -->
+<div class="np-nav-shell" id="np-nav-shell">
+
+  <!-- ── Floating Glass Capsule Bar ─────────────────────── -->
+  <header class="np-bar" id="np-bar" role="banner">
+
+    <!-- Left slot: Search (desktop) / Search icon (mobile) -->
+    <div class="np-bar__slot np-bar__slot--left">
+
+      <!-- Desktop expandable search -->
+      <div class="np-search" id="np-search" role="search">
+        <label for="np-search-input" class="np-search__icon" aria-label="Search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6"/>
+            <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+          </svg>
+        </label>
+        <input
+          id="np-search-input"
+          type="text"
+          class="np-search__input"
+          placeholder="Search NevPlay…"
+          aria-label="Search NevPlay"
+          autocomplete="off"
+        />
+      </div>
+
+    </div>
+
+    <!-- Centre slot: Logo (absolutely centred) -->
+    <a class="np-bar__logo" href="index.html" aria-label="NevPlay home" id="np-logo">
+      <img src="assets/icon.png" alt="NevPlay" draggable="false" />
+    </a>
+
+    <!-- Right slot: Search pill (mobile) + Hamburger -->
+    <div class="np-bar__slot np-bar__slot--right">
+
+      <!-- Mobile search trigger -->
+      <button
+        class="np-icon-btn np-search-trigger"
+        type="button"
+        aria-label="Open search"
+        id="np-search-trigger"
+        data-open-search
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6"/>
+          <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+        </svg>
+      </button>
+
+      <!-- Hamburger (mobile only) -->
+      <button
+        class="np-hamburger"
+        id="np-menu-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="np-drawer"
+      >
+        <span class="np-hamburger__line"></span>
+        <span class="np-hamburger__line"></span>
+        <span class="np-hamburger__line"></span>
+      </button>
+
+    </div>
+  </header><!-- /.np-bar -->
+
+  <!-- ── Desktop Navigation Links Row ──────────────────── -->
+  <nav class="np-links-row" id="np-links-row" aria-label="Primary navigation">
+    <!-- Active glider pill — JS moves this behind the active link -->
+    <span class="np-links-row__glider" id="np-glider" aria-hidden="true"></span>
+
+    <a class="np-link" href="index.html">Home</a>
+    <a class="np-link" href="features.html">Features</a>
+    <a class="np-link" href="screenshots.html">Screenshots</a>
+    <a class="np-link" href="get.html">Download</a>
+    <a class="np-link" href="updates.html">Releases</a>
+    <a class="np-link" href="roadmap.html">Roadmap</a>
+    <a class="np-link" href="blog.html">Community</a>
+    <a class="np-link" href="about.html">About</a>
+  </nav><!-- /.np-links-row -->
+
+</div><!-- /.np-nav-shell -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     Mobile Navigation Drawer
+     ════════════════════════════════════════════════════════ -->
+
+<!-- Backdrop dimmer -->
+<div class="np-backdrop" id="np-backdrop" aria-hidden="true"></div>
+
+<!-- Drawer panel -->
+<aside
+  class="np-drawer"
+  id="np-drawer"
+  aria-hidden="true"
+  aria-label="Navigation menu"
+>
+  <div class="np-drawer__inner">
+
+    <!-- ── Sticky drawer header ──────────────────────── -->
+    <div class="np-drawer__head">
+
+      <!-- Close button -->
+      <button
+        class="np-drawer__close"
+        id="np-drawer-close"
+        type="button"
+        aria-label="Close menu"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="18" y1="6" x2="6" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Logo + brand -->
+      <a class="np-drawer__brand" href="index.html" aria-label="NevPlay home">
+        <img src="assets/icon.png" alt="NevPlay" draggable="false" />
+        <div class="np-drawer__brand-text">
+          <strong>NevPlay</strong>
+          <span>Premium music, reimagined.</span>
+        </div>
+      </a>
+
+      <!-- Drawer search -->
+      <label class="np-drawer__search" role="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6"/>
+          <line x1="15.5" y1="15.5" x2="21" y2="21"/>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search NevPlay…"
+          aria-label="Search NevPlay"
+          autocomplete="off"
+        />
+      </label>
+
+    </div><!-- /.np-drawer__head -->
+
+    <!-- ── Scrollable body ───────────────────────────── -->
+    <div class="np-drawer__body">
+
+      <nav class="np-drawer__nav" aria-label="Mobile navigation">
+
+        <a class="np-dlink" href="index.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Home -->
+            <svg viewBox="0 0 24 24"><path d="M3 12L12 4l9 8"/><path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+          </span>
+          <span class="np-dlink__label">Home</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="features.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Sparkle / Features -->
+            <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+          </span>
+          <span class="np-dlink__label">Features</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="screenshots.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Image -->
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </span>
+          <span class="np-dlink__label">Screenshots</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="get.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Download -->
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </span>
+          <span class="np-dlink__label">Download</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="updates.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Tag / Releases -->
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </span>
+          <span class="np-dlink__label">Releases</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="roadmap.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Map -->
+            <svg viewBox="0 0 24 24"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+          </span>
+          <span class="np-dlink__label">Roadmap</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="blog.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Users / Community -->
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </span>
+          <span class="np-dlink__label">Community</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="about.html" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Info -->
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <span class="np-dlink__label">About</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+        <a class="np-dlink" href="mailto:hello@nevplay.app" data-nav-item>
+          <span class="np-dlink__icon" aria-hidden="true">
+            <!-- Mail -->
+            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </span>
+          <span class="np-dlink__label">Contact</span>
+          <span class="np-dlink__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </a>
+
+      </nav><!-- /.np-drawer__nav -->
+
+    </div><!-- /.np-drawer__body -->
+
+    <!-- ── Sticky drawer footer ──────────────────────── -->
+    <div class="np-drawer__foot">
+
+      <div class="np-drawer__divider" aria-hidden="true"></div>
+
+      <a class="np-drawer__cta" href="get.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download NevPlay
+      </a>
+
+      <div class="np-drawer__socials">
+        <a class="np-drawer__social" href="https://github.com" target="_blank" rel="noreferrer noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a class="np-drawer__social" href="blog.html" aria-label="Community">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          Community
+        </a>
+        <a class="np-drawer__social" href="donate.html" aria-label="Support us">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Support
+        </a>
+      </div>
+
+      <p class="np-drawer__meta">Version 1.0 · Built for premium listening.</p>
+
+    </div><!-- /.np-drawer__foot -->
+
+  </div><!-- /.np-drawer__inner -->
+</aside><!-- /.np-drawer -->

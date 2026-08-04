@@ -1,0 +1,92 @@
+{
+  "backgrounds": [
+    "assets/hero_images/heroimage2.png",
+    "assets/hero_images/image23.png",
+    "assets/hero_images/dark.jpg",
+    "assets/hero_images/purpleish.png"
+  ],
+  "mockups": [
+    "assets/hero_images/2.png",
+    "assets/hero_images/1.png",
+    "assets/hero_images/hero.png"
+  ],
+  "badge": {
+    "icon": "✨",
+    "text": "Now Available",
+    "version": "Version 2026.07"
+  },
+  "heading": {
+    "prefix": "Your Music.",
+    "highlight": "Beautifully Reimagined.",
+    "suffix": "The Premium Offline Music Player."
+  },
+  "description": "NevPlay is an Android Music Player that brings your local music library to life. Enjoy private offline listening with synced lyrics, AI-powered recommendations, and our beautiful Material You Liquid Glass interface, built for lightning-fast performance without any tracking.",
+  "buttons": [
+    {
+      "text": "Download Now",
+      "href": "get.html",
+      "primary": true
+    },
+    {
+      "text": "Explore Features",
+      "href": "features.html",
+      "primary": false
+    }
+  ],
+  "pills": [
+    "Offline Music",
+    "AI Recommendations",
+    "Synced Lyrics",
+    "Material You",
+    "Liquid Glass UI",
+    "Privacy First",
+    "Lightning Fast",
+    "Android Auto"
+  ],
+  "stats": [
+    {
+      "value": "100% Free",
+      "label": "Open Source"
+    },
+    {
+      "value": "Weekly",
+      "label": "Regular Updates"
+    },
+    {
+      "value": "< 40MB",
+      "label": "Fast Performance"
+    },
+    {
+      "value": "No Tracking",
+      "label": "Privacy Focused"
+    }
+  ],
+  "floating_cards": {
+    "now_playing": {
+      "title": "Midnight Drive",
+      "artist": "NevPlay",
+      "progress": "45%",
+      "time_current": "1:37",
+      "time_total": "3:45"
+    },
+    "lyrics": [
+      {
+        "text": "Driving down the neon streets",
+        "active": false
+      },
+      {
+        "text": "Where local beats and rhythms meet",
+        "active": true
+      },
+      {
+        "text": "Offline sound, privacy complete",
+        "active": false
+      }
+    ],
+    "ai_recommendation": {
+      "tag": "✨ AI Recommendation",
+      "title": "Retro Waves",
+      "match": "98% Match"
+    }
+  }
+}
