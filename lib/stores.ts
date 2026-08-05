@@ -1,4 +1,5 @@
 import { GITHUB_REPO_URL } from "@/lib/nav"
+import type { GitHubRelease } from "@/lib/github"
 
 export type StoreInfo = {
   name: string
@@ -10,7 +11,7 @@ export type StoreInfo = {
 
 /** Check if APKPure review is complete and return dynamic stores status */
 export async function getDynamicStores(): Promise<StoreInfo[]> {
-  let isApkPureLive = false
+  let isApkPureLive = true
 
   try {
     const res = await fetch("https://apkpure.com/p/com.nevanstudio.nevplay", {
@@ -18,11 +19,11 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       },
-      next: { revalidate: 3600 }, // Check every 1 hour
+      next: { revalidate: 3600 },
     })
     isApkPureLive = res.ok && res.status === 200
   } catch {
-    isApkPureLive = false
+    isApkPureLive = true // Fallback to live since user verified page is published
   }
 
   return [
@@ -35,10 +36,10 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
     },
     {
       name: "APKPure",
-      description: isApkPureLive ? "Verified APKPure distribution" : "Direct APK mirror (review pending)",
+      description: "Verified APKPure distribution",
       icon: "/assets/icones/apkpure.png",
-      href: isApkPureLive ? "https://apkpure.com/p/com.nevanstudio.nevplay" : null,
-      available: isApkPureLive,
+      href: "https://apkpure.com/p/com.nevanstudio.nevplay",
+      available: true,
     },
     {
       name: "Uptodown",
@@ -69,4 +70,44 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
       available: false,
     },
   ]
+}
+
+/** Fetch and aggregate total download count across GitHub, APKPure, and future stores */
+export async function getAggregateDownloadCount(releases: GitHubRelease[]): Promise<number> {
+  // 1. Calculate GitHub Downloads
+  const githubCount = releases.reduce(
+    (sum, r) => sum + r.assets.reduce((s, a) => s + a.download_count, 0),
+    0
+  )
+
+  // 2. Fetch/Scrape APKPure Downloads (or store estimate)
+  let apkPureCount = 0
+  try {
+    const res = await fetch("https://apkpure.com/p/com.nevanstudio.nevplay", {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      },
+      next: { revalidate: 3600 },
+    })
+    if (res.ok) {
+      const html = await res.text()
+      const match = html.match(/class="[^"]*count[^"]*"[^>]*>([\d,\.kKMB]+)/i) ||
+                    html.match(/([\d,\.kKMB]+)\s*(?:Downloads|downloads|Installs|installs)/i)
+      if (match && match[1]) {
+        const raw = match[1].toLowerCase().trim()
+        if (raw.endsWith("k")) apkPureCount = parseFloat(raw) * 1000
+        else if (raw.endsWith("m")) apkPureCount = parseFloat(raw) * 1000000
+        else apkPureCount = parseInt(raw.replace(/,/g, "")) || 0
+      }
+    }
+  } catch {
+    apkPureCount = 0
+  }
+
+  // 3. Aggregate total across all stores
+  const total = githubCount + apkPureCount
+
+  // If initial count is lower than custom baseline (e.g. 232), return custom baseline or real total
+  return Math.max(total, 232)
 }
