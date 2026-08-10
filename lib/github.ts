@@ -76,6 +76,12 @@ export function getApkAsset(assets: ReleaseAsset[]): ReleaseAsset | null {
   )
 }
 
+export const findApkAsset = getApkAsset
+
+export function findImageAsset(assets: ReleaseAsset[]): ReleaseAsset | null {
+  return assets.find((a) => /\.(png|jpe?g|webp|gif)$/i.test(a.name)) ?? null
+}
+
 export function humanFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
   const units = ["KB", "MB", "GB"]
@@ -87,6 +93,23 @@ export function humanFileSize(bytes: number): string {
     if (value < 1024) break
   }
   return `${value.toFixed(1)} ${unit}`
+}
+
+export function extractImageUrl(body: string | null): string | null {
+  if (!body) return null
+  const htmlMatch = body.match(/<img[^>]+src=["']([^"']+)["']/i)
+  if (htmlMatch) return htmlMatch[1]
+  const mdMatch = body.match(/!\[.*?\]\((https?:\/\/[^\s\)]+)\)/i)
+  if (mdMatch) return mdMatch[1]
+  return null
+}
+
+export function renderReleaseBody(body: string | null): string {
+  if (!body) return ""
+  return body
+    .replace(/<img[^>]*>/gi, "")
+    .replace(/!\[.*?\]\(.*?\)/gi, "")
+    .trim()
 }
 
 // Set to true for custom count, or false for 100% real live numbers across the entire website
