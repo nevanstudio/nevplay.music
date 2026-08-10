@@ -114,12 +114,107 @@ export function extractSha256(body: string | null): string | null {
   return match ? match[1] : null
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
+function formatInlineMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
+    .replace(/`([^`]+)`/g, '<code class="rounded bg-secondary/80 px-1.5 py-0.5 font-mono text-xs text-foreground">$1</code>')
+    .replace(/\[(.*?)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary underline underline-offset-2 hover:brightness-110">$1</a>')
+}
+
+/** Cleanly formats a release notes markdown body into styled HTML blocks (cards, headers, bullets) */
 export function renderReleaseBody(body: string | null): string {
   if (!body) return ""
-  return body
+
+  // 1. Strip raw images (handled separately in UI)
+  const cleanBody = body
     .replace(/<img[^>]*>/gi, "")
     .replace(/!\[.*?\]\(.*?\)/gi, "")
     .trim()
+
+  const lines = cleanBody.split("\n")
+  const htmlBlocks: string[] = []
+  let inList = false
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i].trim()
+    if (!rawLine) {
+      if (inList) {
+        htmlBlocks.push("</ul>")
+        inList = false
+      }
+      continue
+    }
+
+    // Dividers (--- or ===)
+    if (/^(---|===|\*\*\*)$/.test(rawLine)) {
+      if (inList) {
+        htmlBlocks.push("</ul>")
+        inList = false
+      }
+      htmlBlocks.push('<hr class="my-4 border-glass-border opacity-50" />')
+      continue
+    }
+
+    // Headers (#, ##, ###)
+    if (rawLine.startsWith("#")) {
+      if (inList) {
+        htmlBlocks.push("</ul>")
+        inList = false
+      }
+      const headerText = rawLine.replace(/^#+\s*/, "").trim()
+      htmlBlocks.push(
+        `<h3 class="mt-6 mb-3 text-base font-bold tracking-tight text-foreground flex items-center gap-2">${escapeHtml(headerText)}</h3>`
+      )
+      continue
+    }
+
+    // Bullet points (-, *, +, 1.)
+    if (/^([*+\-]||\d+\.)\s/.test(rawLine)) {
+      const itemText = rawLine.replace(/^([*+\-]||\d+\.)\s*/, "").trim()
+      if (!inList) {
+        htmlBlocks.push('<ul class="my-3 space-y-2 text-sm text-muted-foreground">')
+        inList = true
+      }
+      htmlBlocks.push(
+        `<li class="flex items-start gap-2.5"><span class="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary"></span><span>${formatInlineMarkdown(itemText)}</span></li>`
+      )
+      continue
+    }
+
+    // Sub-feature title lines with emojis (e.g. "🎨 Refined UI Experience")
+    if (/^[\p{Emoji}\u2600-\u27BF]/u.test(rawLine) && rawLine.length < 80) {
+      if (inList) {
+        htmlBlocks.push("</ul>")
+        inList = false
+      }
+      htmlBlocks.push(
+        `<h4 class="mt-5 mb-1.5 text-sm font-semibold text-foreground flex items-center gap-2">${formatInlineMarkdown(rawLine)}</h4>`
+      )
+      continue
+    }
+
+    // Regular paragraph
+    if (inList) {
+      htmlBlocks.push("</ul>")
+      inList = false
+    }
+    htmlBlocks.push(
+      `<p class="my-2 text-sm leading-relaxed text-muted-foreground">${formatInlineMarkdown(rawLine)}</p>`
+    )
+  }
+
+  if (inList) {
+    htmlBlocks.push("</ul>")
+  }
+
+  return htmlBlocks.join("\n")
 }
 
 // Set to true for custom count, or false for 100% real live numbers across the entire website

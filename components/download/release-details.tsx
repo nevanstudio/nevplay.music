@@ -4,6 +4,7 @@ import {
   formatReleaseDate,
   humanFileSize,
   parseChangelog,
+  renderReleaseBody,
   extractSha256,
 } from "@/lib/github"
 import { Reveal } from "@/components/motion/reveal"
@@ -12,8 +13,8 @@ import { CopyButton } from "./copy-button"
 import { Download } from "lucide-react"
 
 export function ChangelogTimeline({ release }: { release: GitHubRelease }) {
-  const lines = parseChangelog(release.body)
-  if (lines.length === 0) return null
+  const htmlContent = renderReleaseBody(release.body)
+  if (!htmlContent) return null
 
   return (
     <section className="px-6 py-16">
@@ -26,17 +27,12 @@ export function ChangelogTimeline({ release }: { release: GitHubRelease }) {
           />
         </Reveal>
         <Reveal className="mt-8">
-          <ol className="relative flex flex-col gap-4 border-l border-glass-border pl-6">
-            {lines.map((line) => (
-              <li key={line} className="relative text-sm leading-relaxed text-muted-foreground">
-                <span
-                  aria-hidden="true"
-                  className="absolute -left-[1.72rem] top-1.5 size-2.5 rounded-full border-2 border-background bg-primary"
-                />
-                {line}
-              </li>
-            ))}
-          </ol>
+          <GlassCard className="p-6 md:p-8">
+            <div
+              className="prose-release space-y-3"
+              dangerouslySetInnerHTML={{ __html: htmlContent }}
+            />
+          </GlassCard>
         </Reveal>
       </div>
     </section>
@@ -84,37 +80,40 @@ export function PreviousVersions({ releases }: { releases: GitHubRelease[] }) {
         <div className="mt-8 flex flex-col gap-3">
           {previous.map((release) => {
             const apk = findApkAsset(release)
+            const htmlContent = renderReleaseBody(release.body)
+
             return (
               <Reveal key={release.tag_name}>
                 <details className="glass-panel group rounded-xl">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 [&::-webkit-details-marker]:hidden">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="font-mono text-sm font-semibold">{release.tag_name}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-sm font-semibold text-primary">
+                        {release.tag_name}
+                      </span>
                       <span className="text-xs text-muted-foreground">
                         {formatReleaseDate(release.published_at)}
                       </span>
                     </div>
-                    <span className="text-xs text-muted-foreground transition-transform group-open:rotate-180">
-                      &#9662;
-                    </span>
+                    {apk && (
+                      <span className="text-xs text-muted-foreground">
+                        {humanFileSize(apk.size)}
+                      </span>
+                    )}
                   </summary>
-                  <div className="flex flex-col gap-3 px-5 pb-5">
-                    <ul className="flex flex-col gap-1.5">
-                      {parseChangelog(release.body)
-                        .slice(0, 6)
-                        .map((line) => (
-                          <li key={line} className="text-sm leading-relaxed text-muted-foreground">
-                            {line}
-                          </li>
-                        ))}
-                    </ul>
+                  <div className="border-t border-glass-border p-5 space-y-4">
+                    {htmlContent && (
+                      <div
+                        className="text-sm space-y-2"
+                        dangerouslySetInnerHTML={{ __html: htmlContent }}
+                      />
+                    )}
                     {apk && (
                       <a
                         href={apk.browser_download_url}
-                        className="inline-flex w-fit items-center gap-2 text-sm font-medium text-primary underline-offset-4 hover:underline"
+                        className="inline-flex items-center gap-2 text-xs font-semibold text-primary hover:underline pt-2"
                       >
-                        <Download className="size-4" aria-hidden="true" />
-                        {apk.name} ({humanFileSize(apk.size)})
+                        <Download className="size-3.5" />
+                        Download {release.tag_name} APK ({humanFileSize(apk.size)})
                       </a>
                     )}
                   </div>
