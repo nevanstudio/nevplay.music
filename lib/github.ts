@@ -85,7 +85,7 @@ export function humanFileSize(bytes: number): string {
 
 // Set to true for custom count (232), or false to fetch real GitHub API numbers
 const USE_CUSTOM_DOWNLOAD_COUNT = true
-const CUSTOM_DOWNLOAD_COUNT = 479
+const CUSTOM_DOWNLOAD_COUNT = 484
 
 export function totalDownloads(releases: GitHubRelease[]): number {
   if (USE_CUSTOM_DOWNLOAD_COUNT) {
