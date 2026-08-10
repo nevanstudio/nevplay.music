@@ -67,7 +67,9 @@ export function formatBytes(bytes: number): string {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`
 }
 
-export function getApkAsset(assets: ReleaseAsset[]): ReleaseAsset | null {
+export function getApkAsset(input: ReleaseAsset[] | GitHubRelease | null | undefined): ReleaseAsset | null {
+  if (!input) return null
+  const assets = Array.isArray(input) ? input : input.assets || []
   return (
     assets.find((a) => a.name.endsWith(".apk")) ??
     assets.find((a) => !a.name.endsWith(".json") && !a.name.endsWith(".txt")) ??
@@ -78,7 +80,9 @@ export function getApkAsset(assets: ReleaseAsset[]): ReleaseAsset | null {
 
 export const findApkAsset = getApkAsset
 
-export function findImageAsset(assets: ReleaseAsset[]): ReleaseAsset | null {
+export function findImageAsset(input: ReleaseAsset[] | GitHubRelease | null | undefined): ReleaseAsset | null {
+  if (!input) return null
+  const assets = Array.isArray(input) ? input : input.assets || []
   return assets.find((a) => /\.(png|jpe?g|webp|gif)$/i.test(a.name)) ?? null
 }
 
