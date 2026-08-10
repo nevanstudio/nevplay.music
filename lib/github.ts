@@ -89,16 +89,20 @@ export function humanFileSize(bytes: number): string {
   return `${value.toFixed(1)} ${unit}`
 }
 
-// Minimum baseline floor for total downloads across all releases
-const BASELINE_DOWNLOAD_COUNT = 484
+// Set to true to force a static custom count, or false for 100% real live GitHub counts
+const USE_CUSTOM_DOWNLOAD_COUNT = false
+const CUSTOM_DOWNLOAD_COUNT = 500
 
-/** Calculates real-time live total download count across ALL releases and assets on GitHub */
+/** Calculates live total download count across ALL releases on GitHub */
 export function totalDownloads(releases: GitHubRelease[]): number {
-  const realSum = releases.reduce(
+  if (USE_CUSTOM_DOWNLOAD_COUNT) {
+    return CUSTOM_DOWNLOAD_COUNT
+  }
+
+  return releases.reduce(
     (sum, r) => sum + r.assets.reduce((s, a) => s + a.download_count, 0),
     0
   )
-  return Math.max(realSum, BASELINE_DOWNLOAD_COUNT)
 }
 
 export function formatReleaseDate(iso: string): string {

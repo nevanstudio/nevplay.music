@@ -9,6 +9,18 @@ export type StoreInfo = {
   available: boolean
 }
 
+/** 
+ * Download Count Configuration:
+ * - useStaticCount: set to true if you want to hardcode a static count, or false for 100% real live fetching.
+ * - staticCount: the fixed number shown when useStaticCount = true.
+ * - baselineFloor: optional minimum number floor (e.g. set to 0 for pure real numbers).
+ */
+export const DOWNLOADS_CONFIG = {
+  useStaticCount: false,
+  staticCount: 500,
+  baselineFloor: 0,
+}
+
 /** Check if APKPure review is complete and return dynamic stores status */
 export async function getDynamicStores(): Promise<StoreInfo[]> {
   let isApkPureLive = true
@@ -23,7 +35,7 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
     })
     isApkPureLive = res.ok && res.status === 200
   } catch {
-    isApkPureLive = true // Fallback to live since user verified page is published
+    isApkPureLive = true
   }
 
   return [
@@ -74,13 +86,18 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
 
 /** Fetch and aggregate total download count across GitHub, APKPure, and future stores */
 export async function getAggregateDownloadCount(releases: GitHubRelease[]): Promise<number> {
-  // 1. Calculate GitHub Downloads
+  // If static mode is explicitly turned on, return static count directly
+  if (DOWNLOADS_CONFIG.useStaticCount) {
+    return DOWNLOADS_CONFIG.staticCount
+  }
+
+  // 1. Calculate real live GitHub downloads across ALL releases
   const githubCount = releases.reduce(
     (sum, r) => sum + r.assets.reduce((s, a) => s + a.download_count, 0),
     0
   )
 
-  // 2. Fetch/Scrape APKPure Downloads (or store estimate)
+  // 2. Fetch/Scrape APKPure Downloads
   let apkPureCount = 0
   try {
     const res = await fetch("https://apkpure.com/p/com.nevanstudio.nevplay", {
@@ -105,9 +122,8 @@ export async function getAggregateDownloadCount(releases: GitHubRelease[]): Prom
     apkPureCount = 0
   }
 
-  // 3. Aggregate total across all stores
-  const total = githubCount + apkPureCount
+  // 3. Aggregate total across all stores (GitHub + APKPure)
+  const realTotal = githubCount + apkPureCount
 
-  // If initial count is lower than custom baseline (e.g. 232), return custom baseline or real total
-  return Math.max(total, 232)
+  return Math.max(realTotal, DOWNLOADS_CONFIG.baselineFloor)
 }
