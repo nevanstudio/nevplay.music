@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Github, Rocket, Download, Calendar, Tag, ArrowUpRight, PackageOpen } from "lucide-react"
+import { Github, Download, Calendar, Tag, ArrowUpRight, ChevronDown } from "lucide-react"
 import {
   getReleases,
   findApkAsset,
@@ -40,7 +40,7 @@ export default async function ReleasesPage() {
       </PageHero>
 
       <section className="px-6 pb-24">
-        <div className="mx-auto max-w-4xl space-y-16">
+        <div className="mx-auto max-w-4xl space-y-12">
 
           {/* ── Latest Release – Hero Card ── */}
           {latestRelease && (() => {
@@ -78,18 +78,14 @@ export default async function ReleasesPage() {
                     <div className="relative aspect-video sm:aspect-[21/9] w-full overflow-hidden bg-card">
                       <img
                         src={imageUrl}
-                        alt={
-                          latestRelease.name
-                            ? `${latestRelease.name} preview`
-                            : "Release preview"
-                        }
+                        alt={latestRelease.name ? `${latestRelease.name} preview` : "Release preview"}
                         className="h-full w-full object-cover object-center transition-transform duration-700 hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-card/80 via-transparent to-transparent" />
                     </div>
                   )}
 
-                  <div className="relative z-10 flex flex-col gap-6 p-6 md:p-8">
+                  <div className="relative z-10 flex flex-col gap-5 p-6 md:p-8">
                     {/* Meta row */}
                     <div className="flex flex-wrap items-center gap-3">
                       <span className="flex items-center gap-1.5 font-mono text-sm font-semibold text-primary">
@@ -116,174 +112,108 @@ export default async function ReleasesPage() {
                       {latestRelease.name ?? latestRelease.tag_name}
                     </h2>
 
-                    {/* Release notes */}
-                    {bodyHtml ? (
-                      <div
-                        className="prose-release text-sm"
-                        dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                      />
-                    ) : (
-                      <p className="text-sm leading-relaxed text-muted-foreground">
-                        Release notes are available on GitHub.
-                      </p>
-                    )}
-
-                    {/* Actions */}
-                    <div className="flex flex-wrap items-center gap-4 pt-2">
-                      {apk ? (
-                        <ButtonLink href={apk.browser_download_url} size="lg" external>
+                    {/* Immediate Download Button Top Placement (Instant on mobile) */}
+                    <div className="flex flex-wrap items-center gap-3">
+                      {apk && (
+                        <ButtonLink href={apk.browser_download_url} size="lg" className="w-full sm:w-auto justify-center" external>
                           <Download className="size-4.5" aria-hidden="true" />
                           Download APK
-                          <span className="ml-1 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs font-normal">
+                          <span className="ml-1.5 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs font-normal">
                             {humanFileSize(apk.size)}
                           </span>
-                        </ButtonLink>
-                      ) : (
-                        <ButtonLink href={latestRelease.html_url} size="lg" variant="secondary" external>
-                          <PackageOpen className="size-4.5" aria-hidden="true" />
-                          View Release
                         </ButtonLink>
                       )}
                       <a
                         href={latestRelease.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-foreground hover:underline"
                       >
                         View on GitHub
                         <ArrowUpRight className="size-3.5" aria-hidden="true" />
                       </a>
                     </div>
+
+                    {/* Collapsible Release Notes Container */}
+                    {bodyHtml && (
+                      <details className="group mt-2 rounded-xl border border-glass-border bg-secondary/30 transition-all" open>
+                        <summary className="flex cursor-pointer items-center justify-between gap-3 p-4 text-xs font-bold uppercase tracking-widest text-foreground hover:text-primary transition-colors">
+                          <span>Release Notes</span>
+                          <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" />
+                        </summary>
+                        <div className="border-t border-glass-border p-4 max-h-80 overflow-y-auto pr-2 scrollbar-thin">
+                          <div
+                            className="prose-release text-xs sm:text-sm"
+                            dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                          />
+                        </div>
+                      </details>
+                    )}
                   </div>
                 </div>
               </Reveal>
             )
           })()}
 
-          {/* ── Older Releases ── */}
+          {/* ── Older Releases List ── */}
           {olderReleases.length > 0 && (
-            <div>
+            <div className="space-y-6 pt-4">
               <Reveal>
-                <h2 className="mb-8 text-lg font-bold tracking-tight text-muted-foreground">
-                  Previous Releases
-                </h2>
+                <h3 className="text-xl font-bold tracking-tight text-foreground">
+                  Previous Versions
+                </h3>
               </Reveal>
 
-              <ol className="relative flex flex-col gap-8 border-l border-glass-border pl-8">
-                {olderReleases.map((release, i) => {
+              <div className="space-y-4">
+                {olderReleases.map((release, index) => {
                   const apk = findApkAsset(release)
-                  const imageUrl =
-                    extractImageUrl(release.body) ??
-                    findImageAsset(release)?.browser_download_url ??
-                    null
                   const bodyHtml = renderReleaseBody(release.body)
 
                   return (
-                    <Reveal as="li" key={release.tag_name} className="relative" delay={i * 50}>
-                      {/* Timeline dot */}
-                      <span
-                        aria-hidden="true"
-                        className="absolute -left-[2.55rem] top-5 flex size-5 items-center justify-center rounded-full border-2 border-background bg-secondary"
-                      >
-                        <Rocket className="size-2.5 text-muted-foreground" aria-hidden="true" />
-                      </span>
-
-                      <GlassCard className="flex flex-col gap-4 p-5 md:p-6">
-                        {/* Image if available */}
-                        {imageUrl && (
-                          <div className="overflow-hidden rounded-xl border border-glass-border bg-card">
-                            <img
-                              src={imageUrl}
-                              alt={release.name ? `${release.name} preview` : "Release preview"}
-                              className="h-48 w-full object-cover object-center transition-transform duration-500 hover:scale-105"
-                            />
+                    <Reveal key={release.tag_name} delay={index * 30}>
+                      <GlassCard className="p-6 space-y-4">
+                        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-glass-border pb-4">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-base font-bold text-primary">
+                                {release.tag_name}
+                              </span>
+                              <span className="text-xs text-muted-foreground">
+                                · {formatReleaseDate(release.published_at)}
+                              </span>
+                            </div>
+                            <h4 className="mt-1 text-sm font-semibold text-foreground">
+                              {release.name ?? release.tag_name}
+                            </h4>
                           </div>
-                        )}
 
-                        {/* Meta */}
-                        <div className="flex flex-wrap items-center gap-2">
-                          {release.prerelease && (
-                            <Badge className="border-amber-500/30 bg-amber-500/10 text-amber-400">
-                              Pre-release
-                            </Badge>
-                          )}
-                          <span className="font-mono text-sm font-semibold text-primary">
-                            {release.tag_name}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {formatReleaseDate(release.published_at)}
-                          </span>
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-base font-bold tracking-tight md:text-lg">
-                          {release.name ?? release.tag_name}
-                        </h3>
-
-                        {/* Body preview */}
-                        {bodyHtml ? (
-                          <div
-                            className="prose-release text-sm line-clamp-[12]"
-                            dangerouslySetInnerHTML={{ __html: bodyHtml }}
-                          />
-                        ) : (
-                          <p className="text-sm text-muted-foreground">
-                            Release notes available on GitHub.
-                          </p>
-                        )}
-
-                        {/* Actions */}
-                        <div className="flex flex-wrap items-center gap-3 pt-1">
                           {apk && (
-                            <ButtonLink href={apk.browser_download_url} size="sm" external>
-                              <Download className="size-3.5" aria-hidden="true" />
+                            <ButtonLink href={apk.browser_download_url} variant="secondary" size="sm" external className="w-full sm:w-auto justify-center">
+                              <Download className="size-3.5" />
                               Download APK ({humanFileSize(apk.size)})
                             </ButtonLink>
                           )}
-                          <a
-                            href={release.html_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                          >
-                            View on GitHub
-                            <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                          </a>
                         </div>
+
+                        {bodyHtml && (
+                          <details className="group text-xs text-muted-foreground">
+                            <summary className="cursor-pointer font-semibold text-foreground hover:text-primary transition-colors">
+                              View release notes →
+                            </summary>
+                            <div
+                              className="prose-release mt-3 pt-3 border-t border-glass-border max-h-60 overflow-y-auto pr-2"
+                              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                            />
+                          </details>
+                        )}
                       </GlassCard>
                     </Reveal>
                   )
                 })}
-              </ol>
+              </div>
             </div>
           )}
 
-          {/* Empty state */}
-          {liveReleases.length === 0 && (
-            <Reveal>
-              <GlassCard className="flex flex-col items-center gap-4 py-16 text-center">
-                <div className="flex size-14 items-center justify-center rounded-full bg-secondary">
-                  <Rocket className="size-6 text-muted-foreground" aria-hidden="true" />
-                </div>
-                <h2 className="text-lg font-bold">No releases yet</h2>
-                <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-                  The first NevPlay release will appear here automatically once it&apos;s published
-                  on GitHub.
-                </p>
-                <ButtonLink href={GITHUB_REPO_URL} variant="secondary" external>
-                  <Github className="size-4" aria-hidden="true" />
-                  Watch on GitHub
-                </ButtonLink>
-              </GlassCard>
-            </Reveal>
-          )}
-
-          {/* Footer note */}
-          <Reveal>
-            <p className="text-center text-sm text-muted-foreground">
-              Future releases published to GitHub will appear here automatically.
-            </p>
-          </Reveal>
         </div>
       </section>
     </>
