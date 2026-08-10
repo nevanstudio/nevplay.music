@@ -89,9 +89,9 @@ export function humanFileSize(bytes: number): string {
   return `${value.toFixed(1)} ${unit}`
 }
 
-// Set to true to force a static custom count, or false for 100% real live GitHub counts
-const USE_CUSTOM_DOWNLOAD_COUNT = false
-const CUSTOM_DOWNLOAD_COUNT = 500
+// Set to true for custom count, or false for 100% real live numbers across the entire website
+export const USE_CUSTOM_DOWNLOAD_COUNT = false
+export const CUSTOM_DOWNLOAD_COUNT = 500
 
 /** Calculates live total download count across ALL releases on GitHub */
 export function totalDownloads(releases: GitHubRelease[]): number {

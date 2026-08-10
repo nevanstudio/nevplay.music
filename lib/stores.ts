@@ -1,5 +1,5 @@
 import { GITHUB_REPO_URL } from "@/lib/nav"
-import type { GitHubRelease } from "@/lib/github"
+import { USE_CUSTOM_DOWNLOAD_COUNT, CUSTOM_DOWNLOAD_COUNT, type GitHubRelease } from "@/lib/github"
 
 export type StoreInfo = {
   name: string
@@ -7,18 +7,6 @@ export type StoreInfo = {
   icon: string | null
   href: string | null
   available: boolean
-}
-
-/** 
- * Download Count Configuration:
- * - useStaticCount: set to true if you want to hardcode a static count, or false for 100% real live fetching.
- * - staticCount: the fixed number shown when useStaticCount = true.
- * - baselineFloor: optional minimum number floor (e.g. set to 0 for pure real numbers).
- */
-export const DOWNLOADS_CONFIG = {
-  useStaticCount: false,
-  staticCount: 500,
-  baselineFloor: 0,
 }
 
 /** Check if APKPure review is complete and return dynamic stores status */
@@ -86,9 +74,9 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
 
 /** Fetch and aggregate total download count across GitHub, APKPure, and future stores */
 export async function getAggregateDownloadCount(releases: GitHubRelease[]): Promise<number> {
-  // If static mode is explicitly turned on, return static count directly
-  if (DOWNLOADS_CONFIG.useStaticCount) {
-    return DOWNLOADS_CONFIG.staticCount
+  // If static mode is explicitly turned on in lib/github.ts, return custom count
+  if (USE_CUSTOM_DOWNLOAD_COUNT) {
+    return CUSTOM_DOWNLOAD_COUNT
   }
 
   // 1. Calculate real live GitHub downloads across ALL releases
@@ -123,7 +111,5 @@ export async function getAggregateDownloadCount(releases: GitHubRelease[]): Prom
   }
 
   // 3. Aggregate total across all stores (GitHub + APKPure)
-  const realTotal = githubCount + apkPureCount
-
-  return Math.max(realTotal, DOWNLOADS_CONFIG.baselineFloor)
+  return githubCount + apkPureCount
 }
