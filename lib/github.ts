@@ -108,6 +108,12 @@ export function extractImageUrl(body: string | null): string | null {
   return null
 }
 
+export function extractSha256(body: string | null): string | null {
+  if (!body) return null
+  const match = body.match(/sha256[:\s]+([a-f0-9]{64})/i) || body.match(/\b([a-f0-9]{64})\b/i)
+  return match ? match[1] : null
+}
+
 export function renderReleaseBody(body: string | null): string {
   if (!body) return ""
   return body
