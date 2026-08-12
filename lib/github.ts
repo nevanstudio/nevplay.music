@@ -38,7 +38,7 @@ export async function getReleases(): Promise<GitHubRelease[]> {
   try {
     const res = await fetch(`${API_BASE}/releases?per_page=100`, {
       headers: buildHeaders(),
-      next: { revalidate: 3600 }, // 3,600 seconds = 1 hour (24 times per day)
+      next: { revalidate: 30 }, // 30 seconds auto-revalidation
     })
     if (!res.ok) return []
     const data = (await res.json()) as GitHubRelease[]

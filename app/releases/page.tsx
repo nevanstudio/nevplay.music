@@ -12,8 +12,9 @@ import {
 import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
 import { Badge, ButtonLink, GlassCard, PageHero } from "@/components/ui/primitives"
+import { RefreshReleaseButton } from "@/components/download/refresh-button"
 
-export const revalidate = 3600 // 1 hour (24 times per day)
+export const revalidate = 30 // Revalidate every 30 seconds
 
 export const metadata: Metadata = {
   title: "Releases",
@@ -61,16 +62,19 @@ export default async function ReleasesPage() {
                   />
 
                   {/* Latest badge strip */}
-                  <div className="flex items-center gap-3 border-b border-glass-border bg-primary/5 px-6 py-3">
+                  <div className="flex flex-wrap items-center gap-3 border-b border-glass-border bg-primary/5 px-6 py-3">
                     <span className="flex size-2 rounded-full bg-primary animate-pulse-glow" />
                     <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                       Latest Release
                     </span>
-                    {latestRelease.prerelease && (
-                      <span className="ml-auto rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-400">
-                        Pre-release
-                      </span>
-                    )}
+                    <div className="ml-auto flex items-center gap-2">
+                      <RefreshReleaseButton />
+                      {latestRelease.prerelease && (
+                        <span className="rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-400">
+                          Pre-release
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Release image */}

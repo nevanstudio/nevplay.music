@@ -1,11 +1,20 @@
-import { NextResponse } from "next/server"
-import { getLatestRelease, findApkAsset, humanFileSize } from "@/lib/github"
+import { type NextRequest, NextResponse } from "next/server"
+import { getLatestRelease, getReleases, findApkAsset, humanFileSize } from "@/lib/github"
 
-export const revalidate = 3600 // Revalidate every 1 hour
+export const revalidate = 30 // Revalidate every 30 seconds
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const latest = await getLatestRelease()
+    const { searchParams } = new URL(request.url)
+    const channel = searchParams.get("channel") || "stable"
+
+    let latest;
+    if (channel === "beta") {
+      const releases = await getReleases()
+      latest = releases[0] // Absolute latest (sorted by date in lib/github.ts)
+    } else {
+      latest = await getLatestRelease() // Defaults to non-prerelease
+    }
 
     if (!latest) {
       return NextResponse.json({ error: "No releases found" }, { status: 404 })
@@ -28,7 +37,7 @@ export async function GET() {
       },
       {
         headers: {
-          "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+          "Cache-Control": "public, max-age=30, s-maxage=30, stale-while-revalidate=60",
           "Access-Control-Allow-Origin": "*",
         },
       },

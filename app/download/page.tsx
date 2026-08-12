@@ -31,8 +31,9 @@ import {
   SectionHeading,
 } from "@/components/ui/primitives"
 import { InstallGuide, StoreCards, SystemRequirements, FaqSection } from "@/components/download/download-sections"
+import { RefreshReleaseButton } from "@/components/download/refresh-button"
 
-export const revalidate = 3600 // 1 hour (24 times per day)
+export const revalidate = 30 // Revalidate every 30 seconds
 
 export const metadata: Metadata = {
   title: "Download",
@@ -133,7 +134,10 @@ export default async function DownloadPage() {
                   <span className="text-xs font-semibold uppercase tracking-widest text-primary">
                     Latest Release
                   </span>
-                  <Badge className="ml-auto">Signed APK</Badge>
+                  <div className="ml-auto flex items-center gap-2">
+                    <RefreshReleaseButton />
+                    <Badge>Signed APK</Badge>
+                  </div>
                 </div>
 
                 {/* Banner image */}
@@ -227,10 +231,13 @@ export default async function DownloadPage() {
                     Try the latest experimental features
                   </h3>
                 </div>
-                <ButtonLink href={betaApk.browser_download_url} variant="secondary" external className="shrink-0 justify-center">
-                  <Download className="size-4" />
-                  Download Beta APK ({humanFileSize(betaApk.size)})
-                </ButtonLink>
+                <div className="flex flex-wrap items-center gap-3 shrink-0">
+                  <RefreshReleaseButton channel="beta" />
+                  <ButtonLink href={betaApk.browser_download_url} variant="secondary" external className="justify-center">
+                    <Download className="size-4" />
+                    Download Beta APK ({humanFileSize(betaApk.size)})
+                  </ButtonLink>
+                </div>
               </GlassCard>
             </Reveal>
           )}
