@@ -4,10 +4,11 @@ import { hero } from "@/lib/data"
 import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Badge, ButtonLink } from "@/components/ui/primitives"
 import type { GitHubRelease } from "@/lib/github"
+import { BetaNoticeBanner } from "@/components/home/beta-notice-banner"
 
 export function Hero({ latestRelease }: { latestRelease: GitHubRelease | null }) {
   return (
-    <section className="relative overflow-hidden px-6 pb-20 pt-20 md:pt-28 lg:pb-28">
+    <section className="relative overflow-hidden px-6 pb-20 pt-16 md:pt-20 lg:pb-28">
       {/* Ambient glow background */}
       <div
         aria-hidden="true"
@@ -17,6 +18,9 @@ export function Hero({ latestRelease }: { latestRelease: GitHubRelease | null })
         aria-hidden="true"
         className="animate-pulse-glow pointer-events-none absolute bottom-0 right-[-10rem] h-90 w-90 rounded-full bg-glow blur-3xl"
       />
+
+      {/* High Attention-grabbing Beta Channel Conclusion Notice */}
+      <BetaNoticeBanner />
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-14 lg:flex-row lg:items-center lg:gap-10">
         {/* Copy column */}

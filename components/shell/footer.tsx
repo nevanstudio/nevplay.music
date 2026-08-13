@@ -3,6 +3,7 @@ import Image from "next/image"
 
 const productLinks = [
   { label: "Download", href: "/download" },
+  { label: "News & Notices", href: "/news" },
   { label: "Features", href: "/features" },
   { label: "Screenshots", href: "/screenshots" },
   { label: "Releases", href: "/releases" },
