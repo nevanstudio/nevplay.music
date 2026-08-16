@@ -45,9 +45,9 @@ const featureGroups = [
       },
       {
         icon: Moon,
-        title: "Liquid Glass Interface",
+        title: "Fluent Design & Material Interface",
         description:
-          "NevPlay's signature visual style — layered frosted glass cards, dynamic ambient artwork blurs, and smooth 60 FPS transitions.",
+          "NevPlay's signature visual style — layered frosted glass cards, dynamic ambient artwork blurs, and smooth 120 FPS transitions.",
       },
       {
         icon: Sliders,
@@ -57,7 +57,7 @@ const featureGroups = [
       },
       {
         icon: Gauge,
-        title: "Under 40MB & 60 FPS",
+        title: "Under 40MB & 120 FPS",
         description:
           "Extremely lightweight, zero bloat, lightning-fast app launch times, and butter-smooth scrolling performance.",
       },
@@ -157,7 +157,7 @@ const featureGroups = [
 
 const stats = [
   { value: "Material 3", label: "Design Language" },
-  { value: "60 FPS", label: "Smooth Animations" },
+  { value: "120 FPS", label: "Smooth Animations" },
   { value: "1000+", label: "AutoEQ Profiles" },
   { value: "0 Telemetry", label: "100% Private" },
 ]
@@ -218,7 +218,7 @@ export default function FeaturesPage() {
               </Reveal>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {group.features.map((feature, index) => (
-                  <Reveal key={feature.title} delay={index * 60}>
+                  <Reveal key={feature.title} delay={index * 120}>
                     <GlassCard hover className="flex h-full flex-col gap-3 p-6 border-glass-border">
                       <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary border border-primary/20">
                         <feature.icon className="size-5" aria-hidden="true" />
