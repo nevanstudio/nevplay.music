@@ -33,47 +33,53 @@ const pillars = [
 const journey = [
   {
     year: "2024",
-    title: "The Idea",
+    title: "The Genesis",
     description:
-      "A frustration with bloated streaming apps leads to the first NevPlay prototype — a minimal local player with Material Design.",
+      "Frustration with bloated, data-mining streaming apps led to the first NevPlay prototype — a minimal local music player built on pure principles.",
   },
   {
     year: "2025",
     title: "Public Launch",
     description:
-      "NevPlay is released publicly. Synced lyrics, equalizer, and smart playlists join the core playback engine.",
+      "NevPlay is released to the Android community. Synced LRC lyrics, 10-band equalizer, and privacy-first local stats become core pillars.",
   },
   {
-    year: "2026",
-    title: "The Glass Era",
+    year: "Mid 2026",
+    title: "The Glass & AutoEQ Era",
     description:
-      "Material You integration, Liquid Glass UI, AI recommendations, and AutoEQ transform NevPlay into a premium experience.",
+      "Material You dynamic theming, Liquid Glass UI, and AutoEQ integration with over 1,000 headphone profiles transform NevPlay into a studio-grade player.",
+  },
+  {
+    year: "Oct 2026",
+    title: "The Comeback & Rebirth",
+    description:
+      "After an abrupt 60-day forced offline emergency, NevPlay returns stronger than ever: an overhauled ultra-fast website, trimmed bloat, and next-gen audio pipelines actively in flight.",
   },
 ]
 
 const principles = [
   {
-    icon: Users,
-    title: "Independent Development",
+    icon: Code2,
+    title: "100% Solo & Independent",
     description:
-      "Built by a small passionate team, not a corporation with shareholders to please.",
+      "Engineered by a dedicated solo developer. No shareholders, no venture capital pressure, and no corporate agenda.",
   },
   {
     icon: Heart,
-    title: "Community Driven",
-    description: "Feature priorities come from real users. Your feedback shapes every release.",
+    title: "Listener Owned",
+    description: "Every feature serves the music enthusiast. No accounts, no lock-in, and zero analytics collection.",
   },
   {
-    icon: Code2,
-    title: "Premium Quality",
+    icon: Users,
+    title: "Community Driven",
     description:
-      "Built with attention to detail. Every feature is crafted for excellence and reliability.",
+      "Feature priorities and bug fixes are guided directly by listeners and open-source contributors on GitHub.",
   },
   {
     icon: Wallet,
-    title: "Sustainable & Free",
+    title: "Free Forever",
     description:
-      "Supported by donations, not ads or data mining. Optional support keeps development alive.",
+      "NevPlay will never introduce subscriptions, paywalls, or advertisements. Clean software for local music.",
   },
 ]
 
@@ -168,8 +174,8 @@ export default function AboutPage() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <ButtonLink href="/download">Download NevPlay</ButtonLink>
-              <ButtonLink href="/donate" variant="secondary">
-                Support Us
+              <ButtonLink href="/news" variant="secondary">
+                Read Developer Dispatch
               </ButtonLink>
             </div>
           </div>

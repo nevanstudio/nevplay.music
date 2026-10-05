@@ -256,7 +256,7 @@ export default function FeaturesPage() {
                   Get Stable APK Free
                 </ButtonLink>
                 <ButtonLink href="/news" variant="secondary" size="lg">
-                  Read News Reports
+                  Developer Dispatch
                 </ButtonLink>
               </div>
             </div>

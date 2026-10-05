@@ -326,7 +326,7 @@ export default async function ReleasesPage() {
                       <span className="font-mono text-sm font-bold text-amber-400">{latestBeta.tag_name}</span>
                       <h3 className="mt-1 text-lg font-bold text-foreground">{latestBeta.name ?? latestBeta.tag_name}</h3>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Beta channels are currently closed to the public. Early Access is available in-app (v2026.08.12+).
+                        Pre-release testing build for previewing upcoming audio features.
                       </p>
                     </div>
 

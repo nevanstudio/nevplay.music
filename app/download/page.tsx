@@ -107,13 +107,13 @@ export default async function DownloadPage() {
               </div>
             )}
 
-            {/* Subdued link to News report */}
+            {/* Link to Return Dispatch */}
             <Link
               href="/news"
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-400/90 hover:text-amber-300 hover:underline pt-1 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline pt-1 transition-colors"
             >
-              <AlertCircle className="size-3.5" aria-hidden="true" />
-              Notice: Public Beta channels closed — Early Access moved in-app (v2026.08.12+)
+              <Zap className="size-3.5 text-primary" aria-hidden="true" />
+              October 2026 Developer Dispatch: The 60-day silence is broken
               <ArrowRight className="size-3" aria-hidden="true" />
             </Link>
           </div>
@@ -227,53 +227,47 @@ export default async function DownloadPage() {
             </Reveal>
           )}
 
-          {/* ── Subdued & De-emphasized Beta Notice Box ── */}
+          {/* ── Security & Integrity Guarantee ── */}
           <Reveal>
-            <div className="rounded-2xl border border-glass-border bg-secondary/15 p-6 md:p-7 space-y-4 opacity-80 hover:opacity-100 transition-opacity">
+            <div className="rounded-2xl border border-glass-border bg-card/60 p-6 md:p-7 space-y-4 shadow-sm backdrop-blur-xl">
               <div className="flex items-center justify-between gap-3 border-b border-glass-border pb-3">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  <Info className="size-4 text-muted-foreground" aria-hidden="true" />
-                  Beta Channel Status Notice
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary">
+                  <ShieldCheck className="size-4 text-primary" aria-hidden="true" />
+                  Direct Signed APK Security Guarantee
                 </div>
                 <span className="text-[11px] font-mono text-muted-foreground">
-                  Concluded
+                  Verified SHA-256
                 </span>
               </div>
 
               <div className="space-y-2">
                 <h4 className="text-base font-semibold text-foreground">
-                  Public Beta Downloads Concluded
+                  100% Free · No Ads · Zero Analytics
                 </h4>
                 <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
-                  We have officially ended public Beta releases on our website and GitHub. Public beta channels cannot be open for everyone, but users running version <strong className="text-foreground">2026.08.12</strong> or higher can request Early Access directly <strong className="text-foreground">inside the NevPlay Android app</strong> under Settings.
+                  Every APK is built and signed directly via official GitHub Actions pipelines. NevPlay does not require account registration, requests zero invasive Android permissions, and never connects to remote telemetry or advertising servers. Your music, playlists, and listening habits stay 100% on your device.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                 <Link
-                  href="/news"
+                  href="/about"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
                 >
-                  <Newspaper className="size-3.5" aria-hidden="true" />
-                  Read Full News Notice & Details
+                  <Info className="size-3.5" aria-hidden="true" />
+                  Read About the Solo Dev &amp; Independent Mission
                   <ArrowRight className="size-3" aria-hidden="true" />
                 </Link>
 
-                {betaApk && (
-                  <details className="text-xs">
-                    <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
-                      Legacy Beta Build (v{latestBeta?.tag_name})
-                    </summary>
-                    <div className="mt-2 p-2 rounded bg-background border border-glass-border text-[11px]">
-                      <a
-                        href={betaApk.browser_download_url}
-                        className="text-muted-foreground underline hover:text-foreground"
-                      >
-                        Download legacy pre-release build ({humanFileSize(betaApk.size)})
-                      </a>
-                    </div>
-                  </details>
-                )}
+                <a
+                  href={GITHUB_REPO_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted-foreground hover:text-foreground inline-flex items-center gap-1"
+                >
+                  <Github className="size-3.5" aria-hidden="true" />
+                  Verify Source on GitHub
+                </a>
               </div>
             </div>
           </Reveal>

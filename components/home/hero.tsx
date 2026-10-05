@@ -1,26 +1,47 @@
 import Image from "next/image"
-import { Download, Github, Play, Sparkles } from "lucide-react"
+import Link from "next/link"
+import { ArrowRight, Download, Github, Play, Sparkles, Zap } from "lucide-react"
 import { hero } from "@/lib/data"
 import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Badge, ButtonLink } from "@/components/ui/primitives"
 import type { GitHubRelease } from "@/lib/github"
-import { BetaNoticeBanner } from "@/components/home/beta-notice-banner"
 
 export function Hero({ latestRelease }: { latestRelease: GitHubRelease | null }) {
   return (
-    <section className="relative overflow-hidden px-6 pb-20 pt-16 md:pt-20 lg:pb-28">
+    <section className="relative overflow-hidden px-6 pb-20 pt-12 md:pt-16 lg:pb-28">
       {/* Ambient glow background */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[-10rem] h-120 w-[60rem] max-w-full -translate-x-1/2 rounded-full bg-glow blur-3xl"
+        className="pointer-events-none absolute left-1/2 top-[-10rem] h-120 w-[60rem] max-w-full -translate-x-1/2 rounded-full bg-glow blur-3xl opacity-75"
       />
       <div
         aria-hidden="true"
         className="animate-pulse-glow pointer-events-none absolute bottom-0 right-[-10rem] h-90 w-90 rounded-full bg-glow blur-3xl"
       />
 
-      {/* High Attention-grabbing Beta Channel Conclusion Notice */}
-      <BetaNoticeBanner />
+      {/* Return Announcement Banner */}
+      <div className="w-full max-w-5xl mx-auto mb-10">
+        <Link
+          href="/news"
+          className="group relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/15 via-surface to-primary/5 p-4 sm:p-5 shadow-lg shadow-primary/5 backdrop-blur-xl transition-all duration-300 hover:border-primary/60 hover:shadow-primary/15"
+        >
+          <div className="flex items-center gap-3">
+            <span className="flex size-2.5 rounded-full bg-primary animate-ping-ring shrink-0" />
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary">
+                <Zap className="size-3" aria-hidden="true" />
+                October 2026 Comeback
+              </span>
+              <p className="text-xs sm:text-sm font-semibold text-foreground">
+                The 60-day silence is broken. We are back at the workstation.
+              </p>
+            </div>
+          </div>
+          <span className="inline-flex items-center gap-1 text-xs font-bold text-primary transition-transform group-hover:translate-x-1 shrink-0">
+            Read Developer Dispatch <ArrowRight className="size-3.5" aria-hidden="true" />
+          </span>
+        </Link>
+      </div>
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-14 lg:flex-row lg:items-center lg:gap-10">
         {/* Copy column */}
@@ -28,25 +49,28 @@ export function Hero({ latestRelease }: { latestRelease: GitHubRelease | null })
           <Badge className="blur-in">
             <Sparkles className="size-3.5" aria-hidden="true" />
             {latestRelease
-              ? `Now available — ${latestRelease.tag_name}`
-              : "First release coming soon"}
+              ? `Latest Build — ${latestRelease.tag_name}`
+              : "Stable APK Available"}
           </Badge>
 
-          <h1 className="blur-in text-balance text-4xl font-bold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl [animation-delay:100ms]">
-            {hero.heading.prefix}{" "}
-            <span className="text-primary">{hero.heading.highlight}</span>
+          <h1 className="blur-in text-balance text-4xl font-extrabold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl [animation-delay:100ms]">
+            Pure Offline Music.{" "}
+            <span className="text-primary">Back &amp; Recharged.</span>
           </h1>
 
           <p className="blur-in text-pretty text-lg leading-relaxed text-muted-foreground [animation-delay:200ms]">
-            {hero.description}
+            NevPlay gives you complete ownership over your local music library. Private offline playback with real-time synced lyrics, 10-band AutoEQ headphone calibration, and a gorgeous Liquid Glass interface. 100% free, zero ads, zero telemetry.
           </p>
 
           <div className="blur-in flex flex-wrap items-center justify-center gap-4 lg:justify-start [animation-delay:300ms]">
             <ButtonLink href="/download" size="lg">
               <Download className="size-4.5" aria-hidden="true" />
-              Download Now
+              Download Stable APK
             </ButtonLink>
-            <ButtonLink href={GITHUB_REPO_URL} variant="secondary" size="lg" external>
+            <ButtonLink href="/features" variant="secondary" size="lg">
+              Explore Features
+            </ButtonLink>
+            <ButtonLink href={GITHUB_REPO_URL} variant="ghost" size="lg" external>
               <Github className="size-4.5" aria-hidden="true" />
               GitHub
             </ButtonLink>

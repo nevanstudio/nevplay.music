@@ -30,7 +30,7 @@ export type NewsItem = {
   subtitle: string
   date: string
   time: string
-  category: "Notice" | "Beta Program" | "Release" | "Feature"
+  category: "Dispatch" | "Release" | "Feature"
   pinned?: boolean
   author: string
   content: string[]
@@ -42,40 +42,45 @@ export type NewsItem = {
 
 const newsReports: NewsItem[] = [
   {
-    id: "beta-channel-ended-aug-2026",
+    id: "developer-return-october-2026",
     pinned: true,
-    category: "Notice",
-    title: "Official Notice: Public Beta Channels Concluded — Early Access Moves In-App",
+    category: "Dispatch",
+    title: "Developer Dispatch: The 60-Day Silence is Over — NevPlay is Back",
     subtitle:
-      "Important policy change regarding NevPlay beta distribution. Public beta channels are closed; in-app Early Access requests are now enabled for users on v2026.08.12 or higher.",
-    date: "August 13, 2026",
-    time: "09:30 AM",
-    author: "NevPlay Core Team",
+      "A candid personal report from the solo developer behind NevPlay on the sudden offline absence since v2026.08.10, the architectural overhaul during the hiatus, and our upcoming roadmap.",
+    date: "October 6, 2026",
+    time: "12:00 AM",
+    author: "Nevan (Lead & Solo Developer)",
     content: [
-      "We are announcing an immediate change regarding the NevPlay Beta distribution channels. Effective today, we have formally ended the public Beta channels hosted on GitHub and our website.",
-      "We understand that public beta channels were made available just a few hours ago. However, due to rapid development cycles and the need for targeted performance metrics, public beta builds cannot be made available to everyone at this scale.",
-      "If you are interested in trying experimental features ahead of official stable releases, you can still request Early Access. Starting with NevPlay version 2026.08.12 or higher, users can submit an Early Access Request directly from within the app settings screen.",
-      "The Stable channel remains the single recommended, fully-tested version for all users. We appreciate your understanding and continued support as we build the ultimate offline music player for Android.",
+      "To our community and listeners worldwide:",
+      "On August 10, 2026, following the release of NevPlay v2026.08.10, an unprecedented personal emergency suddenly and completely forced me offline. I was abruptly separated from my development workstations, hardware test devices, code repositories, and online communication channels for nearly two full months.",
+      "As a 100% independent, solo developer, when life unexpectedly forces you away from your keyboard, there is no PR department, no proxy maintainer, and no automated social pipeline. The silence was absolute, and for that, I recognize it caused genuine concern among our community.",
+      "Today, I want to make one thing unequivocally clear: NevPlay was never abandoned, nor will it be. That involuntary hiatus away from illuminated screens became a profound crucible. In the quiet, I dissected every aspect of NevPlay from first principles: where the UI was carrying dead weight, why certain screens caused unnecessary cognitive load, and how to push our low-latency audio engine to rival commercial studio players.",
+      "We are kicking off this comeback with immediate action: our website has been completely rebuilt to be drastically lighter and faster, removing dozens of speculative and underutilized pages to deliver pure performance. Meanwhile, on the Android side, the next app release is actively in development with streamlined caching, refined Liquid Glass aesthetics, and rock-solid offline stability.",
+      "Thank you to everyone who kept listening, kept NevPlay on their devices, and had faith in this independent project. We're back in the studio, and the best is yet to come.",
     ],
     action: {
-      label: "Download Stable v2026.08.12+",
+      label: "Download Stable v2026.08.10+",
       href: "/download",
     },
   },
   {
-    id: "initial-beta-rollout",
-    category: "Beta Program",
-    title: "NevPlay Public Beta Channel Initial Preview",
+    id: "release-2026-08-10",
+    category: "Release",
+    title: "NevPlay Version 2026.08.10 — Stability & High-Res Engine Milestone",
     subtitle:
-      "Exploratory public testing launch for early adopter feedback and experimental sound processing features.",
-    date: "August 13, 2026",
-    time: "06:00 AM",
-    author: "NevPlay Core Team",
+      "Core audio optimization update introducing multi-threaded buffers, expanded lossless decoding, and battery efficiency.",
+    date: "August 10, 2026",
+    time: "03:45 PM",
+    author: "Nevan",
     content: [
-      "Earlier today, NevPlay briefly opened a public preview channel to test our upcoming high-resolution resampling engine and dynamic theme transitions.",
-      "Initial feedback allowed us to gather invaluable crash diagnostics and device configuration telemetry across various Android OS versions.",
-      "This public preview period has now concluded as we transition to our structured in-app Early Access system.",
+      "Version 2026.08.10 solidified our core playback pipeline with multi-threaded audio buffering, expanded FLAC and ALAC decoding, and improved album art memory management.",
+      "This build serves as our stable baseline across thousands of Android devices as we prepare the next major evolutionary update.",
     ],
+    action: {
+      label: "View Release Notes",
+      href: "/releases",
+    },
   },
   {
     id: "release-2026-07",
@@ -85,7 +90,7 @@ const newsReports: NewsItem[] = [
       "Major performance update introducing our 10-band equalizer with AutoEQ headphone profiles and responsive glassmorphism UI.",
     date: "July 28, 2026",
     time: "02:15 PM",
-    author: "NevPlay Core Team",
+    author: "Nevan",
     content: [
       "Version 2026.07 brings our most requested feature: a built-in 10-Band Graphic Equalizer complete with AutoEQ integration featuring over 1,000 headphone calibration profiles.",
       "The UI has been overhauled with smooth 60 FPS Jetpack Compose animations, dynamic ambient artwork blurs, and instant local library indexing.",
@@ -104,7 +109,7 @@ const newsReports: NewsItem[] = [
       "Full Material 3 Expressive UI integration with dynamic color extraction and LRCLIB lyrics lookup.",
     date: "June 15, 2026",
     time: "11:00 AM",
-    author: "NevPlay Design Team",
+    author: "Nevan",
     content: [
       "NevPlay now dynamically samples your wallpaper and cover art palette using Android Material You design tokens for a cohesive look across dark and light modes.",
       "Automatic offline lyric matching via LRCLIB ensures your music library shines with full karaoke text display.",
@@ -118,7 +123,7 @@ const newsReports: NewsItem[] = [
       "Zero-cloud tracking AI recommendations that learn your acoustic taste directly on your Android device.",
     date: "May 10, 2026",
     time: "04:30 PM",
-    author: "NevPlay AI Labs",
+    author: "Nevan",
     content: [
       "NevPlay is introducing on-device intelligence. Unlike streaming platforms that collect user listening logs, NevPlay analyze track acoustics, BPM, key signature, and your local listening history 100% locally.",
       "Your data never leaves your device while you enjoy personalized smart playlist generation.",
@@ -171,7 +176,7 @@ export default function NewsPage() {
                   <article
                     className={`relative overflow-hidden rounded-2xl border transition-all duration-300 ${
                       isPinned
-                        ? "border-amber-500/50 bg-gradient-to-br from-amber-500/10 via-card to-card shadow-xl shadow-amber-500/10 ring-1 ring-amber-500/30"
+                        ? "border-primary/60 bg-gradient-to-br from-primary/15 via-card to-card shadow-2xl shadow-primary/15 ring-1 ring-primary/40"
                         : "border-glass-border bg-card hover:border-primary/40 hover:shadow-lg"
                     }`}
                   >
@@ -179,15 +184,15 @@ export default function NewsPage() {
                     <div
                       className={`flex flex-wrap items-center justify-between gap-3 px-6 py-3.5 border-b text-xs font-mono ${
                         isPinned
-                          ? "border-amber-500/30 bg-amber-500/15 text-amber-300"
+                          ? "border-primary/30 bg-primary/20 text-primary"
                           : "border-glass-border bg-secondary/30 text-muted-foreground"
                       }`}
                     >
                       <div className="flex items-center gap-2">
                         {isPinned ? (
-                          <span className="inline-flex items-center gap-1 font-bold text-amber-400">
-                            <ShieldAlert className="size-3.5" aria-hidden="true" />
-                            CRITICAL NOTICE
+                          <span className="inline-flex items-center gap-1.5 font-bold text-primary">
+                            <span className="size-2 rounded-full bg-primary animate-ping-ring" />
+                            OFFICIAL COMEBACK DISPATCH
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 font-semibold text-primary">
@@ -238,7 +243,7 @@ export default function NewsPage() {
                             size="sm"
                             className={
                               isPinned
-                                ? "bg-amber-500 text-black hover:bg-amber-400 font-bold"
+                                ? "bg-primary text-primary-foreground hover:brightness-110 font-bold"
                                 : ""
                             }
                           >

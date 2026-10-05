@@ -1,25 +1,22 @@
 import Link from "next/link"
 import Image from "next/image"
+import { GITHUB_REPO_URL, GITHUB_ISSUES_URL } from "@/lib/nav"
 
 const productLinks = [
-  { label: "Download", href: "/download" },
-  { label: "News & Notices", href: "/news" },
+  { label: "Download APK", href: "/download" },
   { label: "Features", href: "/features" },
-  { label: "Screenshots", href: "/screenshots" },
   { label: "Releases", href: "/releases" },
-  { label: "Roadmap", href: "/roadmap" },
+  { label: "News & Dispatch", href: "/news" },
 ]
 
 const companyLinks = [
-  { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
-  { label: "Donate", href: "/donate" },
-  { label: "Help", href: "/help" },
+  { label: "About NevPlay", href: "/about", external: false },
+  { label: "GitHub Repository", href: GITHUB_REPO_URL, external: true },
+  { label: "Report an Issue", href: GITHUB_ISSUES_URL, external: true },
 ]
 
 const legalLinks = [
   { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Service", href: "/terms" },
 ]
 
 export function Footer() {
@@ -55,15 +52,27 @@ export function Footer() {
             </nav>
             <nav aria-label="Project" className="flex flex-col gap-3">
               <h3 className="text-sm font-semibold">Project</h3>
-              {companyLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {companyLinks.map((link) =>
+                link.external ? (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
             </nav>
             <nav aria-label="Legal" className="flex flex-col gap-3">
               <h3 className="text-sm font-semibold">Legal</h3>
