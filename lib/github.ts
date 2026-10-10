@@ -218,8 +218,8 @@ export function renderReleaseBody(body: string | null): string {
 }
 
 // Set to true for custom count, or false for 100% real live numbers across the entire website
-export const USE_CUSTOM_DOWNLOAD_COUNT = true
-export const CUSTOM_DOWNLOAD_COUNT = 1005
+export const USE_CUSTOM_DOWNLOAD_COUNT = false
+export const CUSTOM_DOWNLOAD_COUNT = 1658
 
 /** Calculates live total download count across ALL releases on GitHub */
 export function totalDownloads(releases: GitHubRelease[]): number {
