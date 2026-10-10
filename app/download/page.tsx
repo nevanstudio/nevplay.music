@@ -22,7 +22,9 @@ import {
   Newspaper,
   AlertCircle,
   Info,
+  Github,
 } from "lucide-react"
+import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
 import {
   Badge,
