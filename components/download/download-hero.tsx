@@ -48,7 +48,6 @@ export function DownloadHero({
               <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-sm text-muted-foreground">
                 <span>{formatReleaseDate(latestRelease.published_at)}</span>
                 <span>{humanFileSize(apk.size)}</span>
-                {downloads > 0 && <span>{downloads.toLocaleString()} downloads</span>}
               </div>
               <ButtonLink href={apk.browser_download_url} size="lg" external className="w-full sm:w-auto">
                 <Download className="size-4.5" aria-hidden="true" />

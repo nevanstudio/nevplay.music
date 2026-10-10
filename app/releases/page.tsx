@@ -8,7 +8,6 @@ import {
   humanFileSize,
   renderReleaseBody,
   extractImageUrl,
-  totalDownloads,
 } from "@/lib/github"
 import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
@@ -251,7 +250,6 @@ export default async function ReleasesPage() {
   const latestStable = stableReleases[0] ?? null
   const latestBeta = betaReleases[0] ?? null
   const olderStable = stableReleases.slice(1)
-  const downloads = totalDownloads(allReleases)
 
   return (
     <>
@@ -267,30 +265,27 @@ export default async function ReleasesPage() {
       </PageHero>
 
       {/* Stats bar */}
-      {downloads > 0 && (
-        <section className="px-6 pb-8">
-          <div
-            className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-6"
-            style={{ animation: "slide-up 0.5s cubic-bezier(0.22,1,0.36,1) both" }}
-          >
-            {[
-              { icon: Download, value: downloads.toLocaleString(), label: "Total Downloads" },
-              { icon: Rocket, value: String(stableReleases.length), label: "Stable Releases" },
-              { icon: Zap, value: String(betaReleases.length), label: "Beta Releases" },
-            ].map(({ icon: Icon, value, label }) => (
-              <div key={label} className="glass-panel flex items-center gap-3 rounded-2xl px-5 py-3 border border-glass-border">
-                <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10">
-                  <Icon className="size-4 text-primary" aria-hidden="true" />
-                </div>
-                <div>
-                  <p className="text-lg font-bold tabular-nums text-foreground leading-none">{value}</p>
-                  <p className="text-xs text-muted-foreground">{label}</p>
-                </div>
+      <section className="px-6 pb-8">
+        <div
+          className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-6"
+          style={{ animation: "slide-up 0.5s cubic-bezier(0.22,1,0.36,1) both" }}
+        >
+          {[
+            { icon: Rocket, value: String(stableReleases.length), label: "Stable Releases" },
+            { icon: Zap, value: String(betaReleases.length), label: "Beta Releases" },
+          ].map(({ icon: Icon, value, label }) => (
+            <div key={label} className="glass-panel flex items-center gap-3 rounded-2xl px-5 py-3 border border-glass-border">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10">
+                <Icon className="size-4 text-primary" aria-hidden="true" />
               </div>
-            ))}
-          </div>
-        </section>
-      )}
+              <div>
+                <p className="text-lg font-bold tabular-nums text-foreground leading-none">{value}</p>
+                <p className="text-xs text-muted-foreground">{label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <section className="px-6 pb-28">
         <div className="mx-auto max-w-4xl space-y-16">

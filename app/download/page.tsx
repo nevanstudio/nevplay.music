@@ -8,7 +8,6 @@ import {
   humanFileSize,
   renderReleaseBody,
   extractImageUrl,
-  totalDownloads,
 } from "@/lib/github"
 import {
   Download,
@@ -48,7 +47,6 @@ export default async function DownloadPage() {
   const betaReleases = releases.filter((r) => r.prerelease && !r.draft)
   const latest = stableReleases[0] ?? null
   const latestBeta = betaReleases[0] ?? null
-  const downloads = totalDownloads(releases)
 
   const latestApk = latest ? findApkAsset(latest) : null
   const latestBodyHtml = latest ? renderReleaseBody(latest.body) : ""
@@ -125,27 +123,6 @@ export default async function DownloadPage() {
               <ArrowRight className="size-3" aria-hidden="true" />
             </Link>
           </div>
-
-          {/* Stats row */}
-          {downloads > 0 && (
-            <div className="blur-in flex flex-wrap items-center justify-center gap-6 pt-2 [animation-delay:300ms]">
-              {[
-                { icon: Download, label: "Downloads", value: downloads.toLocaleString() },
-                { icon: Star, label: "Free Forever", value: "Always" },
-                { icon: Zap, label: "No Ads", value: "Zero" },
-              ].map(({ icon: Icon, label, value }) => (
-                <div key={label} className="flex flex-col items-center gap-0.5">
-                  <span className="text-lg font-bold tabular-nums text-foreground sm:text-xl">
-                    {value}
-                  </span>
-                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                    <Icon className="size-3" aria-hidden="true" />
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 

@@ -31,14 +31,12 @@ export function ReleaseCard({
   isBeta = false,
 }: ReleaseCardProps) {
   const [isDownloading, setIsDownloading] = useState(false)
-  const [downloadsCount, setDownloadsCount] = useState(downloadCount)
 
   const handleDownload = async () => {
     setIsDownloading(true)
     try {
       // Track download
       await trackDownload(id, releaseType)
-      setDownloadsCount((prev) => prev + 1)
 
       // Open APK URL directly
       if (apkUrl) window.open(apkUrl, "_blank")
@@ -104,9 +102,6 @@ export function ReleaseCard({
       {apkUrl && (
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-col gap-1">
-            <p className="text-sm font-medium text-white">
-              {downloadsCount.toLocaleString()} downloads
-            </p>
             <a
               href={apkUrl}
               target="_blank"
