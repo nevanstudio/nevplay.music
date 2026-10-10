@@ -76,27 +76,44 @@ export default async function DownloadPage() {
             sideload-friendly APK — straight from GitHub or official stores.
           </p>
 
-          {/* Primary Download Button */}
-          <div className="blur-in flex flex-col items-center justify-center gap-3 w-full max-w-md pt-2 [animation-delay:250ms]">
-            {latestApk && (
-              <div className="flex flex-col items-center gap-2 w-full">
+          {/* Primary Download Buttons (Direct APK + Uptodown Badge) */}
+          <div className="blur-in flex flex-col items-center justify-center gap-4 w-full max-w-lg pt-2 [animation-delay:250ms]">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full">
+              {latestApk && (
                 <ButtonLink
                   href={latestApk.browser_download_url}
                   size="lg"
-                  className="w-full justify-center text-base py-4 shadow-2xl shadow-primary/30 bg-gradient-to-r from-primary via-primary to-primary/90 hover:brightness-110 ring-2 ring-primary/40 font-bold"
+                  className="w-full sm:flex-1 justify-center text-sm sm:text-base py-3.5 shadow-xl shadow-primary/25 bg-gradient-to-r from-primary via-primary to-primary/90 hover:brightness-110 ring-2 ring-primary/40 font-bold"
                   external
                 >
                   <Download className="size-5" aria-hidden="true" />
-                  Download Stable APK
-                  <span className="ml-2 rounded-full bg-primary-foreground/20 px-2.5 py-0.5 text-xs font-normal">
-                    v{latest.tag_name} · {humanFileSize(latestApk.size)}
+                  Download APK
+                  <span className="ml-2 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs font-normal">
+                    v{latest.tag_name}
                   </span>
                 </ButtonLink>
-                <span className="text-xs text-muted-foreground font-medium">
-                  Official Stable Release · Recommended for all Android devices
-                </span>
-              </div>
-            )}
+              )}
+
+              {/* Direct Uptodown Download Button Badge */}
+              <a
+                href="https://nevplay.en.uptodown.com/android"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Download NevPlay on Uptodown"
+                className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-xl hover:shadow-sky-500/20 focus:outline-none"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="https://stc.utdstc.com/img/mediakit/download-gio-big-b.png"
+                  alt="Download NevPlay"
+                  className="h-12 w-auto object-contain rounded-xl drop-shadow-md"
+                />
+              </a>
+            </div>
+
+            <span className="text-xs text-muted-foreground font-medium text-center">
+              Official Stable Releases · Free, 100% verified &amp; safe for all Android devices
+            </span>
 
             {/* Link to Return Dispatch */}
             <Link
@@ -191,15 +208,32 @@ export default async function DownloadPage() {
                   </p>
 
                   <div className="pt-2 space-y-4">
-                    <ButtonLink
-                      href={latestApk.browser_download_url}
-                      size="lg"
-                      className="w-full sm:w-auto justify-center shadow-xl shadow-primary/25 text-sm px-8 py-3 font-bold"
-                      external
-                    >
-                      <Download className="size-4" aria-hidden="true" />
-                      Download Direct APK ({humanFileSize(latestApk.size)})
-                    </ButtonLink>
+                    <div className="flex flex-wrap items-center gap-3">
+                      <ButtonLink
+                        href={latestApk.browser_download_url}
+                        size="lg"
+                        className="w-full sm:w-auto justify-center shadow-xl shadow-primary/25 text-sm px-8 py-3 font-bold"
+                        external
+                      >
+                        <Download className="size-4" aria-hidden="true" />
+                        Download Direct APK ({humanFileSize(latestApk.size)})
+                      </ButtonLink>
+
+                      <a
+                        href="https://nevplay.en.uptodown.com/android"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Download NevPlay on Uptodown"
+                        className="inline-flex items-center justify-center transition-all duration-300 hover:scale-[1.03] hover:shadow-lg focus:outline-none"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src="https://stc.utdstc.com/img/mediakit/download-gio-big-b.png"
+                          alt="Download NevPlay"
+                          className="h-11 w-auto object-contain rounded-xl drop-shadow"
+                        />
+                      </a>
+                    </div>
 
                     {latestBodyHtml && (
                       <details className="group/det rounded-2xl border border-glass-border bg-secondary/20 transition-all">

@@ -4,7 +4,6 @@ import { installSteps, systemRequirements, faqs } from "@/lib/data"
 import { Reveal } from "@/components/motion/reveal"
 import { GlassCard, SectionHeading } from "@/components/ui/primitives"
 import { getDynamicStores } from "@/lib/stores"
-import { EmbedBadgeModal } from "@/components/download/embed-badge-modal"
 
 export function InstallGuide() {
   return (
@@ -42,17 +41,11 @@ export async function StoreCards() {
     <section className="px-6 py-10 bg-secondary/10 border-y border-glass-border">
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <SectionHeading
-              eyebrow="Distribution Channels"
-              title="Official & Alternative App Stores"
-              description="Get NevPlay from your favorite Android app store with verified updates."
-              align="left"
-            />
-            <div className="shrink-0 self-start sm:self-auto">
-              <EmbedBadgeModal />
-            </div>
-          </div>
+          <SectionHeading
+            eyebrow="Distribution Channels"
+            title="Official & Alternative App Stores"
+            description="Get NevPlay from your favorite Android app store with verified updates."
+          />
         </Reveal>
 
         <div className="mt-8 grid gap-3.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

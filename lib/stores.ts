@@ -35,17 +35,17 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
       available: true,
     },
     {
+      name: "Uptodown",
+      description: "Verified Android store · Fast direct download",
+      icon: "/assets/icones/uptodown.png",
+      href: "https://nevplay.en.uptodown.com/android",
+      available: true,
+    },
+    {
       name: "APKPure",
       description: "Verified APKPure distribution",
       icon: "/assets/icones/apkpure.png",
       href: "https://apkpure.com/p/com.nevanstudio.nevplay",
-      available: true,
-    },
-    {
-      name: "Uptodown",
-      description: "Verified Android app store",
-      icon: "/assets/icones/uptodown.png",
-      href: "https://nevplay.en.uptodown.com/android",
       available: true,
     },
     {
