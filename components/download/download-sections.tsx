@@ -1,57 +1,14 @@
 import Image from "next/image"
+import { ExternalLink } from "lucide-react"
 import { installSteps, systemRequirements, faqs } from "@/lib/data"
-import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
 import { GlassCard, SectionHeading } from "@/components/ui/primitives"
-
-const stores = [
-  {
-    name: "GitHub Releases",
-    description: "Official releases & source code",
-    icon: "/assets/icones/Refresh_loading.png",
-    href: GITHUB_REPO_URL,
-    available: true,
-  },
-  {
-    name: "APKPure",
-    description: "Direct APK mirror store",
-    icon: "/assets/icones/apkpure.png",
-    href: null,
-    available: false,
-  },
-  {
-    name: "Uptodown",
-    description: "Verified Android app store",
-    icon: "/assets/icones/uptodown.png",
-    href: null,
-    available: false,
-  },
-  {
-    name: "Google Play Store",
-    description: "Auto-updates (review pending)",
-    icon: "/assets/icones/playstore.png",
-    href: null,
-    available: false,
-  },
-  {
-    name: "Samsung Galaxy Store",
-    description: "Official Galaxy package",
-    icon: "/assets/icones/galaxystore.png",
-    href: null,
-    available: false,
-  },
-  {
-    name: "Huawei AppGallery",
-    description: "Optimized for HarmonyOS",
-    icon: "/assets/icones/appgallery.png",
-    href: null,
-    available: false,
-  },
-]
+import { getDynamicStores } from "@/lib/stores"
+import { EmbedBadgeModal } from "@/components/download/embed-badge-modal"
 
 export function InstallGuide() {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-12">
       <div className="mx-auto max-w-5xl">
         <Reveal>
           <SectionHeading
@@ -60,15 +17,15 @@ export function InstallGuide() {
             description="Sideloading NevPlay takes less than a minute."
           />
         </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-4 grid-cols-2 lg:grid-cols-4">
           {installSteps.map((step, index) => (
-            <Reveal key={step.step} delay={index * 80}>
-              <GlassCard hover className="flex h-full flex-col gap-3 p-6">
-                <span className="flex size-9 items-center justify-center rounded-full bg-primary font-mono text-sm font-bold text-primary-foreground">
+            <Reveal key={step.step} delay={index * 50}>
+              <GlassCard hover className="flex h-full flex-col gap-2.5 p-5">
+                <span className="flex size-8 items-center justify-center rounded-full bg-primary font-mono text-xs font-bold text-primary-foreground">
                   {step.step}
                 </span>
-                <h3 className="font-semibold">{step.title}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{step.description}</p>
+                <h3 className="font-semibold text-sm">{step.title}</h3>
+                <p className="text-xs leading-relaxed text-muted-foreground">{step.description}</p>
               </GlassCard>
             </Reveal>
           ))}
@@ -78,54 +35,72 @@ export function InstallGuide() {
   )
 }
 
-import { getDynamicStores } from "@/lib/stores"
-
 export async function StoreCards() {
   const stores = await getDynamicStores()
 
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-10 bg-secondary/10 border-y border-glass-border">
       <div className="mx-auto max-w-5xl">
         <Reveal>
-          <SectionHeading
-            eyebrow="Distribution"
-            title="Alternative App Stores"
-            description="Prefer third-party distribution? NevPlay is heading to major Android stores."
-          />
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <SectionHeading
+              eyebrow="Distribution Channels"
+              title="Official & Alternative App Stores"
+              description="Get NevPlay from your favorite Android app store with verified updates."
+              align="left"
+            />
+            <div className="shrink-0 self-start sm:self-auto">
+              <EmbedBadgeModal />
+            </div>
+          </div>
         </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div className="mt-8 grid gap-3.5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {stores.map((store, index) => {
+            const isFeatured = store.name === "Uptodown" || store.name === "GitHub Releases"
             const inner = (
               <GlassCard
                 hover={store.available}
-                className={`relative flex h-full items-center gap-4 p-5 transition-all duration-300 ${
-                  store.available
-                    ? "border-primary/40 bg-gradient-to-br from-card via-card to-primary/5 shadow-lg shadow-primary/5"
-                    : "opacity-75 hover:opacity-100 hover:border-primary/20"
+                className={`relative flex h-full items-center gap-4 p-4 transition-all duration-300 ${
+                  isFeatured
+                    ? "border-primary/60 bg-gradient-to-br from-primary/10 via-card to-card shadow-xl shadow-primary/10 ring-1 ring-primary/30"
+                    : store.available
+                    ? "border-primary/40 bg-card hover:border-primary/60"
+                    : "opacity-60 hover:opacity-90"
                 }`}
               >
                 {store.icon ? (
-                  <div className="relative flex size-12 shrink-0 items-center justify-center rounded-xl border border-glass-border bg-secondary/80 p-2 shadow-inner">
+                  <div className={`relative flex size-13 shrink-0 items-center justify-center rounded-2xl border p-2 shadow-inner ${
+                    isFeatured ? "border-primary/40 bg-primary/20" : "border-glass-border bg-secondary/80"
+                  }`}>
                     <Image
                       src={store.icon}
                       alt={store.name}
-                      width={36}
-                      height={36}
-                      className="size-8 object-contain"
+                      width={44}
+                      height={44}
+                      className="size-9 object-contain drop-shadow-sm"
                     />
                   </div>
                 ) : (
-                  <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/20 font-mono text-sm font-bold text-primary">
+                  <div className="flex size-13 shrink-0 items-center justify-center rounded-2xl bg-primary/20 font-mono text-base font-bold text-primary border border-primary/30">
                     GH
                   </div>
                 )}
-                <div className="flex flex-col gap-1 min-w-0 flex-1">
-                  <span className="font-bold text-sm tracking-tight truncate">{store.name}</span>
+                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-base tracking-tight text-foreground truncate">{store.name}</span>
+                    {store.href && <ExternalLink className="size-3.5 text-muted-foreground shrink-0" />}
+                  </div>
                   <span className="text-xs text-muted-foreground line-clamp-1">{store.description}</span>
                 </div>
+
                 {store.available ? (
-                  <span className="shrink-0 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">
-                    Live
+                  <span className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider ${
+                    isFeatured
+                      ? "bg-primary text-primary-foreground shadow-md shadow-primary/30"
+                      : "border border-primary/40 bg-primary/15 text-primary"
+                  }`}>
+                    Available
                   </span>
                 ) : (
                   <span className="shrink-0 rounded-full border border-glass-border bg-secondary/80 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
@@ -135,9 +110,9 @@ export async function StoreCards() {
               </GlassCard>
             )
             return (
-              <Reveal key={store.name} delay={index * 50}>
+              <Reveal key={store.name} delay={index * 40}>
                 {store.href ? (
-                  <a href={store.href} target="_blank" rel="noopener noreferrer" className="block h-full">
+                  <a href={store.href} target="_blank" rel="noopener noreferrer" className="block h-full hover:scale-[1.02] transition-transform">
                     {inner}
                   </a>
                 ) : (
@@ -154,20 +129,20 @@ export async function StoreCards() {
 
 export function SystemRequirements() {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-12">
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <SectionHeading eyebrow="Requirements" title="Device Requirements" align="left" />
         </Reveal>
-        <Reveal className="mt-8">
+        <Reveal className="mt-6">
           <GlassCard className="divide-y divide-glass-border">
             {systemRequirements.map((req) => (
               <div
                 key={req.label}
-                className="flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-row items-center justify-between gap-4 px-5 py-3.5"
               >
-                <dt className="text-sm font-medium text-muted-foreground">{req.label}</dt>
-                <dd className="text-sm font-semibold">{req.value}</dd>
+                <dt className="text-xs font-medium text-muted-foreground">{req.label}</dt>
+                <dd className="text-xs font-semibold text-foreground text-right">{req.value}</dd>
               </div>
             ))}
           </GlassCard>
@@ -179,16 +154,16 @@ export function SystemRequirements() {
 
 export function FaqSection({ title = "Frequently Asked Questions" }: { title?: string }) {
   return (
-    <section className="px-6 py-16">
+    <section className="px-6 py-12">
       <div className="mx-auto max-w-3xl">
         <Reveal>
           <SectionHeading eyebrow="FAQ" title={title} />
         </Reveal>
-        <div className="mt-10 flex flex-col gap-3">
+        <div className="mt-8 flex flex-col gap-2.5">
           {faqs.map((faq, index) => (
-            <Reveal key={faq.question} delay={index * 50}>
+            <Reveal key={faq.question} delay={index * 40}>
               <details className="glass-panel group rounded-xl">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 font-medium [&::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-medium text-sm [&::-webkit-details-marker]:hidden">
                   {faq.question}
                   <span
                     aria-hidden="true"
@@ -197,7 +172,7 @@ export function FaqSection({ title = "Frequently Asked Questions" }: { title?: s
                     +
                   </span>
                 </summary>
-                <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground">
+                <p className="px-4 pb-4 text-xs leading-relaxed text-muted-foreground">
                   {faq.answer}
                 </p>
               </details>

@@ -45,8 +45,8 @@ export async function getDynamicStores(): Promise<StoreInfo[]> {
       name: "Uptodown",
       description: "Verified Android app store",
       icon: "/assets/icones/uptodown.png",
-      href: null,
-      available: false,
+      href: "https://nevplay.en.uptodown.com/android",
+      available: true,
     },
     {
       name: "Google Play Store",
