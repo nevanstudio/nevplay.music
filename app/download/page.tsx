@@ -15,24 +15,18 @@ import {
   ShieldCheck,
   Tag,
   Calendar,
-  HardDrive,
-  CheckCircle2,
-  Github,
   Star,
   Zap,
   ArrowRight,
   ChevronDown,
   Newspaper,
   AlertCircle,
-  Smartphone,
   Info,
 } from "lucide-react"
-import { GITHUB_REPO_URL } from "@/lib/nav"
 import { Reveal } from "@/components/motion/reveal"
 import {
   Badge,
   ButtonLink,
-  GlassCard,
   SectionHeading,
 } from "@/components/ui/primitives"
 import { InstallGuide, StoreCards, SystemRequirements, FaqSection } from "@/components/download/download-sections"
@@ -55,11 +49,6 @@ export default async function DownloadPage() {
   const downloads = totalDownloads(releases)
 
   const latestApk = latest ? findApkAsset(latest) : null
-  const latestImageUrl = latest
-    ? (extractImageUrl(latest.body) ??
-       findImageAsset(latest)?.browser_download_url ??
-       null)
-    : null
   const latestBodyHtml = latest ? renderReleaseBody(latest.body) : ""
 
   const betaApk = latestBeta ? findApkAsset(latestBeta) : null
@@ -67,12 +56,12 @@ export default async function DownloadPage() {
   return (
     <>
       {/* ── Hero Section ── */}
-      <section className="relative overflow-hidden px-6 pb-12 pt-20 md:pb-16 md:pt-28">
+      <section className="relative overflow-hidden px-6 pb-8 pt-16 md:pb-12 md:pt-24">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-0 h-[28rem] w-[56rem] max-w-full -translate-x-1/2 rounded-full bg-glow blur-3xl"
         />
-        <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-6 text-center">
+        <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-5 text-center">
           <Badge className="blur-in">
             <ShieldCheck className="size-3.5" aria-hidden="true" />
             Ad-Free · Privacy-First · Offline
@@ -80,13 +69,13 @@ export default async function DownloadPage() {
           <h1 className="blur-in text-balance text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl [animation-delay:100ms]">
             Get NevPlay for Android
           </h1>
-          <p className="blur-in max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg [animation-delay:200ms]">
+          <p className="blur-in max-w-2xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base [animation-delay:200ms]">
             High-fidelity local music playback on your device. Fast, secure, and
-            sideload-friendly APK — straight from GitHub.
+            sideload-friendly APK — straight from GitHub or official stores.
           </p>
 
-          {/* Primary & Standout Download Option (Stable Build) */}
-          <div className="blur-in flex flex-col items-center justify-center gap-4 w-full max-w-md pt-2 [animation-delay:250ms]">
+          {/* Primary Download Button */}
+          <div className="blur-in flex flex-col items-center justify-center gap-3 w-full max-w-md pt-2 [animation-delay:250ms]">
             {latestApk && (
               <div className="flex flex-col items-center gap-2 w-full">
                 <ButtonLink
@@ -102,7 +91,7 @@ export default async function DownloadPage() {
                   </span>
                 </ButtonLink>
                 <span className="text-xs text-muted-foreground font-medium">
-                  Official Stable Release · Battle-tested & Recommended for everyone
+                  Official Stable Release · Recommended for all Android devices
                 </span>
               </div>
             )}
@@ -120,14 +109,14 @@ export default async function DownloadPage() {
 
           {/* Stats row */}
           {downloads > 0 && (
-            <div className="blur-in flex flex-wrap items-center justify-center gap-6 pt-4 [animation-delay:300ms]">
+            <div className="blur-in flex flex-wrap items-center justify-center gap-6 pt-2 [animation-delay:300ms]">
               {[
                 { icon: Download, label: "Downloads", value: downloads.toLocaleString() },
                 { icon: Star, label: "Free Forever", value: "Always" },
                 { icon: Zap, label: "No Ads", value: "Zero" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex flex-col items-center gap-0.5">
-                  <span className="text-xl font-bold tabular-nums text-foreground sm:text-2xl">
+                  <span className="text-lg font-bold tabular-nums text-foreground sm:text-xl">
                     {value}
                   </span>
                   <span className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -141,11 +130,14 @@ export default async function DownloadPage() {
         </div>
       </section>
 
-      {/* ── Main Download Section: Stable Version Primary Stage ── */}
-      <section className="px-6 pb-16">
-        <div className="mx-auto max-w-5xl space-y-10">
+      {/* ── Alternative Stores Section (Prominently placed directly below main download) ── */}
+      <StoreCards />
+
+      {/* ── Main Release Details & Changelog ── */}
+      <section className="px-6 py-12">
+        <div className="mx-auto max-w-5xl space-y-8">
           <SectionHeading
-            eyebrow="Official Distribution"
+            eyebrow="Official Build Details"
             title="NevPlay Stable Release"
             description="Our primary release for daily listening. Rock-solid performance, battery optimized, and 100% private."
           />
@@ -165,7 +157,7 @@ export default async function DownloadPage() {
                   <div className="flex items-center gap-2.5">
                     <span className="flex size-3 animate-pulse-glow rounded-full bg-primary" />
                     <span className="text-xs font-bold uppercase tracking-widest text-primary">
-                      Primary & Recommended Channel
+                      Primary GitHub Channel
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -174,14 +166,14 @@ export default async function DownloadPage() {
                   </div>
                 </div>
 
-                <div className="relative z-10 flex flex-col gap-6 p-6 md:p-8">
+                <div className="relative z-10 flex flex-col gap-5 p-6 md:p-8">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
-                      <div className="flex items-center gap-2 font-mono text-sm font-bold text-primary">
-                        <Tag className="size-4" aria-hidden="true" />
+                      <div className="flex items-center gap-2 font-mono text-xs font-bold text-primary">
+                        <Tag className="size-3.5" aria-hidden="true" />
                         Version {latest.tag_name}
                       </div>
-                      <h3 className="text-2xl font-bold tracking-tight text-foreground mt-1">
+                      <h3 className="text-xl md:text-2xl font-bold tracking-tight text-foreground mt-1">
                         {latest.name ?? `NevPlay ${latest.tag_name}`}
                       </h3>
                     </div>
@@ -192,7 +184,7 @@ export default async function DownloadPage() {
                     </span>
                   </div>
 
-                  <p className="text-sm leading-relaxed text-muted-foreground max-w-3xl">
+                  <p className="text-xs md:text-sm leading-relaxed text-muted-foreground max-w-3xl">
                     NevPlay Stable is tested across dozens of Android devices for total stability, high-res audio playback, low battery consumption, and zero telemetry collection.
                   </p>
 
@@ -200,15 +192,15 @@ export default async function DownloadPage() {
                     <ButtonLink
                       href={latestApk.browser_download_url}
                       size="lg"
-                      className="w-full sm:w-auto justify-center shadow-xl shadow-primary/25 text-base px-8 py-3.5 font-bold"
+                      className="w-full sm:w-auto justify-center shadow-xl shadow-primary/25 text-sm px-8 py-3 font-bold"
                       external
                     >
-                      <Download className="size-5" aria-hidden="true" />
-                      Download Stable APK ({humanFileSize(latestApk.size)})
+                      <Download className="size-4" aria-hidden="true" />
+                      Download Direct APK ({humanFileSize(latestApk.size)})
                     </ButtonLink>
 
                     {latestBodyHtml && (
-                      <details className="group/det rounded-2xl border border-glass-border bg-secondary/20 transition-all" open>
+                      <details className="group/det rounded-2xl border border-glass-border bg-secondary/20 transition-all">
                         <summary className="flex cursor-pointer items-center justify-between gap-3 p-4 text-xs font-bold uppercase tracking-widest text-foreground hover:text-primary transition-colors">
                           <span>Release Highlights & Detailed Changelog</span>
                           <ChevronDown className="size-4 text-muted-foreground transition-transform group-open/det:rotate-180" />
@@ -227,10 +219,10 @@ export default async function DownloadPage() {
             </Reveal>
           )}
 
-          {/* ── Subdued & De-emphasized Beta Notice Box ── */}
+          {/* ── Subdued Beta Notice Box ── */}
           <Reveal>
-            <div className="rounded-2xl border border-glass-border bg-secondary/15 p-6 md:p-7 space-y-4 opacity-80 hover:opacity-100 transition-opacity">
-              <div className="flex items-center justify-between gap-3 border-b border-glass-border pb-3">
+            <div className="rounded-2xl border border-glass-border bg-secondary/15 p-5 md:p-6 space-y-3 opacity-80 hover:opacity-100 transition-opacity">
+              <div className="flex items-center justify-between gap-3 border-b border-glass-border pb-2.5">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
                   <Info className="size-4 text-muted-foreground" aria-hidden="true" />
                   Beta Channel Status Notice
@@ -240,16 +232,16 @@ export default async function DownloadPage() {
                 </span>
               </div>
 
-              <div className="space-y-2">
-                <h4 className="text-base font-semibold text-foreground">
+              <div className="space-y-1.5">
+                <h4 className="text-sm font-semibold text-foreground">
                   Public Beta Downloads Concluded
                 </h4>
-                <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   We have officially ended public Beta releases on our website and GitHub. Public beta channels cannot be open for everyone, but users running version <strong className="text-foreground">2026.08.12</strong> or higher can request Early Access directly <strong className="text-foreground">inside the NevPlay Android app</strong> under Settings.
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
                 <Link
                   href="/news"
                   className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
@@ -279,9 +271,6 @@ export default async function DownloadPage() {
           </Reveal>
         </div>
       </section>
-
-      {/* ── App Stores ── */}
-      <StoreCards />
 
       {/* ── Install Guide ── */}
       <InstallGuide />
