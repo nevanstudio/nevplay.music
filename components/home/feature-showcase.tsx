@@ -1,48 +1,56 @@
 import Image from "next/image"
-import { AudioLines, Mic2, Palette, ShieldCheck, WifiOff } from "lucide-react"
+import { AudioLines, Mic2, Palette, ShieldCheck, WifiOff, Clock, SlidersHorizontal, Moon, Sparkles } from "lucide-react"
 import { Reveal } from "@/components/motion/reveal"
 import { SectionHeading } from "@/components/ui/primitives"
 
 const features = [
   {
-    icon: WifiOff,
-    title: "Your Library, Always Offline",
+    icon: Palette,
+    title: "Material 3 Expressive & Liquid Glass",
     description:
-      "Your entire local music collection, always available. No internet required, no streaming dependencies, no buffering — just instant playback of the music you own.",
-    image: "/assets/screenshots/Home.png",
-    alt: "NevPlay home screen showing the local music library",
+      "Fluid dynamic colors extracted in real-time from album art, accompanied by responsive waveform seeking, frosted glass controls, and gesture-driven bottom sheets.",
+    image: "/assets/screenshots/now_playing_screen.png",
+    alt: "NevPlay Material 3 Expressive Now Playing Screen",
   },
   {
     icon: Mic2,
-    title: "Karaoke-Style Synced Lyrics",
+    title: "Synced Karaoke-Style Lyrics",
     description:
-      "LRC lyrics highlight in real time, beautifully animated to the rhythm. Full-screen lyric mode turns every song into an experience.",
-    image: "/assets/screenshots/Full_Screen_Lyrics_View.png",
-    alt: "Full screen synced lyrics view in NevPlay",
+      "Synchronized LRC and syllable-accurate lyrics glide smoothly into view with animated lead-in countdowns, custom offset synchronization, and ambient blurred backdrops.",
+    image: "/assets/screenshots/full_lyrics_screen.png",
+    alt: "NevPlay Full Screen Synced Karaoke Lyrics",
+  },
+  {
+    icon: Moon,
+    title: "Intelligent Bedtime Sleep Timer",
+    description:
+      "Wake up refreshed with our live countdown hero, dynamic wavy progress loader, quick extender pills, and gentle 15-second audio fade-out that lets your tracks finish naturally.",
+    image: "/assets/screenshots/sleep_timer_screen.png",
+    alt: "NevPlay Redesigned Sleep Timer with Wavy Progress",
+  },
+  {
+    icon: WifiOff,
+    title: "Pure Offline Library with Multi-Selection",
+    description:
+      "Your complete local music library instantly accessible without accounts or internet. Effortlessly batch-edit ID3 tags, manage playlists, and bulk-organize songs with full multi-selection.",
+    image: "/assets/screenshots/library_screen.png",
+    alt: "NevPlay Local Music Library and Multi-Select Deck",
   },
   {
     icon: AudioLines,
-    title: "Professional Audio Tuning",
+    title: "Pro Acoustic Engine & Hardware Offload",
     description:
-      "A multi-band equalizer plus AutoEQ integration with thousands of community-tuned headphone profiles. Perfect sound for your exact headphones, automatically.",
-    image: "/assets/screenshots/Equalizer.png",
-    alt: "NevPlay professional equalizer screen",
-  },
-  {
-    icon: Palette,
-    title: "Material You, Liquid Glass",
-    description:
-      "Dynamic color palettes pulled straight from your wallpaper, layered with NevPlay's signature Liquid Glass interface. Every screen feels personal.",
-    image: "/assets/screenshots/Player.png",
-    alt: "NevPlay now playing screen with Material You theming",
+      "Deep bass enhancement, 3D spatial widening, hardware-accelerated audio offload, and real-time audio session diagnostics calibrated for zero battery drain.",
+    image: "/assets/screenshots/device_capability_screen.png",
+    alt: "NevPlay Audio Device Capabilities and DSP Engine",
   },
   {
     icon: ShieldCheck,
-    title: "Privacy Without Compromise",
+    title: "Privacy-First Customization & Smart Filters",
     description:
-      "Zero analytics, zero tracking, zero accounts. Listening stats are computed on-device and never leave it. Your music stays yours.",
-    image: "/assets/screenshots/Rhythm_Stats.png",
-    alt: "NevPlay privacy-first local listening statistics",
+      "Zero analytics, zero tracking, zero telemetries. Full blacklist and whitelist controls automatically shield system ringtones, alarms, recordings, and Android folders on all drives.",
+    image: "/assets/screenshots/settings_screen.png",
+    alt: "NevPlay Material 3 Settings and Focus Folders",
   },
 ]
 

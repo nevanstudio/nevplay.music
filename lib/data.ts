@@ -50,84 +50,100 @@ export type Screenshot = {
 
 export const screenshots: Screenshot[] = [
   {
-    id: "home",
-    title: "Home Screen",
-    category: "Library",
-    image: "/assets/screenshots/Home.png",
-    description:
-      "Your clean, modern music hub with local collection highlights and customized recommendations.",
-  },
-  {
-    id: "player",
-    title: "Beautiful Now Playing",
+    id: "now_playing",
+    title: "Material 3 Now Playing",
     category: "Player",
-    image: "/assets/screenshots/Player.png",
+    image: "/assets/screenshots/now_playing_screen.png",
     description:
-      "Premium glass UI showcasing album art, high-fidelity playback controls, and smooth visualizations.",
+      "Vibrant dynamic theming pulled directly from album art, paired with responsive waveform scrubbing and frosted glass controls.",
   },
   {
-    id: "lyrics_full",
-    title: "Full Screen Lyrics View",
-    category: "Player",
-    image: "/assets/screenshots/Full_Screen_Lyrics_View.png",
+    id: "full_lyrics",
+    title: "Synced Karaoke Lyrics",
+    category: "Lyrics",
+    image: "/assets/screenshots/full_lyrics_screen.png",
     description:
-      "Synced karaoke-style lyrics that highlight and transition beautifully to the rhythm of your music.",
+      "Full-screen word-by-word synced lyrics with smooth line entrances, countdown lead-in ring, and ambient blurred background.",
   },
   {
-    id: "equalizer",
-    title: "Professional Equalizer",
+    id: "half_lyrics",
+    title: "Interactive Lyrics Peek",
+    category: "Lyrics",
+    image: "/assets/screenshots/half_lyrics_screen.png",
+    description:
+      "Follow synchronized lines without leaving the player, complete with timing offset adjustment and haptic feedback.",
+  },
+  {
+    id: "sleep_timer",
+    title: "Redesigned Sleep Timer",
     category: "Audio",
-    image: "/assets/screenshots/Equalizer.png",
+    image: "/assets/screenshots/sleep_timer_screen.png",
     description:
-      "Multi-band audio frequency tuning tool to achieve the perfect acoustic response for any headphones.",
+      "Live countdown hero with wavy progress loader, quick extender pills, custom idle slider, and gentle 15-second audio fade-out.",
   },
   {
-    id: "auto_eq",
-    title: "AutoEQ Integration",
-    category: "Audio",
-    image: "/assets/screenshots/AutoEQ.png",
-    description:
-      "Choose from thousands of preset headphone profiles to optimize and balance sound automatically.",
-  },
-  {
-    id: "rhythm_stats",
-    title: "Rhythm & Listen Stats",
-    category: "Analytics",
-    image: "/assets/screenshots/Rhythm_Stats.png",
-    description:
-      "Understand your music taste with privacy-first listening history charts, statistics, and graphs.",
-  },
-  {
-    id: "edit_metadata",
-    title: "Tag Editor & Metadata",
-    category: "Tools",
-    image: "/assets/screenshots/Edit_Metadata.png",
-    description:
-      "Keep your local audio library organized by modifying titles, artists, albums, track numbers, and cover art.",
-  },
-  {
-    id: "playlist",
-    title: "Smart Playlists",
+    id: "library",
+    title: "Local Music Library",
     category: "Library",
-    image: "/assets/screenshots/Playlist.png",
+    image: "/assets/screenshots/library_screen.png",
     description:
-      "Create custom lists of your favorite tracks or play automatically generated collections based on tags.",
+      "High-performance local music management with multi-selection deck for bulk tag editing, playlist addition, and instant playback.",
   },
   {
-    id: "queue",
-    title: "Interactive Play Queue",
-    category: "Player",
-    image: "/assets/screenshots/Queue.png",
+    id: "full_artist",
+    title: "Artist Discography",
+    category: "Library",
+    image: "/assets/screenshots/full_artist_screen.png",
     description:
-      "Easily manage upcoming tracks with drag-and-drop ordering and swift swipe-to-remove interactions.",
+      "Curated artist view featuring full discography albums, top tracks, and integrated biography.",
+  },
+  {
+    id: "artist_bottomsheet",
+    title: "Quick Artist Navigator",
+    category: "Library",
+    image: "/assets/screenshots/artist_bottomsheet_screen.png",
+    description:
+      "Effortlessly browse artist highlights, track counts, and related releases right from your queue or now playing screen.",
+  },
+  {
+    id: "device_capability",
+    title: "Audio Engine Diagnostics",
+    category: "Audio",
+    image: "/assets/screenshots/device_capability_screen.png",
+    description:
+      "Real-time hardware audio offload diagnostics, spatialization processor capabilities, sample rates, and acoustic status.",
   },
   {
     id: "settings",
-    title: "Extensive Customization",
+    title: "Material 3 Expressive Settings",
     category: "Settings",
-    image: "/assets/screenshots/Settings.png",
+    image: "/assets/screenshots/settings_screen.png",
     description:
-      "Tailor the interface, theme engine, gesture behaviors, language translations, and file scanners to your liking.",
+      "Total customization of audio effects, themes, focus folders, and automatic system folder blacklisting on all storage volumes.",
+  },
+  {
+    id: "about",
+    title: "About NevPlay",
+    category: "About",
+    image: "/assets/screenshots/about_screen.png",
+    description:
+      "Independent, privacy-first audio philosophy with zero tracking, offline-first design, and transparent open-source engineering.",
+  },
+  {
+    id: "updater",
+    title: "Seamless In-App Updater",
+    category: "Updates",
+    image: "/assets/screenshots/updater_screen_1.png",
+    description:
+      "Direct release notifications, auto-download checks, and verified SHA-256 package verification without third-party app stores.",
+  },
+  {
+    id: "changelog",
+    title: "Release Changelog View",
+    category: "Updates",
+    image: "/assets/screenshots/updater_screen_2.png",
+    description:
+      "Detailed release notes, feature highlights, and performance benchmarks delivered right inside the app.",
   },
 ]
 
